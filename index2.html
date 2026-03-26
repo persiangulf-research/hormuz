@@ -131,6 +131,31 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background:repeating-lin
 .error-card{background:rgba(231,76,60,.06);border:1px solid rgba(231,76,60,.25);border-radius:2px;padding:16px 20px;font-size:12px;color:#ff8a94;line-height:1.6}
 .rs-title{font-size:9px;font-weight:600;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
 .rs-title::after{content:'';flex:1;height:1px;background:var(--border)}
+/* ═══ INTEL STATUS BANNER ════════════════════════════════════════════════════ */
+.intel-status-bar{background:var(--bg2);border:1px solid rgba(212,135,10,.22);border-radius:2px;padding:14px 18px;margin-bottom:16px;animation:fadeIn .4s ease}
+.intel-status-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.intel-trap{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:2px}
+.intel-trap.active{background:rgba(231,76,60,.15);color:#ff8a94;border:1px solid rgba(231,76,60,.3)}
+.intel-trap.inactive{background:rgba(39,174,96,.1);color:var(--up);border:1px solid rgba(39,174,96,.25)}
+.intel-trap.unknown{background:rgba(255,255,255,.07);color:var(--text3);border:1px solid var(--border)}
+.intel-eq-badge{font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 10px;border-radius:2px;background:rgba(212,135,10,.12);color:var(--accent);border:1px solid rgba(212,135,10,.25)}
+.intel-ai-badge{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:2px}
+.intel-ai-badge.calibrated{background:rgba(39,174,96,.1);color:var(--up);border:1px solid rgba(39,174,96,.25)}
+.intel-ai-badge.uncalibrated{background:rgba(255,255,255,.06);color:var(--text3);border:1px solid var(--border)}
+.intel-published{font-size:11px;color:var(--text3);margin-left:auto}
+.intel-closure{font-size:11px;font-weight:600;color:var(--accent)}
+.intel-strategic{font-family:var(--serif);font-size:0.78rem;color:var(--text2);line-height:1.7;border-top:1px solid var(--border);padding-top:10px;margin-top:4px}
+.intel-event{font-size:11px;color:var(--accent);font-weight:500;margin-top:6px}
+.intel-event::before{content:'◈ MOST SIGNIFICANT: ';font-size:9px;font-weight:600;letter-spacing:.1em;color:var(--text3);text-transform:uppercase}
+.intel-notes{font-family:var(--serif);font-size:0.76rem;color:var(--text3);line-height:1.6;padding:10px 14px;background:rgba(255,255,255,.025);border-radius:2px;border:1px solid var(--border);margin-top:10px}
+.intel-notes-lbl{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin-bottom:5px}
+/* ═══ DERIVED VALUES PANEL ═══════════════════════════════════════════════════ */
+.derived-panel{background:var(--bg2);border:1px solid var(--border);border-radius:2px;padding:16px 18px;margin-bottom:16px;animation:fadeIn .4s ease}
+.derived-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:10px}
+.derived-item{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:2px;padding:10px 12px;text-align:center}
+.derived-val{font-family:var(--display);font-size:26px;letter-spacing:.02em;line-height:1;margin-bottom:3px}
+.derived-lbl{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
+.derived-sub{font-size:10px;color:var(--text3);margin-top:4px;font-family:var(--serif)}
 /* ═══ GAME THEORY PAGE ═══════════════════════════════════════════════════════ */
 .gt-page{padding:28px;min-height:calc(100vh - 96px);position:relative;z-index:1}
 .gt-hdr{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
@@ -312,6 +337,29 @@ input[type=range]{flex:1;accent-color:var(--accent)}
     <span style="margin-left:auto;font-size:12px;color:var(--text3)">Strait of Hormuz — Predictive Game Theory Simulation</span>
   </div>
 
+  <!-- ══ INTEL STATUS BANNER (populated from params.json) ══ -->
+  <div class="intel-status-bar" id="intel-status-bar" style="display:none">
+    <div class="intel-status-row">
+      <span id="intel-trap-badge" class="intel-trap unknown">—</span>
+      <span id="intel-eq-badge" class="intel-eq-badge">—</span>
+      <span id="intel-ai-badge" class="intel-ai-badge uncalibrated">Manual</span>
+      <span id="intel-closure" class="intel-closure"></span>
+      <span id="intel-published" class="intel-published"></span>
+    </div>
+    <div class="intel-strategic" id="intel-strategic"></div>
+    <div class="intel-event" id="intel-event"></div>
+    <div style="margin-top:10px">
+      <div class="intel-notes-lbl">Analyst Notes</div>
+      <div class="intel-notes" id="intel-notes"></div>
+    </div>
+  </div>
+
+  <!-- ══ DERIVED EQUILIBRIUM VALUES (populated from params.json) ══ -->
+  <div class="derived-panel" id="derived-panel" style="display:none">
+    <div class="section-label">Derived Equilibrium Values <span style="font-size:10px;color:var(--text3);text-transform:none;letter-spacing:0;font-weight:400;font-family:var(--serif)">— computed from calibrated parameters</span></div>
+    <div class="derived-grid" id="derived-grid"></div>
+  </div>
+
   <div class="bridge-banner" id="bridge-banner">
     <div style="font-size:18px">⚡</div>
     <div class="bridge-text"><strong id="bridge-hl" style="color:var(--text);display:block;margin-bottom:3px"></strong>AI detected Hormuz-relevant signals. Simulation parameters have been auto-updated from the news analysis.</div>
@@ -398,6 +446,7 @@ const S = {
   ],
   history: JSON.parse(localStorage.getItem('ni_history') || '[]'),
   current: null,
+  params: null,    // loaded from params.json
 };
 
 const SAMPLES = [
@@ -410,14 +459,161 @@ const SAMPLES = [
 const HORMUZ_KW = ['hormuz','strait','irgc','tanker','persian gulf','blockade','shipping lane','5th fleet','iran navy'];
 
 /* ── BOOT ──────────────────────────────────────────────────────────────────── */
-function init() {
+async function init() {
   renderMetrics(); renderHistory(); updateApiStatus(); startClock();
   buildMatrix(); buildLadder();
+  await loadParams();
   if (!S.apiKey) openModal();
 }
 function startClock() {
   const t = () => document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US',{hour12:false});
   t(); setInterval(t,1000);
+}
+
+/* ── PARAMS.JSON LOADER ─────────────────────────────────────────────────────── */
+async function loadParams() {
+  try {
+    const res = await fetch('params.json');
+    if (!res.ok) return;
+    const data = await res.json();
+    S.params = data;
+    applyParams(data);
+    renderIntelStatus(data.meta);
+    renderDerived(data.derived, data.parameters);
+    // auto-run simulation with calibrated params
+    setTimeout(() => runSim(), 300);
+  } catch(e) {
+    // params.json not available (e.g. running locally without server) — silent fail
+  }
+}
+
+/**
+ * Map params.json parameter fields onto the Monte Carlo sliders.
+ *
+ * Mapping rationale (all values clamped 1-10):
+ *   ir-econ    ← Sr (settlement readiness inverted: low Sr → high econ pressure)
+ *               combined with rhoI (regime instability → economic pressure)
+ *   ir-asym    ← m (military asymmetric capability multiplier)
+ *   ir-dom     ← c (domestic compliance / cohesion)
+ *   ir-proxy   ← nu (number of proxy dimensions / proxy strength)
+ *   us-deter   ← H (US deterrence headroom)
+ *   us-oil     ← G (global oil dependency / cost of closure to US allies)
+ *   us-ally    ← Ps (political / alliance pressure parameter)
+ *   us-esc     ← k (escalation cost multiplier, inverted — high cost → low tolerance)
+ */
+function applyParams(data) {
+  const p = data.parameters;
+  if (!p) return;
+
+  const clamp = (v, lo=1, hi=10) => Math.min(hi, Math.max(lo, Math.round(v)));
+  const norm10 = (v, lo, hi) => clamp(((v - lo) / (hi - lo)) * 9 + 1);
+
+  // Iran economic pressure: low Sr + high rhoI → high pressure
+  const irEcon = clamp((1 - p.Sr) * 7 + p.rhoI * 20 + 1);
+  // Iran asymmetric capability: m is already ~0-10 range
+  const irAsym = norm10(p.m, 0.5, 6);
+  // Iran domestic legitimacy: c (0-1 compliance) → high c = high legitimacy
+  const irDom = clamp(p.c * 10);
+  // Iran proxy strength: nu (3 = baseline) scaled
+  const irProxy = norm10(p.nu, 1, 6);
+  // US deterrence: H (7 = baseline from params), scaled to 1-10
+  const usDeter = norm10(p.H, 2, 12);
+  // US oil dependency: G (global cost) — higher = more US interest, scaled
+  const usOil = norm10(p.G, 2, 12);
+  // US alliance pressure: Ps (political settlement pressure)
+  const usAlly = norm10(p.Ps, 4, 18);
+  // US escalation tolerance: k (cost multiplier) — high k = low tolerance
+  const usEsc = clamp(11 - norm10(p.k, 0.5, 3));
+
+  const set = (id, v) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.value = v;
+    const vEl = document.getElementById(id + '-v');
+    if (vEl) vEl.textContent = v;
+  };
+
+  set('ir-econ',  irEcon);
+  set('ir-asym',  irAsym);
+  set('ir-dom',   irDom);
+  set('ir-proxy', irProxy);
+  set('us-deter', usDeter);
+  set('us-oil',   usOil);
+  set('us-ally',  usAlly);
+  set('us-esc',   usEsc);
+}
+
+/* ── INTEL STATUS BANNER ────────────────────────────────────────────────────── */
+function renderIntelStatus(meta) {
+  if (!meta) return;
+  const bar = document.getElementById('intel-status-bar');
+  bar.style.display = 'block';
+
+  // Trap badge
+  const tb = document.getElementById('intel-trap-badge');
+  const trap = (meta.trapStatus||'unknown').toLowerCase();
+  tb.textContent = 'TRAP: ' + (meta.trapStatus||'—').toUpperCase();
+  tb.className = 'intel-trap ' + (trap === 'active' ? 'active' : trap === 'inactive' ? 'inactive' : 'unknown');
+
+  // Equation badge
+  document.getElementById('intel-eq-badge').textContent = meta.primaryEquation || '—';
+
+  // AI calibration badge
+  const ab = document.getElementById('intel-ai-badge');
+  if (meta.aiCalibrated) {
+    ab.textContent = '✓ AI Calibrated'; ab.className = 'intel-ai-badge calibrated';
+  } else {
+    ab.textContent = 'Manual Calibration'; ab.className = 'intel-ai-badge uncalibrated';
+  }
+
+  // Closure days
+  const cd = document.getElementById('intel-closure');
+  if (meta.closureDays != null) cd.textContent = `T+${meta.closureDays}d closure window`;
+
+  // Published date
+  const pd = document.getElementById('intel-published');
+  if (meta.published) {
+    const d = new Date(meta.published);
+    pd.textContent = 'Updated ' + d.toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'});
+  }
+
+  // Strategic summary
+  const ss = document.getElementById('intel-strategic');
+  ss.textContent = meta.strategicSummary || '';
+
+  // Most significant event
+  const me = document.getElementById('intel-event');
+  me.textContent = meta.mostSignificantEvent || '';
+  me.style.display = meta.mostSignificantEvent ? 'block' : 'none';
+
+  // Analyst notes
+  document.getElementById('intel-notes').textContent = meta.analystNotes || '';
+}
+
+/* ── DERIVED VALUES PANEL ───────────────────────────────────────────────────── */
+function renderDerived(derived, params) {
+  if (!derived) return;
+  const panel = document.getElementById('derived-panel');
+  panel.style.display = 'block';
+
+  const items = [
+    { key:'estar',         label:'E*',              val:derived.estar,          sub:'Optimal escalation pt',     color:'var(--accent)' },
+    { key:'estarRatio',    label:'E*/E',             val:derived.estarRatio,     sub:'Ratio vs current E='+params?.E, color:'var(--accent)' },
+    { key:'dominanceMargin',label:'Dom. Margin',     val:derived.dominanceMargin,sub:'Sr threshold buffer',       color:'var(--up)' },
+    { key:'srCoverage',    label:'Sr Coverage',      val:derived.srCoverage,     sub:'Signal-to-threshold gap',   color:'#60aaff' },
+    { key:'uAccommodate',  label:'U(Accom.)',         val:derived.uAccommodate,   sub:'Payoff — accommodate',      color: derived.uAccommodate >= 0 ? 'var(--up)' : 'var(--danger)' },
+    { key:'uEscalate',     label:'U(Escalate)',       val:derived.uEscalate,      sub:'Payoff — escalate',         color: derived.uEscalate >= 0 ? 'var(--up)' : 'var(--danger)' },
+  ];
+
+  document.getElementById('derived-grid').innerHTML = items.map(it => {
+    const v = it.val;
+    const display = v != null ? (typeof v === 'number' ? (v > 0 && it.key !== 'estar' && it.key !== 'estarRatio' && it.key !== 'dominanceMargin' && it.key !== 'srCoverage' ? '+' : '') + v : v) : '—';
+    return `<div class="derived-item">
+      <div class="derived-val" style="color:${it.color}">${display}</div>
+      <div class="derived-lbl">${it.label}</div>
+      <div class="derived-sub">${it.sub}</div>
+    </div>`;
+  }).join('');
 }
 
 /* ── NAVIGATION ────────────────────────────────────────────────────────────── */
