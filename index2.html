@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IntelDash — Geopolitical Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0c0f;--bg2:#111318;--bg3:#181c22;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#e8eaf0;--text2:#8a8fa0;--text3:#555b6e;--accent:#00d4a1;--warn:#f5a623;--danger:#ff4757;--up:#00d4a1;--down:#ff4757;--neutral:#8a8fa0;--mono:'DM Mono',monospace;--display:'Syne',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:13px;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,0.015) 39px,rgba(255,255,255,0.015) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,0.015) 39px,rgba(255,255,255,0.015) 40px);pointer-events:none;z-index:0}
+/* TOP BAR */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(10,12,15,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--display);font-size:17px;font-weight:800;letter-spacing:-0.02em;display:flex;align-items:center;gap:10px}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.topbar-right{display:flex;align-items:center;gap:14px}
+.clock{font-size:12px;color:var(--text3);letter-spacing:.05em}
+.api-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);padding:5px 10px;border:1px solid var(--border);border-radius:4px;cursor:pointer;transition:all .15s}
+.api-status:hover{border-color:var(--border2);background:var(--bg2)}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--text3)}
+.status-dot.connected{background:var(--accent);box-shadow:0 0 6px var(--accent)}
+/* PAGE TABS */
+.page-tabs{display:flex;gap:2px;padding:0 28px;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:56px;z-index:99}
+.page-tab{padding:10px 20px;font-size:12px;letter-spacing:.04em;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;font-family:var(--mono)}
+.page-tab:hover{color:var(--text2)}
+.page-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.page{display:none;position:relative;z-index:1}
+.page.active{display:block}
+/* SHARED */
+.section-label{font-size:9px;letter-spacing:.15em;color:var(--text3);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+/* ═══ NEWS PAGE ══════════════════════════════════════════════════════════════ */
+.ni-app{display:grid;grid-template-columns:340px 1fr;min-height:calc(100vh - 96px)}
+.left-panel{border-right:1px solid var(--border);display:flex;flex-direction:column;height:calc(100vh - 96px);position:sticky;top:96px;overflow-y:auto}
+.panel-section{padding:20px;border-bottom:1px solid var(--border)}
+.headline-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-family:var(--mono);font-size:12px;color:var(--text);resize:vertical;min-height:100px;line-height:1.6;outline:none;transition:border-color .15s}
+.headline-input:focus{border-color:var(--accent)}
+.headline-input::placeholder{color:var(--text3)}
+.analyze-btn{margin-top:10px;width:100%;background:var(--accent);border:none;border-radius:6px;padding:10px;font-family:var(--display);font-size:13px;font-weight:700;color:#0a0c0f;cursor:pointer;transition:all .15s}
+.analyze-btn:hover{background:#00f0b8;transform:translateY(-1px)}
+.analyze-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.analyze-btn.loading{background:var(--bg3);color:var(--accent);border:1px solid rgba(0,212,161,.3)}
+.btn-spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(0,212,161,.3);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;margin-right:7px;vertical-align:middle}
+.metric-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:all .15s;margin-bottom:6px}
+.metric-item:hover{border-color:var(--border2)}
+.metric-item.active{border-color:rgba(0,212,161,.3);background:rgba(0,212,161,.04)}
+.metric-color{width:3px;height:28px;border-radius:2px;flex-shrink:0}
+.metric-name{flex:1;font-size:12px}
+.metric-unit{font-size:10px;color:var(--text3)}
+.metric-check{width:14px;height:14px;border:1px solid var(--border2);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.metric-check.checked{background:var(--accent);border-color:var(--accent)}
+.metric-check.checked::after{content:'✓';font-size:9px;color:#0a0c0f}
+.add-metric-row{display:flex;gap:6px;margin-top:8px}
+.add-metric-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-family:var(--mono);font-size:11px;color:var(--text);outline:none}
+.add-metric-input:focus{border-color:var(--border2)}
+.add-metric-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:7px 12px;font-size:12px;color:var(--text2);cursor:pointer;transition:all .15s}
+.add-metric-btn:hover{background:var(--bg2);color:var(--text)}
+.history-item{padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:all .15s;margin-bottom:6px}
+.history-item:hover{border-color:var(--border2)}
+.history-item.selected{border-color:rgba(0,153,255,.4)}
+.history-headline{font-size:11px;color:var(--text2);line-height:1.4;margin-bottom:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.history-meta{display:flex;align-items:center;gap:8px}
+.history-time{font-size:10px;color:var(--text3)}
+.sentiment-pill{font-size:9px;padding:2px 7px;border-radius:10px;letter-spacing:.04em;text-transform:uppercase}
+.sp-pos{background:rgba(0,212,161,.12);color:var(--accent)}
+.sp-neg{background:rgba(255,71,87,.12);color:var(--danger)}
+.sp-neu{background:rgba(138,143,160,.15);color:var(--neutral)}
+.sp-mix{background:rgba(245,166,35,.12);color:var(--warn)}
+.main-panel{display:flex;flex-direction:column;overflow-y:auto;height:calc(100vh - 96px)}
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:var(--text3);padding:40px;text-align:center}
+.empty-icon{font-size:48px;opacity:.3}
+.empty-title{font-family:var(--display);font-size:20px;font-weight:700;color:var(--text3)}
+.empty-sub{font-size:12px;color:var(--text3);line-height:1.6;max-width:340px}
+.sample-headlines{display:flex;flex-direction:column;gap:6px;margin-top:8px;width:100%;max-width:420px}
+.sample-btn{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:9px 14px;font-family:var(--mono);font-size:11px;color:var(--text2);cursor:pointer;text-align:left;transition:all .15s;line-height:1.4}
+.sample-btn:hover{border-color:var(--accent);color:var(--text)}
+.results-wrap{padding:24px 28px;display:flex;flex-direction:column;gap:20px}
+.headline-card{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:20px 24px;animation:fadeIn .3s ease}
+.headline-label{font-size:9px;letter-spacing:.15em;color:var(--text3);text-transform:uppercase;margin-bottom:10px}
+.headline-text{font-family:var(--display);font-size:18px;font-weight:600;line-height:1.4;margin-bottom:14px}
+.sentiment-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.big-sentiment{font-size:11px;padding:4px 12px;border-radius:20px;font-weight:500;letter-spacing:.04em}
+.conf-wrap{display:flex;align-items:center;gap:8px;flex:1;min-width:120px}
+.conf-lbl{font-size:11px;color:var(--text3)}
+.conf-bar{flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.conf-fill{height:100%;border-radius:2px;background:var(--accent);transition:width .8s cubic-bezier(.4,0,.2,1)}
+.analysis-text{margin-top:14px;font-size:12px;color:var(--text2);line-height:1.7;padding-top:14px;border-top:1px solid var(--border)}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.metric-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px 20px;position:relative;overflow:hidden;animation:fadeIn .3s ease both;transition:border-color .2s}
+.metric-card:hover{border-color:var(--border2)}
+.mc-label{font-size:10px;letter-spacing:.08em;color:var(--text3);text-transform:uppercase;margin-bottom:10px}
+.mc-impact{font-family:var(--display);font-size:26px;font-weight:800;line-height:1;margin-bottom:6px}
+.mc-dir{display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:10px}
+.mc-bar-track{height:3px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;margin-bottom:10px}
+.mc-bar-fill{height:100%;border-radius:2px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.mc-reasoning{font-size:11px;color:var(--text3);line-height:1.5}
+.tf-row{display:flex;gap:8px}
+.tf-card{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;animation:fadeIn .3s ease both}
+.tf-head{font-size:10px;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.tf-badge{padding:2px 8px;border-radius:10px;font-size:9px}
+.tf-content{font-size:11px;color:var(--text2);line-height:1.6}
+.risks-card{background:var(--bg2);border:1px solid rgba(255,71,87,.2);border-radius:10px;padding:18px 20px;animation:fadeIn .3s ease both}
+.risks-title{font-size:10px;letter-spacing:.1em;color:rgba(255,71,87,.7);text-transform:uppercase;margin-bottom:12px}
+.risk-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}
+.risk-dot{width:4px;height:4px;border-radius:50%;background:var(--danger);margin-top:5px;flex-shrink:0}
+.risk-text,.opp-text{font-size:12px;color:var(--text2);line-height:1.5}
+.opps-card{background:var(--bg2);border:1px solid rgba(0,212,161,.2);border-radius:10px;padding:18px 20px;animation:fadeIn .3s ease both}
+.opps-title{font-size:10px;letter-spacing:.1em;color:rgba(0,212,161,.7);text-transform:uppercase;margin-bottom:12px}
+.opp-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}
+.opp-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);margin-top:5px;flex-shrink:0}
+.error-card{background:rgba(255,71,87,.06);border:1px solid rgba(255,71,87,.25);border-radius:10px;padding:16px 20px;font-size:12px;color:#ff8a94;line-height:1.6}
+.rs-title{font-size:9px;letter-spacing:.15em;color:var(--text3);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.rs-title::after{content:'';flex:1;height:1px;background:var(--border)}
+/* ═══ GAME THEORY PAGE ═══════════════════════════════════════════════════════ */
+.gt-page{padding:28px;min-height:calc(100vh - 96px)}
+.gt-hdr{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.flag-badge{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:5px 14px;border-radius:20px;border:1px solid}
+.flag-us{background:rgba(0,153,255,.08);color:#60aaff;border-color:rgba(0,153,255,.25)}
+.flag-ir{background:rgba(255,71,87,.08);color:#ff8a94;border-color:rgba(255,71,87,.25)}
+.vs-lbl{font-size:12px;color:var(--text3)}
+.bridge-banner{background:linear-gradient(90deg,rgba(0,212,161,.06),rgba(0,153,255,.06));border:1px solid rgba(0,212,161,.2);border-radius:10px;padding:14px 18px;margin-bottom:20px;display:none}
+.bridge-banner.on{display:flex;align-items:center;gap:14px}
+.bridge-text{flex:1;font-size:12px;color:var(--text2);line-height:1.5}
+.bridge-btn{background:rgba(0,212,161,.12);border:1px solid rgba(0,212,161,.3);border-radius:6px;padding:7px 14px;font-size:11px;color:var(--accent);cursor:pointer;white-space:nowrap;transition:all .15s;font-family:var(--mono)}
+.bridge-btn:hover{background:rgba(0,212,161,.2)}
+.gt-tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--bg2);padding:4px;border-radius:8px;border:1px solid var(--border);width:fit-content}
+.gt-tab{padding:7px 18px;font-size:12px;cursor:pointer;border-radius:6px;border:none;background:transparent;color:var(--text3);transition:all .18s;font-family:var(--mono);letter-spacing:.02em}
+.gt-tab.active{background:var(--bg3);color:var(--text);border:1px solid var(--border2)}
+.gt-panel{display:none}
+.gt-panel.active{display:block}
+/* Matrix */
+.matrix-wrap{overflow-x:auto;margin-bottom:20px}
+.payoff-grid{border-collapse:collapse;font-size:12px;min-width:560px;width:100%}
+.payoff-grid th{padding:9px 12px;font-size:10px;letter-spacing:.05em;color:var(--text3);text-transform:uppercase;border:1px solid var(--border);background:var(--bg2);font-weight:500}
+.payoff-grid td{padding:9px 12px;text-align:center;border:1px solid var(--border);transition:background .15s}
+.row-hdr{text-align:left!important;background:var(--bg2);color:var(--text2);font-size:11px;min-width:130px}
+.cell-val{font-weight:500;font-size:12px;color:var(--text)}
+.cell-desc{font-size:10px;color:var(--text3);margin-top:3px}
+.cell-hover:hover{background:var(--bg3);cursor:pointer}
+.nash-cell{background:rgba(0,212,161,.06)!important}
+.nash-cell .cell-val{color:var(--accent)}
+.nash-badge{display:inline-block;font-size:9px;padding:2px 7px;background:rgba(0,212,161,.15);color:var(--accent);border-radius:10px;margin-top:4px}
+/* Bar charts */
+.bar-section{margin-top:16px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.bar-lbl{font-size:11px;color:var(--text2);min-width:150px}
+.bar-track{flex:1;height:16px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:8px;font-size:10px;font-weight:500;transition:width .5s}
+/* Ladder */
+.ladder-wrap{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.ladder-step{display:flex;align-items:stretch;gap:12px;cursor:pointer}
+.step-num{width:28px;height:28px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;margin-top:4px}
+.step-body{flex:1;padding:10px 14px;border-radius:8px;border:1px solid var(--border);transition:all .15s}
+.step-body:hover{border-color:var(--border2);background:var(--bg3)}
+.step-title{font-size:13px;font-weight:500;font-family:var(--display);margin-bottom:5px}
+.step-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.prob-bar-wrap{flex:1;min-width:80px;height:4px;background:var(--border);border-radius:2px}
+.prob-bar{height:100%;border-radius:2px;transition:width .4s}
+.prob-label{font-size:10px;color:var(--text3)}
+.actor-tag{font-size:10px;padding:2px 8px;border-radius:10px}
+.step-detail{background:var(--bg2);border-radius:8px;padding:14px 16px;margin-top:6px;border:1px solid var(--border);font-size:12px;line-height:1.6;display:none;animation:fadeIn .2s ease}
+.step-detail.open{display:block}
+.step-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;font-size:11px}
+/* Simulation */
+.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.sim-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px}
+.sim-card-title{font-family:var(--display);font-size:14px;font-weight:700;margin-bottom:14px}
+.factor-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.factor-lbl{font-size:11px;color:var(--text2);flex:1}
+.factor-val{font-size:11px;font-weight:500;min-width:18px;text-align:right}
+input[type=range]{flex:1;accent-color:var(--accent)}
+.run-btn{width:100%;padding:10px;margin:4px 0 16px;font-family:var(--display);font-size:13px;font-weight:700;color:#0a0c0f;background:var(--accent);border:none;border-radius:8px;cursor:pointer;transition:all .15s}
+.run-btn:hover{background:#00f0b8}
+.outcome-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+.outcome-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center}
+.outcome-val{font-family:var(--display);font-size:22px;font-weight:800;margin-bottom:4px}
+.outcome-lbl{font-size:10px;color:var(--text3)}
+.eq-result{padding:14px 16px;border-radius:8px;font-size:12px;line-height:1.6;margin-bottom:16px}
+.eq-stable{background:rgba(0,212,161,.06);border:1px solid rgba(0,212,161,.2)}
+.eq-unstable{background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.2)}
+.eq-conflict{background:rgba(255,71,87,.06);border:1px solid rgba(255,71,87,.2)}
+.eq-title{font-weight:500;font-family:var(--display);font-size:14px;margin-bottom:5px}
+.dist-title{font-size:9px;letter-spacing:.15em;color:var(--text3);text-transform:uppercase;margin-bottom:12px}
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:28px;width:460px;max-width:calc(100vw - 40px);transform:translateY(10px);transition:transform .2s}
+.modal-overlay.open .modal{transform:none}
+.modal-title{font-family:var(--display);font-size:18px;font-weight:700;margin-bottom:6px}
+.modal-sub{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:20px}
+.modal-lbl{font-size:11px;color:var(--text2);margin-bottom:6px}
+.modal-input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:10px 12px;font-family:var(--mono);font-size:12px;color:var(--text);outline:none;margin-bottom:14px}
+.modal-input:focus{border-color:var(--accent)}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end}
+.modal-cancel{background:transparent;border:1px solid var(--border2);border-radius:6px;padding:8px 16px;font-family:var(--mono);font-size:12px;color:var(--text2);cursor:pointer}
+.modal-save{background:var(--accent);border:none;border-radius:6px;padding:8px 18px;font-family:var(--display);font-size:12px;font-weight:700;color:#0a0c0f;cursor:pointer}
+.modal-save:hover{background:#00f0b8}
+.modal-note{font-size:11px;color:var(--text3);line-height:1.5;padding:10px 12px;background:rgba(255,255,255,.03);border-radius:6px}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
+@media(max-width:860px){
+  .ni-app{grid-template-columns:1fr}
+  .left-panel{height:auto;position:static}
+  .main-panel{height:auto}
+  .tf-row,.sim-grid{flex-direction:column}
+  .outcome-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo"><div class="logo-dot"></div>IntelDash<span style="font-family:var(--mono);font-weight:400;font-size:12px;color:var(--text3);margin-left:4px">/ Geopolitical Intelligence</span></div>
+  <div class="topbar-right">
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="api-status" onclick="openModal()"><div class="status-dot" id="status-dot"></div><span id="api-status-text">Connect API</span></div>
+  </div>
+</div>
+
+<div class="page-tabs">
+  <div class="page-tab active" onclick="switchPage('news')">◈ News Impact Analysis</div>
+  <div class="page-tab" onclick="switchPage('gt')">⚔ Hormuz Game Theory</div>
+</div>
+
+<!-- ══ NEWS PAGE ══════════════════════════════════════════════════════════════ -->
+<div class="page active" id="page-news">
+<div class="ni-app">
+  <div class="left-panel">
+    <div class="panel-section">
+      <div class="section-label">News Input</div>
+      <textarea class="headline-input" id="headline-input" placeholder="Paste news headlines here...
+
+• Federal Reserve raises rates 75bps
+• OPEC announces production cuts  
+• Iran seizes tanker in Hormuz strait"></textarea>
+      <button class="analyze-btn" id="analyze-btn" onclick="analyzeHeadline()">Analyze Impact</button>
+    </div>
+    <div class="panel-section">
+      <div class="section-label">Tracked Metrics</div>
+      <div id="metrics-list"></div>
+      <div class="add-metric-row">
+        <input class="add-metric-input" id="new-metric-input" placeholder="Add custom metric..." onkeydown="if(event.key==='Enter')addMetric()">
+        <button class="add-metric-btn" onclick="addMetric()">+</button>
+      </div>
+    </div>
+    <div class="panel-section" style="flex:1">
+      <div class="section-label">Analysis History</div>
+      <div id="history-list"><div style="font-size:11px;color:var(--text3);padding:8px 0">No analyses yet.</div></div>
+    </div>
+  </div>
+  <div class="main-panel" id="main-panel">
+    <div class="empty-state" id="empty-state">
+      <div class="empty-icon">◈</div>
+      <div class="empty-title">Awaiting Intelligence</div>
+      <div class="empty-sub">Paste news headlines and click Analyze Impact. Hormuz-related headlines automatically update the Game Theory simulation parameters.</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px">Try a sample:</div>
+      <div class="sample-headlines">
+        <button class="sample-btn" onclick="useSample(0)">📊 Fed raises interest rates 50bps amid persistent inflation, signals more hikes ahead</button>
+        <button class="sample-btn" onclick="useSample(1)">🛢️ OPEC+ cuts oil production by 2 million barrels per day starting November</button>
+        <button class="sample-btn" onclick="useSample(2)">⚔️ Iran IRGC seizes commercial tanker in Strait of Hormuz — US 5th Fleet mobilizes</button>
+        <button class="sample-btn" onclick="useSample(3)">🤖 OpenAI announces GPT-5 with 10x capability improvement, cuts enterprise pricing 40%</button>
+      </div>
+    </div>
+    <div class="results-wrap" id="results-wrap" style="display:none"></div>
+  </div>
+</div>
+</div>
+
+<!-- ══ GAME THEORY PAGE ═══════════════════════════════════════════════════════ -->
+<div class="page" id="page-gt">
+<div class="gt-page">
+  <div class="gt-hdr">
+    <div class="flag-badge flag-us">🇺🇸 United States</div>
+    <span class="vs-lbl">vs</span>
+    <div class="flag-badge flag-ir">🇮🇷 Iran</div>
+    <span style="margin-left:auto;font-size:12px;color:var(--text3)">Strait of Hormuz — Predictive Game Theory Simulation</span>
+  </div>
+
+  <div class="bridge-banner" id="bridge-banner">
+    <div style="font-size:18px">⚡</div>
+    <div class="bridge-text"><strong id="bridge-hl" style="color:var(--text);display:block;margin-bottom:3px"></strong>AI detected Hormuz-relevant signals. Simulation parameters have been auto-updated from the news analysis.</div>
+    <button class="bridge-btn" onclick="runSim()">▶ Re-run Simulation</button>
+  </div>
+
+  <div class="gt-tabs">
+    <button class="gt-tab active" onclick="switchGtTab('matrix')">Payoff Matrix</button>
+    <button class="gt-tab" onclick="switchGtTab('escalation')">Escalation Ladder</button>
+    <button class="gt-tab" onclick="switchGtTab('simulation')">Monte Carlo</button>
+  </div>
+
+  <!-- MATRIX -->
+  <div class="gt-panel active" id="gt-matrix">
+    <p style="font-size:12px;color:var(--text3);margin-bottom:16px;line-height:1.6">Simultaneous-move normal-form game. Cells show (US payoff, Iran payoff) — higher is better for that actor. <span style="background:rgba(0,212,161,.12);color:var(--accent);padding:2px 7px;border-radius:8px;font-size:10px;margin-left:4px">★ Nash Equilibrium</span></p>
+    <div class="matrix-wrap"><table class="payoff-grid"><thead><tr><th style="text-align:left"></th><th>Iran: Keep open</th><th>Iran: Mine strait</th><th>Iran: Close strait</th><th>Iran: Full blockade</th></tr></thead><tbody id="matrix-body"></tbody></table></div>
+    <div class="bar-section"><div style="font-size:9px;letter-spacing:.15em;color:var(--text3);text-transform:uppercase;margin-bottom:12px">Best-response payoffs by scenario</div><div id="payoff-bars"></div></div>
+    <div style="margin-top:14px;font-size:11px;color:var(--text3);line-height:1.6"><strong style="color:var(--text2)">Reading the matrix:</strong> The Nash Equilibrium (green) is where neither player improves by unilaterally changing strategy. Deterrence logic produces stable tension around partial closure + US strike posture — the mutual "best worst outcome."</div>
+  </div>
+
+  <!-- LADDER -->
+  <div class="gt-panel" id="gt-escalation">
+    <p style="font-size:12px;color:var(--text3);margin-bottom:16px;line-height:1.6">Sequential game model. Each rung represents a discrete strategic move. Click any step to see conditional probabilities of each actor's next move.</p>
+    <div class="ladder-wrap" id="ladder-wrap"></div>
+    <div class="step-detail" id="step-detail"></div>
+  </div>
+
+  <!-- SIMULATION -->
+  <div class="gt-panel" id="gt-simulation">
+    <p style="font-size:12px;color:var(--text3);margin-bottom:16px;line-height:1.6">Monte Carlo simulation over 10,000 game iterations. Parameters auto-update from Hormuz-related news analyses.</p>
+    <div class="sim-grid">
+      <div class="sim-card">
+        <div class="sim-card-title" style="color:#60aaff">🇺🇸 US Parameters</div>
+        <div class="factor-row"><span class="factor-lbl">Deterrence credibility</span><input type="range" id="us-deter" min="1" max="10" value="8" step="1" oninput="syncV('us-deter')"><span class="factor-val" id="us-deter-v">8</span></div>
+        <div class="factor-row"><span class="factor-lbl">Oil dependency</span><input type="range" id="us-oil" min="1" max="10" value="4" step="1" oninput="syncV('us-oil')"><span class="factor-val" id="us-oil-v">4</span></div>
+        <div class="factor-row"><span class="factor-lbl">Alliance pressure</span><input type="range" id="us-ally" min="1" max="10" value="7" step="1" oninput="syncV('us-ally')"><span class="factor-val" id="us-ally-v">7</span></div>
+        <div class="factor-row"><span class="factor-lbl">Escalation tolerance</span><input type="range" id="us-esc" min="1" max="10" value="5" step="1" oninput="syncV('us-esc')"><span class="factor-val" id="us-esc-v">5</span></div>
+      </div>
+      <div class="sim-card">
+        <div class="sim-card-title" style="color:#ff8a94">🇮🇷 Iran Parameters</div>
+        <div class="factor-row"><span class="factor-lbl">Economic pressure</span><input type="range" id="ir-econ" min="1" max="10" value="8" step="1" oninput="syncV('ir-econ')"><span class="factor-val" id="ir-econ-v">8</span></div>
+        <div class="factor-row"><span class="factor-lbl">Asymmetric capability</span><input type="range" id="ir-asym" min="1" max="10" value="6" step="1" oninput="syncV('ir-asym')"><span class="factor-val" id="ir-asym-v">6</span></div>
+        <div class="factor-row"><span class="factor-lbl">Domestic legitimacy</span><input type="range" id="ir-dom" min="1" max="10" value="5" step="1" oninput="syncV('ir-dom')"><span class="factor-val" id="ir-dom-v">5</span></div>
+        <div class="factor-row"><span class="factor-lbl">Regional proxy strength</span><input type="range" id="ir-proxy" min="1" max="10" value="7" step="1" oninput="syncV('ir-proxy')"><span class="factor-val" id="ir-proxy-v">7</span></div>
+      </div>
+    </div>
+    <button class="run-btn" onclick="runSim()">▶ Run 10,000-iteration Monte Carlo Simulation</button>
+    <div id="sim-outcomes" class="outcome-grid" style="display:none"></div>
+    <div id="sim-eq" style="display:none"></div>
+    <div id="sim-dist" style="display:none"><div class="dist-title">Outcome probability distribution</div><div id="sim-bars"></div></div>
+  </div>
+</div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">Connect Claude API</div>
+    <div class="modal-sub">Enter your Anthropic API key to enable AI-powered news impact analysis. Stored only in your browser's localStorage — never sent anywhere except api.anthropic.com.</div>
+    <div class="modal-lbl">API Key</div>
+    <input class="modal-input" id="modal-key" type="password" placeholder="sk-ant-...">
+    <div class="modal-note">Get your key at <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent)">console.anthropic.com</a> — this app runs entirely in your browser.</div>
+    <br>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-save" onclick="saveKey()">Save & Connect</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── STATE ─────────────────────────────────────────────────────────────────── */
+const S = {
+  apiKey: localStorage.getItem('ni_key') || '',
+  metrics: JSON.parse(localStorage.getItem('ni_metrics') || 'null') || [
+    {id:'oil',   name:'Oil Price',      unit:'USD/bbl', active:true,  color:'#ff6b35'},
+    {id:'usd',   name:'US Dollar (DXY)',unit:'Index',   active:true,  color:'#0099ff'},
+    {id:'sp500', name:'S&P 500',        unit:'Index',   active:true,  color:'#00d4a1'},
+    {id:'bonds', name:'10Y Treasuries', unit:'Yield %', active:true,  color:'#f5a623'},
+    {id:'gold',  name:'Gold',           unit:'USD/oz',  active:true,  color:'#ffd700'},
+    {id:'vix',   name:'VIX Volatility', unit:'Index',   active:false, color:'#ff4757'},
+    {id:'gas',   name:'Natural Gas',    unit:'MMBtu',   active:false, color:'#a29bfe'},
+    {id:'btc',   name:'Bitcoin',        unit:'USD',     active:false, color:'#f5a623'},
+  ],
+  history: JSON.parse(localStorage.getItem('ni_history') || '[]'),
+  current: null,
+};
+
+const SAMPLES = [
+  "Federal Reserve raises interest rates by 50 basis points amid persistent inflation, signaling more hikes ahead through 2024",
+  "OPEC+ agrees to cut oil production by 2 million barrels per day starting November, Saudi Arabia leads coalition",
+  "Iran IRGC seizes commercial tanker in Strait of Hormuz — US 5th Fleet mobilizes, international shipping reroutes, insurance rates spike 300%",
+  "OpenAI announces GPT-5 with 10x capability improvement over GPT-4, enterprise API pricing cut by 40%",
+];
+
+const HORMUZ_KW = ['hormuz','strait','irgc','tanker','persian gulf','blockade','shipping lane','5th fleet','iran navy'];
+
+/* ── BOOT ──────────────────────────────────────────────────────────────────── */
+function init() {
+  renderMetrics(); renderHistory(); updateApiStatus(); startClock();
+  buildMatrix(); buildLadder();
+  if (!S.apiKey) openModal();
+}
+function startClock() {
+  const t = () => document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US',{hour12:false});
+  t(); setInterval(t,1000);
+}
+
+/* ── NAVIGATION ────────────────────────────────────────────────────────────── */
+function switchPage(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.page-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.page-tab')[id==='news'?0:1].classList.add('active');
+}
+function switchGtTab(id) {
+  document.querySelectorAll('.gt-tab').forEach((t,i)=>t.classList.toggle('active',['matrix','escalation','simulation'][i]===id));
+  document.querySelectorAll('.gt-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('gt-'+id).classList.add('active');
+}
+
+/* ── API KEY ───────────────────────────────────────────────────────────────── */
+function openModal(){document.getElementById('modal-overlay').classList.add('open');document.getElementById('modal-key').value=S.apiKey}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open')}
+function saveKey(){S.apiKey=document.getElementById('modal-key').value.trim();localStorage.setItem('ni_key',S.apiKey);updateApiStatus();closeModal()}
+function updateApiStatus(){
+  const dot=document.getElementById('status-dot'),txt=document.getElementById('api-status-text');
+  if(S.apiKey){dot.className='status-dot connected';txt.textContent='API Connected'}
+  else{dot.className='status-dot';txt.textContent='Connect API'}
+}
+
+/* ── METRICS ───────────────────────────────────────────────────────────────── */
+function renderMetrics(){
+  document.getElementById('metrics-list').innerHTML=S.metrics.map(m=>`
+    <div class="metric-item ${m.active?'active':''}" onclick="toggleMetric('${m.id}')">
+      <div class="metric-color" style="background:${m.color}"></div>
+      <div class="metric-name">${m.name}</div><div class="metric-unit">${m.unit}</div>
+      <div class="metric-check ${m.active?'checked':''}"></div>
+    </div>`).join('');
+  localStorage.setItem('ni_metrics',JSON.stringify(S.metrics));
+}
+function toggleMetric(id){const m=S.metrics.find(x=>x.id===id);if(m){m.active=!m.active;renderMetrics()}}
+function addMetric(){
+  const el=document.getElementById('new-metric-input'),val=el.value.trim();if(!val)return;
+  const cols=['#e84393','#a29bfe','#00cec9','#fd79a8','#55efc4','#fdcb6e'];
+  S.metrics.push({id:'c_'+Date.now(),name:val,unit:'Score',active:true,color:cols[Math.floor(Math.random()*cols.length)]});
+  el.value='';renderMetrics();
+}
+
+/* ── HISTORY ───────────────────────────────────────────────────────────────── */
+function renderHistory(){
+  const list=document.getElementById('history-list');
+  if(!S.history.length){list.innerHTML='<div style="font-size:11px;color:var(--text3);padding:8px 0">No analyses yet.</div>';return}
+  const sc={positive:'sp-pos',negative:'sp-neg',neutral:'sp-neu',mixed:'sp-mix'};
+  list.innerHTML=S.history.slice().reverse().map((h,ri)=>{
+    const i=S.history.length-1-ri;
+    return `<div class="history-item ${S.current?.id===h.id?'selected':''}" onclick="loadHistory(${i})">
+      <div class="history-headline">${h.headline}</div>
+      <div class="history-meta"><span class="history-time">${h.time}</span><span class="sentiment-pill ${sc[h.sentiment]||'sp-neu'}">${h.sentiment}</span></div>
+    </div>`;
+  }).join('');
+}
+function loadHistory(i){S.current=S.history[i];renderResults(S.current);renderHistory()}
+function saveHistory(e){S.history.push(e);if(S.history.length>20)S.history.shift();localStorage.setItem('ni_history',JSON.stringify(S.history));renderHistory()}
+
+/* ── SAMPLES ───────────────────────────────────────────────────────────────── */
+function useSample(i){document.getElementById('headline-input').value=SAMPLES[i];document.getElementById('headline-input').focus()}
+
+/* ── ANALYSIS ──────────────────────────────────────────────────────────────── */
+async function analyzeHeadline(){
+  const headline=document.getElementById('headline-input').value.trim();
+  if(!headline)return;
+  if(!S.apiKey){openModal();return}
+  const active=S.metrics.filter(m=>m.active);
+  if(!active.length){alert('Enable at least one metric.');return}
+
+  const btn=document.getElementById('analyze-btn');
+  btn.disabled=true;btn.classList.add('loading');
+  btn.innerHTML='<span class="btn-spinner"></span>Analyzing...';
+  showLoading();
+
+  const mj=active.map(m=>`{"id":"${m.id}","name":"${m.name}","unit":"${m.unit}"}`).join(',');
+  const isH=HORMUZ_KW.some(kw=>headline.toLowerCase().includes(kw));
+
+  const prompt=`You are a senior financial analyst and macroeconomic strategist. Analyze this news headline and assess impact on the specified metrics.
+
+HEADLINE: "${headline}"
+METRICS: [${mj}]
+${isH?'\nThis headline relates to Iran/Strait of Hormuz tensions. Include a "hormuzImpact" object.':''}
+
+Respond ONLY in valid JSON (no markdown, no preamble):
+{
+  "sentiment":"positive|negative|neutral|mixed",
+  "confidence":0-100,
+  "summary":"2-3 sentence executive summary",
+  "metrics":[{"id":"","direction":"up|down|neutral","magnitude":0-100,"shortTerm":"1-sentence","mediumTerm":"1-sentence","reasoning":"1-sentence"}],
+  "timeframes":{"immediate":"24h impact","shortTerm":"1-4 week impact","longTerm":"3-6 month impact"},
+  "keyRisks":["risk1","risk2","risk3"],
+  "opportunities":["opp1","opp2"]${isH?',\n  "hormuzImpact":{"irEcon":1-10,"irAsym":1-10,"usDeter":1-10,"usEsc":1-10,"escalationRung":1-5,"rationale":"1-sentence explaining which game theory parameters shift and why"}':''}
+}`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,messages:[{role:'user',content:prompt}]})
+    });
+    if(!res.ok){
+      const e=await res.json().catch(()=>({}));
+      if(res.status===401)throw new Error('Invalid API key. Please check your Anthropic API key.');
+      if(res.status===429)throw new Error('Rate limit reached. Please wait a moment and try again.');
+      throw new Error(e.error?.message||`API error ${res.status}`);
+    }
+    const data=await res.json();
+    let txt=data.content[0].text.trim().replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+    const result=JSON.parse(txt);
+    const entry={id:Date.now(),headline,time:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),sentiment:result.sentiment,result,activeMetrics:active};
+    S.current=entry;saveHistory(entry);renderResults(entry);
+    if(result.hormuzImpact) applyHormuzBridge(result.hormuzImpact,headline);
+  }catch(err){
+    showError(err.message);
+  }finally{
+    btn.disabled=false;btn.classList.remove('loading');btn.innerHTML='Analyze Impact';
+  }
+}
+
+/* ── HORMUZ BRIDGE ─────────────────────────────────────────────────────────── */
+function applyHormuzBridge(h,headline){
+  const set=(id,v)=>{const el=document.getElementById(id);if(el){el.value=Math.min(10,Math.max(1,v));document.getElementById(id+'-v').textContent=el.value}};
+  if(h.irEcon) set('ir-econ',h.irEcon);
+  if(h.irAsym) set('ir-asym',h.irAsym);
+  if(h.usDeter) set('us-deter',h.usDeter);
+  if(h.usEsc) set('us-esc',h.usEsc);
+  const banner=document.getElementById('bridge-banner');
+  document.getElementById('bridge-hl').textContent=headline.length>90?headline.slice(0,90)+'…':headline;
+  banner.classList.add('on');
+  if(h.escalationRung) highlightRung(h.escalationRung-1);
+}
+
+/* ── RENDER ────────────────────────────────────────────────────────────────── */
+function showLoading(){
+  document.getElementById('empty-state').style.display='none';
+  const w=document.getElementById('results-wrap');w.style.display='flex';
+  w.innerHTML=`<div style="flex:1;display:flex;align-items:center;justify-content:center;min-height:300px;flex-direction:column;gap:16px">
+    <div style="width:40px;height:40px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite"></div>
+    <div style="font-size:12px;color:var(--text3)">Claude is analyzing...</div></div>`;
+}
+function showError(msg){
+  document.getElementById('results-wrap').style.display='flex';
+  document.getElementById('results-wrap').innerHTML=`<div class="error-card">⚠ ${msg}</div>`;
+}
+function renderResults(entry){
+  const {result,activeMetrics,headline}=entry;
+  document.getElementById('empty-state').style.display='none';
+  const wrap=document.getElementById('results-wrap');wrap.style.display='flex';
+  const sc={positive:'sp-pos',negative:'sp-neg',neutral:'sp-neu',mixed:'sp-mix'}[result.sentiment]||'sp-neu';
+  const cards=(result.metrics||[]).map((m,idx)=>{
+    const meta=activeMetrics.find(x=>x.id===m.id)||{};
+    const col=meta.color||'#00d4a1';
+    const up=m.direction==='up',dn=m.direction==='down';
+    const ic=up?'var(--up)':dn?'var(--down)':'var(--neutral)';
+    const arr=up?'↑':dn?'↓':'→';
+    const mag=Math.min(100,Math.max(0,m.magnitude||50));
+    return `<div class="metric-card" style="animation-delay:${idx*60}ms">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;border-radius:10px 10px 0 0;background:${col}"></div>
+      <div class="mc-label">${meta.name||m.id}</div>
+      <div class="mc-impact" style="color:${ic}">${arr} ${mag<30?'Low':mag<60?'Moderate':mag<80?'High':'Critical'}</div>
+      <div class="mc-dir" style="color:${ic}"><span>${arr}</span><span>${up?'Bullish':dn?'Bearish':'Neutral'} · ${mag}% magnitude</span></div>
+      <div class="mc-bar-track"><div class="mc-bar-fill" style="width:${mag}%;background:${col}"></div></div>
+      <div class="mc-reasoning">${m.reasoning||''}</div></div>`;
+  }).join('');
+  const tf=result.timeframes||{};
+  const risks=(result.keyRisks||[]).map(r=>`<div class="risk-item"><div class="risk-dot"></div><div class="risk-text">${r}</div></div>`).join('');
+  const opps=(result.opportunities||[]).map(o=>`<div class="opp-item"><div class="opp-dot"></div><div class="opp-text">${o}</div></div>`).join('');
+  const hNote=result.hormuzImpact?`<div style="background:rgba(0,153,255,.06);border:1px solid rgba(0,153,255,.2);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--text2);line-height:1.6">
+    <strong style="color:#60aaff">⚔ Game Theory Simulation Updated</strong> — ${result.hormuzImpact.rationale||'Hormuz simulation parameters updated.'}
+    <button onclick="switchPage('gt');runSim()" style="margin-left:10px;background:rgba(0,153,255,.12);border:1px solid rgba(0,153,255,.3);border-radius:6px;padding:4px 12px;font-size:11px;color:#60aaff;cursor:pointer;font-family:var(--mono)">View & Run Simulation →</button></div>`:''
+  wrap.innerHTML=`
+    <div class="headline-card">
+      <div class="headline-label">Analyzed Headline</div>
+      <div class="headline-text">${headline}</div>
+      <div class="sentiment-row">
+        <span class="big-sentiment ${sc}">${(result.sentiment||'').toUpperCase()}</span>
+        <div class="conf-wrap"><span class="conf-lbl">Confidence</span><div class="conf-bar"><div class="conf-fill" style="width:${result.confidence||75}%"></div></div><span class="conf-lbl">${result.confidence||75}%</span></div>
+      </div>
+      <div class="analysis-text">${result.summary||''}</div>
+    </div>
+    ${hNote}
+    <div><div class="rs-title">Metric Impact Assessment</div><div class="metrics-grid">${cards}</div></div>
+    <div><div class="rs-title">Impact Timeframes</div>
+      <div class="tf-row">
+        <div class="tf-card"><div class="tf-head"><span class="tf-badge" style="background:rgba(0,153,255,.12);color:#60aaff">24h</span>Immediate</div><div class="tf-content">${tf.immediate||'—'}</div></div>
+        <div class="tf-card"><div class="tf-head"><span class="tf-badge" style="background:rgba(245,166,35,.12);color:var(--warn)">1-4w</span>Short-term</div><div class="tf-content">${tf.shortTerm||'—'}</div></div>
+        <div class="tf-card"><div class="tf-head"><span class="tf-badge" style="background:rgba(0,212,161,.12);color:var(--accent)">3-6m</span>Long-term</div><div class="tf-content">${tf.longTerm||'—'}</div></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="risks-card"><div class="risks-title">⚠ Key Risks</div><div>${risks||'<div class="risk-text">None identified.</div>'}</div></div>
+      <div class="opps-card"><div class="opps-title">◆ Opportunities</div><div>${opps||'<div class="opp-text">None identified.</div>'}</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);padding:4px 0 8px;line-height:1.5">⚑ AI-generated for informational purposes only. Not financial advice. Analyzed at ${entry.time}.</div>`;
+}
+
+/* ── GAME THEORY ───────────────────────────────────────────────────────────── */
+const MDATA={
+  us:['Status quo (patrol)','Coercive posture','Military strike','Full blockade resp.'],
+  ir:['Keep open','Mine strait','Close strait','Full blockade'],
+  p:  [[[6,5],[3,7],[1,4],[-2,3]],[[7,3],[4,5],[2,6],[-1,4]],[[5,2],[6,4],[8,2],[3,1]],[[4,1],[5,3],[7,3],[6,2]]],
+  lb: [
+    [['Stable deterrence','Face maintained'],['US credibility hit','Shipping disrupted'],['Mutual loss','Oil spike'],['War threshold','Extreme escalation']],
+    [['US gains credibility','Iran backs down'],['Tense standoff','Both probe limits'],['US justification','Iran tests resolve'],['Near-war','Coalition builds']],
+    [['Disproportionate','Iran gains sympathy'],['Tactical strike','Mine clearance ops'],['Nash eq.','Mutual deterrence'],['Escalation','Regional war risk']],
+    [['US overreach','Regional backlash'],['Counter-mine ops','Extended conflict'],['US victory','Iran isolated'],['Full war','Catastrophic both']]
+  ],
+  nash:[[0,2],[1,0],[2,1],[2,2]]
+};
+const isNash=(r,c)=>MDATA.nash.some(([a,b])=>a===r&&b===c);
+
+function buildMatrix(){
+  let h='';
+  MDATA.us.forEach((us,r)=>{
+    h+=`<tr><td class="row-hdr">US: ${us}</td>`;
+    MDATA.ir.forEach((ir,c)=>{
+      const[up,ip]=MDATA.p[r][c],[d1]=MDATA.lb[r][c],n=isNash(r,c);
+      const cl=n?'nash-cell cell-hover':(up>5?'cell-hover':(ip>5?'cell-hover':'cell-hover'));
+      h+=`<td class="${cl}" style="${n?'':''}"><div class="cell-val">${up>0?'+':''}${up} / ${ip>0?'+':''}${ip}</div><div class="cell-desc">${d1}</div>${n?'<div class="nash-badge">★ Nash Eq.</div>':''}</td>`;
+    });
+    h+='</tr>';
+  });
+  document.getElementById('matrix-body').innerHTML=h;
+  const scens=[
+    {n:'Stable deterrence',us:6,ir:5,uc:'#0099ff',ic:'#ff4757'},
+    {n:'Coercive standoff',us:7,ir:3,uc:'#0099ff',ic:'#ff4757'},
+    {n:'Strike + closure (Nash)',us:8,ir:2,uc:'#00d4a1',ic:'#ff4757'},
+    {n:'Full war',us:6,ir:2,uc:'#f5a623',ic:'#ff4757'},
+    {n:'Blockade — Iran wins',us:-2,ir:3,uc:'#ff4757',ic:'#00d4a1'},
+  ];
+  document.getElementById('payoff-bars').innerHTML=scens.map(s=>{
+    const uw=Math.max(0,Math.round((Math.max(0,s.us)/10)*100)),iw=Math.max(0,Math.round((s.ir/10)*100));
+    return `<div class="bar-row"><span class="bar-lbl">${s.n}</span><div style="flex:1">
+      <div class="bar-row" style="margin-bottom:3px"><span style="font-size:10px;width:22px;color:#60aaff">US</span><div class="bar-track"><div class="bar-fill" style="width:${uw}%;background:${s.uc}35;color:${s.uc}">${s.us>0?'+':''}${s.us}</div></div></div>
+      <div class="bar-row"><span style="font-size:10px;width:22px;color:#ff8a94">IR</span><div class="bar-track"><div class="bar-fill" style="width:${iw}%;background:${s.ic}35;color:${s.ic}">${s.ir>0?'+':''}${s.ir}</div></div></div>
+    </div></div>`;
+  }).join('');
+}
+
+const LADDER=[
+  {l:1,title:'Status quo / Freedom of Navigation',actors:['US','Iran'],color:'#1D9E75',esc:12,
+   desc:'US 5th Fleet patrols, Iran IRGC Navy shadows. Both parties signal deterrence without direct confrontation. Classic deterrence equilibrium.',
+   next:{US:'Coercive signaling (68%), de-escalate (32%)',Iran:'Harassment ops (55%), cooperate (45%)'}},
+  {l:2,title:'Harassment & signaling operations',actors:['Iran'],color:'#639922',esc:25,
+   desc:'Iranian fast boats harass tankers, brief detentions of foreign vessels. US responds with warnings. Both sides probe limits without crossing red lines.',
+   next:{US:'Naval build-up (62%), back off (38%)',Iran:'Mine deployment (40%), hold position (60%)'}},
+  {l:3,title:'Mine deployment / tanker attacks',actors:['Iran'],color:'#BA7517',esc:38,
+   desc:'Iran deploys limpet mines or proxy strikes on tankers (as seen in 2019). Global oil prices spike. US begins mine-countermeasure operations.',
+   next:{US:'Limited air strike (55%), diplomatic push (45%)',Iran:'Escalate to closure (35%), negotiate (65%)'}},
+  {l:4,title:'Partial strait closure / US strike',actors:['US','Iran'],color:'#D85A30',esc:55,
+   desc:'Iran announces partial closure or US conducts targeted strikes on IRGC naval assets. Critical inflection — Nash equilibrium zone. Maximum coercive signaling.',
+   next:{US:'Full military campaign (40%), ceasefire (60%)',Iran:'Missile salvo (45%), back-channel (55%)'}},
+  {l:5,title:'Full blockade / regional war',actors:['US','Iran'],color:'#A32D2D',esc:90,
+   desc:'Complete strait closure. US-led coalition forced to respond with full military operation. Iran activates proxy network (Hezbollah, Houthis, PMF). Oil $200+.',
+   next:{US:'War until resolution (90%), negotiate under fire (10%)',Iran:'Regime survival (95%), limited concession (5%)'}},
+];
+
+let selRung=null;
+function buildLadder(){
+  document.getElementById('ladder-wrap').innerHTML=LADDER.map((s,i)=>{
+    const at=s.actors.map(a=>`<span class="actor-tag" style="background:${a==='US'?'rgba(0,153,255,.1)':'rgba(255,71,87,.1)'};color:${a==='US'?'#60aaff':'#ff8a94'}">${a==='US'?'🇺🇸 US':'🇮🇷 Iran'}</span>`).join('');
+    return `<div class="ladder-step" onclick="selectRung(${i})">
+      <div class="step-num" style="background:${s.color}22;color:${s.color};border:1px solid ${s.color}44">${s.l}</div>
+      <div class="step-body" id="rung-${i}" style="border-color:${s.color}33">
+        <div class="step-title">${s.title}</div>
+        <div class="step-meta">${at}<div class="prob-bar-wrap"><div class="prob-bar" style="width:${s.esc}%;background:${s.color}"></div></div><span class="prob-label">${s.esc}% escalation risk</span></div>
+      </div></div>`;
+  }).join('');
+}
+function selectRung(i){
+  const s=LADDER[i],det=document.getElementById('step-detail');
+  if(selRung===i){det.classList.remove('open');selRung=null;return}
+  selRung=i;det.classList.add('open');
+  det.innerHTML=`<strong style="font-family:var(--display);color:var(--text)">${s.title}</strong>
+    <p style="margin:8px 0;color:var(--text2)">${s.desc}</p>
+    <div class="step-detail-grid">
+      <div><span style="font-weight:500;color:#60aaff">🇺🇸 US next move:</span><br><span style="color:var(--text2)">${s.next.US}</span></div>
+      <div><span style="font-weight:500;color:#ff8a94">🇮🇷 Iran next move:</span><br><span style="color:var(--text2)">${s.next.Iran}</span></div>
+    </div>`;
+}
+function highlightRung(i){if(i>=0&&i<LADDER.length){switchGtTab('escalation');selectRung(i)}}
+
+function syncV(id){document.getElementById(id+'-v').textContent=document.getElementById(id).value}
+
+function runSim(){
+  switchGtTab('simulation');
+  const g=id=>+document.getElementById(id).value;
+  const N=10000,counts={stable:0,tension:0,crisis:0,limited:0,war:0};
+  for(let i=0;i<N;i++){
+    const r=()=>Math.random();
+    const irA=(g('ir-econ')+g('ir-asym')+g('ir-proxy')-g('ir-dom')/2)/25;
+    const usR=(g('us-deter')+g('us-ally')+g('us-esc')-g('us-oil')/2)/25;
+    const n=(r()-.5)*.3;const ir=irA+n,us=usR+n*.8;
+    if(ir<.28)counts.stable++;
+    else if(ir<.42)counts.tension++;
+    else if(ir<.58){if(us>.55)counts.crisis++;else counts.tension++}
+    else if(ir<.72){if(us>.5)counts.limited++;else counts.crisis++}
+    else{if(us>.65||r()<.3)counts.war++;else counts.limited++}
+  }
+  const pct=v=>Math.round(v/N*100);
+  const outs=[
+    {l:'Stable deterrence',v:pct(counts.stable), c:'#1D9E75'},
+    {l:'Active tensions',  v:pct(counts.tension), c:'#BA7517'},
+    {l:'Crisis / standoff',v:pct(counts.crisis),  c:'#D85A30'},
+    {l:'Limited conflict', v:pct(counts.limited), c:'#A32D2D'},
+    {l:'Full war',         v:pct(counts.war),      c:'#791F1F'},
+  ];
+  const dom=outs.reduce((a,b)=>a.v>b.v?a:b);
+  document.getElementById('sim-outcomes').style.display='grid';
+  document.getElementById('sim-outcomes').innerHTML=outs.map(o=>`<div class="outcome-card"><div class="outcome-val" style="color:${o.c}">${o.v}%</div><div class="outcome-lbl">${o.l}</div></div>`).join('');
+  let ec='eq-stable',et='',ed='';
+  if(dom.l==='Stable deterrence'){ec='eq-stable';et='Nash Equilibrium: Mutual Deterrence';ed='Sustained deterrence is the dominant equilibrium. Neither side can improve by deviating — Iran risks military defeat, the US risks regional entanglement.'}
+  else if(dom.l==='Active tensions'||dom.l==='Crisis / standoff'){ec='eq-unstable';et='Unstable Equilibrium: Coercive Bargaining';ed='A tense but manageable standoff. Iran uses the strait as a bargaining chip; the US maintains credible military threat. Outcome hinges on diplomatic pressure and miscalculation risk.'}
+  else{ec='eq-conflict';et='Dominant Outcome: Escalation to Conflict';ed='Parameters break deterrence stability. High Iranian economic pressure and strong asymmetric capabilities collapse the game-theoretic equilibrium — both actors may prefer conflict to status quo.'}
+  const eq=document.getElementById('sim-eq');eq.style.display='block';
+  eq.innerHTML=`<div class="eq-result ${ec}"><div class="eq-title">${et}</div><div>${ed}</div></div>`;
+  document.getElementById('sim-dist').style.display='block';
+  document.getElementById('sim-bars').innerHTML=outs.map(o=>`<div class="bar-row"><span class="bar-lbl">${o.l}</span><div class="bar-track"><div class="bar-fill" style="width:${o.v}%;background:${o.c};color:#fff">${o.v}%</div></div></div>`).join('');
+}
+
+init();
+</script>
+</body>
+</html>
