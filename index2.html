@@ -192,7 +192,8 @@ input[type=range]{flex:1;accent-color:var(--accent)}
 .run-btn{width:100%;padding:10px;margin:4px 0 16px;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);background:transparent;border:1px solid rgba(212,135,10,.55);border-radius:2px;cursor:pointer;transition:all .2s}
 .run-btn:hover{background:rgba(212,135,10,.12);border-color:var(--accent);color:#fff}
 .outcome-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
-.outcome-card{background:var(--bg2);border:1px solid var(--border);border-radius:2px;padding:12px;text-align:center}
+.outcome-card{background:var(--bg2);border:1px solid var(--border);border-radius:2px;padding:12px;text-align:center;transition:border-color .2s}
+.outcome-card.dominant{border-color:rgba(255,255,255,.2)}
 .outcome-val{font-family:var(--display);font-size:28px;letter-spacing:.02em;margin-bottom:4px}
 .outcome-lbl{font-size:10px;color:var(--text3)}
 .eq-result{padding:14px 16px;border-radius:2px;font-family:var(--serif);font-size:0.8rem;line-height:1.7;margin-bottom:16px}
@@ -201,6 +202,21 @@ input[type=range]{flex:1;accent-color:var(--accent)}
 .eq-conflict{background:rgba(231,76,60,.06);border:1px solid rgba(231,76,60,.2)}
 .eq-title{font-family:var(--display);font-size:20px;letter-spacing:.02em;margin-bottom:5px}
 .dist-title{font-size:9px;font-weight:600;letter-spacing:.18em;color:var(--text3);text-transform:uppercase;margin-bottom:12px}
+/* Donut chart */
+.sim-viz{display:grid;grid-template-columns:200px 1fr;gap:24px;align-items:center;margin-bottom:20px}
+.donut-wrap{position:relative;width:200px;height:200px;flex-shrink:0}
+.donut-svg{width:200px;height:200px;transform:rotate(-90deg)}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.donut-dominant-val{font-family:var(--display);font-size:38px;letter-spacing:.02em;line-height:1}
+.donut-dominant-lbl{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-top:4px;text-align:center;max-width:80px}
+.dist-bars{display:flex;flex-direction:column;gap:10px}
+.dist-bar-row{display:flex;align-items:center;gap:10px}
+.dist-bar-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dist-bar-lbl{font-size:11px;color:var(--text2);min-width:120px}
+.dist-bar-track{flex:1;height:20px;background:rgba(255,255,255,.04);border-radius:1px;overflow:hidden;position:relative}
+.dist-bar-fill{height:100%;border-radius:1px;display:flex;align-items:center;padding-left:8px;font-family:var(--mono);font-size:10px;font-weight:600;color:rgba(255,255,255,.85);transition:width 1s cubic-bezier(.4,0,.2,1);min-width:2px}
+.dist-bar-pct{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:600;font-family:var(--mono);color:var(--text3)}
+@keyframes countUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 /* Modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-overlay.open{opacity:1;pointer-events:all}
@@ -345,7 +361,7 @@ input[type=range]{flex:1;accent-color:var(--accent)}
     <button class="run-btn" onclick="runSim()">▶ Run 10,000-iteration Monte Carlo Simulation</button>
     <div id="sim-outcomes" class="outcome-grid" style="display:none"></div>
     <div id="sim-eq" style="display:none"></div>
-    <div id="sim-dist" style="display:none"><div class="dist-title">Outcome probability distribution</div><div id="sim-bars"></div></div>
+    <div id="sim-dist" style="display:none"><div class="dist-title">Outcome probability distribution — 10,000 iterations</div><div id="sim-bars"></div></div>
   </div>
 </div>
 </div>
@@ -687,6 +703,35 @@ function highlightRung(i){if(i>=0&&i<LADDER.length){switchGtTab('escalation');se
 
 function syncV(id){document.getElementById(id+'-v').textContent=document.getElementById(id).value}
 
+function buildDonut(outs, dom) {
+  const R = 80, cx = 100, cy = 100, stroke = 22;
+  const circ = 2 * Math.PI * R;
+  let offset = 0;
+  const segs = outs.map(o => {
+    const len = (o.v / 100) * circ;
+    const seg = { ...o, offset, len };
+    offset += len;
+    return seg;
+  });
+  const paths = segs.map(s =>
+    s.v === 0 ? '' :
+    `<circle cx="${cx}" cy="${cy}" r="${R}"
+       fill="none" stroke="${s.c}" stroke-width="${stroke}"
+       stroke-dasharray="${s.len} ${circ - s.len}"
+       stroke-dashoffset="${-s.offset}"
+       opacity="0.88"
+       style="transition:stroke-dasharray 1s cubic-bezier(.4,0,.2,1)"/>`
+  ).join('');
+  return `<svg class="donut-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="${stroke}"/>
+    ${paths}
+  </svg>
+  <div class="donut-center">
+    <div class="donut-dominant-val" style="color:${dom.c}">${dom.v}%</div>
+    <div class="donut-dominant-lbl">${dom.l}</div>
+  </div>`;
+}
+
 function runSim(){
   switchGtTab('simulation');
   const g=id=>+document.getElementById(id).value;
@@ -704,23 +749,60 @@ function runSim(){
   }
   const pct=v=>Math.round(v/N*100);
   const outs=[
-    {l:'Stable deterrence',v:pct(counts.stable), c:'#1D9E75'},
-    {l:'Active tensions',  v:pct(counts.tension), c:'#BA7517'},
-    {l:'Crisis / standoff',v:pct(counts.crisis),  c:'#D85A30'},
-    {l:'Limited conflict', v:pct(counts.limited), c:'#A32D2D'},
-    {l:'Full war',         v:pct(counts.war),      c:'#791F1F'},
+    {l:'Stable deterrence', v:pct(counts.stable),  c:'#1D9E75', icon:'●'},
+    {l:'Active tensions',   v:pct(counts.tension),  c:'#BA7517', icon:'●'},
+    {l:'Crisis / standoff', v:pct(counts.crisis),   c:'#D85A30', icon:'●'},
+    {l:'Limited conflict',  v:pct(counts.limited),  c:'#A32D2D', icon:'●'},
+    {l:'Full war',          v:pct(counts.war),       c:'#791F1F', icon:'●'},
   ];
   const dom=outs.reduce((a,b)=>a.v>b.v?a:b);
+
+  /* Outcome cards */
   document.getElementById('sim-outcomes').style.display='grid';
-  document.getElementById('sim-outcomes').innerHTML=outs.map(o=>`<div class="outcome-card"><div class="outcome-val" style="color:${o.c}">${o.v}%</div><div class="outcome-lbl">${o.l}</div></div>`).join('');
-  let ec='eq-stable',et='',ed='';
-  if(dom.l==='Stable deterrence'){ec='eq-stable';et='Nash Equilibrium: Mutual Deterrence';ed='Sustained deterrence is the dominant equilibrium. Neither side can improve by deviating — Iran risks military defeat, the US risks regional entanglement.'}
-  else if(dom.l==='Active tensions'||dom.l==='Crisis / standoff'){ec='eq-unstable';et='Unstable Equilibrium: Coercive Bargaining';ed='A tense but manageable standoff. Iran uses the strait as a bargaining chip; the US maintains credible military threat. Outcome hinges on diplomatic pressure and miscalculation risk.'}
-  else{ec='eq-conflict';et='Dominant Outcome: Escalation to Conflict';ed='Parameters break deterrence stability. High Iranian economic pressure and strong asymmetric capabilities collapse the game-theoretic equilibrium — both actors may prefer conflict to status quo.'}
+  document.getElementById('sim-outcomes').innerHTML=outs.map(o=>`
+    <div class="outcome-card ${o.l===dom.l?'dominant':''}" style="${o.l===dom.l?`border-color:${o.c}44`:''};animation:countUp .4s ease both">
+      <div style="width:6px;height:6px;border-radius:50%;background:${o.c};margin:0 auto 8px"></div>
+      <div class="outcome-val" style="color:${o.c}">${o.v}%</div>
+      <div class="outcome-lbl">${o.l}</div>
+    </div>`).join('');
+
+  /* Equilibrium assessment */
+  let ec='eq-stable',et='',ed='',eti='';
+  if(dom.l==='Stable deterrence'){
+    ec='eq-stable';eti='◆';
+    et='Nash Equilibrium: Mutual Deterrence';
+    ed='Sustained deterrence is the dominant equilibrium. Neither side can improve by deviating — Iran risks military defeat, the US risks regional entanglement.';
+  } else if(dom.l==='Active tensions'||dom.l==='Crisis / standoff'){
+    ec='eq-unstable';eti='◈';
+    et='Unstable Equilibrium: Coercive Bargaining';
+    ed='A tense but manageable standoff. Iran uses the strait as a bargaining chip; the US maintains a credible military threat. Outcome hinges on diplomatic pressure and miscalculation risk.';
+  } else {
+    ec='eq-conflict';eti='⚠';
+    et='Dominant Outcome: Escalation to Conflict';
+    ed='Parameters break deterrence stability. High Iranian economic pressure and strong asymmetric capabilities collapse the game-theoretic equilibrium — both actors may prefer conflict to status quo.';
+  }
   const eq=document.getElementById('sim-eq');eq.style.display='block';
-  eq.innerHTML=`<div class="eq-result ${ec}"><div class="eq-title">${et}</div><div>${ed}</div></div>`;
+  eq.innerHTML=`<div class="eq-result ${ec}"><div class="eq-title">${eti} ${et}</div><div>${ed}</div></div>`;
+
+  /* Visualization: donut + bars */
   document.getElementById('sim-dist').style.display='block';
-  document.getElementById('sim-bars').innerHTML=outs.map(o=>`<div class="bar-row"><span class="bar-lbl">${o.l}</span><div class="bar-track"><div class="bar-fill" style="width:${o.v}%;background:${o.c};color:#fff">${o.v}%</div></div></div>`).join('');
+  document.getElementById('sim-bars').innerHTML=`
+    <div class="sim-viz">
+      <div class="donut-wrap">${buildDonut(outs, dom)}</div>
+      <div class="dist-bars">
+        ${outs.map((o,i)=>`
+          <div class="dist-bar-row" style="animation:countUp .3s ease ${i*80}ms both">
+            <div class="dist-bar-dot" style="background:${o.c}"></div>
+            <span class="dist-bar-lbl">${o.l}</span>
+            <div class="dist-bar-track">
+              <div class="dist-bar-fill" style="width:${Math.max(o.v,0)}%;background:linear-gradient(90deg,${o.c}cc,${o.c}88)">
+                ${o.v>=8?o.v+'%':''}
+              </div>
+              ${o.v<8?`<span class="dist-bar-pct" style="color:${o.c}">${o.v}%</span>`:''}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
 }
 
 init();
