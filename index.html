@@ -449,15 +449,15 @@ footer {
   border-bottom: 1px solid rgba(239,68,68,0.5);
   padding: 0 clamp(1.5rem, 4vw, 3rem);
   display: flex; align-items: center; gap: 1.5rem;
-  height: 52px; position: relative; z-index: 101;
+  height: 64px; position: relative; z-index: 101;
 }
 .bb-badge {
-  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  font-family: var(--mono); font-size: 13px; font-weight: 700;
   letter-spacing: 0.18em; text-transform: uppercase;
   background: #ef4444; color: #fff;
-  padding: 5px 14px; border-radius: 3px; white-space: nowrap;
+  padding: 7px 16px; border-radius: 3px; white-space: nowrap;
   animation: bb-pulse 2.5s ease-in-out infinite;
-  box-shadow: 0 0 12px rgba(239,68,68,0.5);
+  box-shadow: 0 0 14px rgba(239,68,68,0.6);
 }
 @keyframes bb-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.85;transform:scale(1.02)} }
 .bb-scroll {
@@ -467,14 +467,14 @@ footer {
   align-items: center;
 }
 .bb-text {
-  font-family: var(--mono); font-size: 15px; font-weight: 600;
+  font-family: var(--mono); font-size: 19px; font-weight: 700;
   color: #fca5a5;
   white-space: nowrap;
-  animation: bb-scroll 60s linear infinite;
+  animation: bb-scroll 130s linear infinite;
   display: inline-block;
   padding-left: 100%;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-  letter-spacing: 0.02em;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  letter-spacing: 0.03em;
 }
 @keyframes bb-scroll {
   0%   { transform: translateX(0); }
@@ -491,12 +491,12 @@ footer {
   font-weight: 600;
 }
 
-/* ── ALERT CARD ────────────────────────────────────────────────────── */
+/* ── ALERT CARD — news with metrics impact ─────────────────────────── */
 .alert-card {
   margin: 0; padding: 1.75rem clamp(1.5rem,4vw,3rem);
   background: linear-gradient(135deg, #1c0a0a 0%, #0d1219 100%);
   border-bottom: 1px solid rgba(239,68,68,0.25);
-  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
 }
 @media (max-width:768px){ .alert-card { grid-template-columns: 1fr; } }
@@ -524,6 +524,36 @@ footer {
 .ac-eq {
   font-family: var(--mono); font-size: 10.5px; font-weight: 600;
   color: var(--amber-l); margin-top: .25rem;
+}
+.ac-date {
+  font-family: var(--mono); font-size: 9px; color: rgba(255,255,255,.3);
+  margin-top: .1rem; letter-spacing: .06em;
+}
+.ac-metrics {
+  margin-top: .5rem; padding: .5rem .65rem;
+  background: rgba(255,255,255,.04); border-left: 2px solid rgba(212,135,10,.4);
+  display: flex; flex-direction: column; gap: 3px;
+}
+.ac-metric-row {
+  font-family: var(--mono); font-size: 10px;
+  display: flex; gap: .5rem; align-items: baseline;
+}
+.ac-metric-key { color: rgba(232,226,212,.35); min-width: 80px; flex-shrink: 0; }
+.ac-metric-val { color: var(--amber-l); font-weight: 600; flex: 1; }
+.ac-metric-note { color: rgba(232,226,212,.35); font-size: 9px; font-style: italic; }
+/* alert section header bar */
+.alert-section-bar {
+  padding: 0 clamp(1.5rem,4vw,3rem);
+  height: 36px; display: flex; align-items: center; gap: 1rem;
+  background: rgba(127,29,29,.35);
+  border-bottom: 1px solid rgba(239,68,68,.2);
+}
+.alert-section-label {
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase; color: #ef4444;
+}
+.alert-section-count {
+  font-family: var(--mono); font-size: 10px; color: rgba(252,165,165,.55);
 }
 
 /* ── AUTOMATED BRIEFING ────────────────────────────────────────────── */
@@ -721,32 +751,22 @@ footer {
   <span class="bb-badge">Breaking</span>
   <div class="bb-scroll">
     <span class="bb-text" id="bb-text">
-      ★ 26 MAR 2026 — Iran threatens full Hormuz closure — IRGC declares strait closed indefinitely — Brent remains elevated above $85 — U.S. 5th Fleet maintains carrier strike groups in Gulf — Saudi Arabia and UAE coordinate on safe-passage protocols — China increases mBridge transactions by 45% — European nations call for de-escalation talks — IMF warns of global economic impact — Hormuz closure enters Day <span id="bb-days">26</span>
+      Loading latest intelligence… Day <span id="bb-days">—</span>
     </span>
   </div>
   <span class="bb-time" id="bb-time">—</span>
 </div>
 
-<!-- ALERT CARDS — breaking developments mapped to equations -->
-<div class="alert-card">
-  <div class="ac-item">
-    <div class="ac-tag red">CRITICAL · Eq.5 — E* impact</div>
-    <div class="ac-title">IRGC declares Hormuz closure indefinite</div>
-    <div class="ac-body">Iran announces strait will remain closed until sanctions lifted. U.S. 5th Fleet maintains carrier strike groups. Military confrontation risk elevated. Model: c(credibility) remains high at 0.90+. E* ≈ 13.4. Deterrence gap = 6.4 (feasible escalation).</div>
-    <div class="ac-eq">ΔE* ≈ 0 · c → 0.90+ · Deterrence gap remains</div>
-  </div>
-  <div class="ac-item">
-    <div class="ac-tag amber">ALERT · Eq.12 — Sr watch</div>
-    <div class="ac-title">China increases mBridge transactions 45%</div>
-    <div class="ac-body">Yuan settlement infrastructure expanding rapidly. European nations seeking de-escalation. Iran demands full OFAC/SWIFT relief - not market waivers. Model: G(Tehran yuan gain) rising. Sr gap remains 18+. Dominance trap intact.</div>
-    <div class="ac-eq">Sr(min) = 18 · Sr(offered) = 0.78 · Gap = 17.22+</div>
-  </div>
-  <div class="ac-item">
-    <div class="ac-tag green">Update · Eq.8 — Hegemony decay</div>
-    <div class="ac-title">Brent remains elevated above $85</div>
-    <div class="ac-body">Oil markets pricing sustained disruption premium. China and Russia accelerating de-dollarization. mBridge transaction volume up 45%. Nations hedging dollar exposure. Model: H(hegemony loss) accelerating. ρI decay rate increasing.</div>
-    <div class="ac-eq">H ↓ 1-2 points · ρI increases · Dollar share eroding</div>
-  </div>
+<!-- ALERT SECTION BAR -->
+<div class="alert-section-bar">
+  <span class="alert-section-label">⚡ Latest Developments — Metrics Impact</span>
+  <span class="alert-section-line" style="flex:1;height:1px;background:rgba(239,68,68,.15);margin:0 .75rem;"></span>
+  <span class="alert-section-count" id="alert-count">loading…</span>
+</div>
+
+<!-- ALERT CARDS — dynamically rendered from params.json news array -->
+<div class="alert-card" id="alert-card-container">
+  <!-- injected by JS from params.json news[] -->
 </div>
 
 <!-- HEADER -->
@@ -1128,51 +1148,90 @@ setInterval(updateClosureDays, 60000);
   setInterval(tick, 30000);
 })();
 
-// Fetch dynamic news from params.json and update banner
+// ── Banner & Alert Cards — driven purely from params.json news[] ─────
 (function() {
   const bbText = document.getElementById('bb-text');
-  if (!bbText) return;
-  
-  fetch('params.json')
+  const alertContainer = document.getElementById('alert-card-container');
+  const alertCount = document.getElementById('alert-count');
+
+  function severityTagClass(s) {
+    if (s === 'red')   return 'red';
+    if (s === 'green') return 'green';
+    return 'amber';
+  }
+
+  function renderAlertCards(newsItems) {
+    if (!alertContainer) return;
+    if (!newsItems || newsItems.length === 0) {
+      alertContainer.innerHTML = '<div class="ac-item" style="grid-column:1/-1"><div class="ac-body" style="color:rgba(232,226,212,.35)">No news items found in params.json</div></div>';
+      return;
+    }
+    alertContainer.innerHTML = newsItems.map(item => {
+      const cls = severityTagClass(item.severity);
+      const mi = item.metricsImpact || {};
+      // Build metrics rows from all keys except 'note'
+      const metricRows = Object.entries(mi)
+        .filter(([k]) => k !== 'note')
+        .map(([k, v]) => `<div class="ac-metric-row"><span class="ac-metric-key">${k.replace(/_/g,' ')}</span><span class="ac-metric-val">${v}</span></div>`)
+        .join('');
+      const noteRow = mi.note
+        ? `<div class="ac-metric-row"><span class="ac-metric-key" style="min-width:unset;color:rgba(232,226,212,.5);font-style:italic;font-size:9.5px">${mi.note}</span></div>`
+        : '';
+      return `
+        <div class="ac-item">
+          <div class="ac-tag ${cls}">${item.severity === 'red' ? 'CRITICAL' : item.severity === 'green' ? 'UPDATE' : 'ALERT'} · ${item.eqLabel || item.eq}</div>
+          <div class="ac-date">${item.date || ''} · ${item.id || ''}</div>
+          <div class="ac-title">${item.headline}</div>
+          <div class="ac-metrics">
+            ${metricRows}
+            ${noteRow}
+          </div>
+        </div>`;
+    }).join('');
+    if (alertCount) alertCount.textContent = newsItems.length + ' event' + (newsItems.length !== 1 ? 's' : '') + ' logged';
+  }
+
+  function buildBannerText(data) {
+    if (!bbText) return;
+    const news = (data.meta && data.meta.news) || [];
+    const closureDays = data.meta && data.meta.closureDays ? data.meta.closureDays : '';
+    let parts = [];
+
+    // Lead: closure day + strategic summary
+    if (closureDays) parts.push('▶ HORMUZ CLOSURE — DAY ' + closureDays);
+    if (data.meta && data.meta.strategicSummary) parts.push(data.meta.strategicSummary);
+
+    // Each news item ticker
+    news.forEach(item => {
+      if (item.ticker) parts.push(item.ticker);
+    });
+
+    // Trap status tail
+    if (data.meta && data.meta.trapStatus) {
+      parts.push('DOMINANT STRATEGY TRAP: ' + data.meta.trapStatus.toUpperCase() + ' — Sr offered = ' +
+        ((data.parameters && data.parameters.Sr) || '0.78') + ' / ' +
+        ((data.parameters && (data.parameters.G + data.parameters.S)) || 18) + ' required');
+    }
+
+    // Analyst notes tail
+    if (data.meta && data.meta.analystNotes) parts.push('ANALYST: ' + data.meta.analystNotes);
+
+    const sep = '   ◆   ';
+    // Duplicate content for seamless loop (content must be wider than viewport)
+    const full = parts.join(sep) + sep + parts.join(sep);
+    bbText.textContent = full;
+  }
+
+  fetch('params.json?v=' + Date.now(), { cache: 'no-store' })
     .then(r => r.json())
     .then(data => {
-      const items = [];
-      
-      // Add strategic summary if available
-      if (data.meta && data.meta.strategicSummary) {
-        items.push(data.meta.strategicSummary);
-      }
-      
-      // Add most significant event if available
-      if (data.meta && data.meta.mostSignificantEvent) {
-        items.push(data.meta.mostSignificantEvent);
-      }
-      
-      // Add trap status
-      if (data.meta && data.meta.trapStatus) {
-        items.push('Trap: ' + data.meta.trapStatus.toUpperCase());
-      }
-      
-      // Add fetched headlines if available
-      if (data.meta && data.meta.headlines && data.meta.headlines.length > 0) {
-        const hlItems = data.meta.headlines.slice(0, 5).map(h => h.title);
-        items.push('LATEST: ' + hlItems.join(' | '));
-      }
-      
-      // Add analyst notes
-      if (data.meta && data.meta.analystNotes) {
-        items.push('Analysis: ' + data.meta.analystNotes);
-      }
-      
-      if (items.length > 0) {
-        // Prepend to existing banner text with separator
-        const currentText = bbText.innerHTML;
-        const separator = ' — ';
-        bbText.innerHTML = items.join(separator) + separator + currentText;
-      }
+      buildBannerText(data);
+      renderAlertCards((data.meta && data.meta.news) || []);
     })
     .catch(err => {
-      console.log('[Banner] Could not fetch dynamic news from params.json:', err.message);
+      console.log('[Banner] Could not fetch params.json:', err.message);
+      if (bbText) bbText.textContent = '★ HORMUZ GAMBIT — Live geoeconomic analysis — Strategic dominance trap active — Sr = 0.78 / 18 required — Day ' + Math.floor((new Date() - new Date('2026-02-28T00:00:00Z')) / 864e5);
+      if (alertCount) alertCount.textContent = 'params.json unavailable';
     });
 })();
 
@@ -1215,9 +1274,9 @@ function updateDisplay(brent, isLive) {
   if (fsEsc)   fsEsc.textContent   = uEsc;
   if (fsGap)   fsGap.textContent   = estar;
 
-  // Masthead Sr (Bessent offer stays at 0.78, threshold G+S=18)
+  // Masthead Sr — uses MODEL.Sr (loaded from params.json)
   const msEl = document.getElementById('ms-sr');
-  if (msEl) msEl.textContent = dom + ' vs 0.78';
+  if (msEl) msEl.textContent = dom + ' vs ' + (MODEL.Sr || 0.78).toFixed(2);
   if (typeof runBriefing === 'function') setTimeout(runBriefing, 100);
 }
 
@@ -1301,6 +1360,16 @@ async function loadParams() {
     // Update Sr ticker immediately
     const srEl = document.getElementById('tick-sr');
     if (srEl) srEl.textContent = MODEL.Sr.toFixed(2) + ' / ' + (MODEL.G + MODEL.S) + ' req.';
+    // Update masthead Sr stat
+    const msSrEl = document.getElementById('ms-sr');
+    if (msSrEl) msSrEl.textContent = (MODEL.G + MODEL.S) + ' vs ' + MODEL.Sr.toFixed(2);
+    // Update masthead dominant strategy broken
+    const msDomEl = document.getElementById('ms-dom-broken');
+    if (msDomEl) {
+      const trapBroken = (MODEL.Sr >= MODEL.G + MODEL.S);
+      msDomEl.textContent = trapBroken ? '★ YES' : 'No';
+      msDomEl.className = 'mast-stat-val ' + (trapBroken ? '' : 'danger');
+    }
     
     // Update Brent price ticker if available in params.json
     if (data.meta?.brentPrice) {
@@ -1362,6 +1431,17 @@ function runBriefing() {
   const brentBadge = b < 100 ? 'ok' : b > 110 ? 'alert' : 'warn';
   const closureDays = Math.floor((new Date() - WAR_START) / 864e5);
 
+  // Build news-with-metrics row from params.json news array
+  const newsItems = (MODEL.meta && MODEL.meta.news) || [];
+  const newsRowLearn = newsItems.length > 0
+    ? newsItems.map((n, i) =>
+        `<span style="color:var(--amber-l);font-weight:600">[${n.id||'N-'+(i+1)}]</span> ${n.date ? '<span style="color:var(--faint)">' + n.date + '</span> — ' : ''}<span style="color:var(--text)">${n.headline}</span> → <span style="color:var(--amber)">${n.eqLabel||n.eq||''}</span>${n.metricsImpact && n.metricsImpact.note ? ' <span style="color:rgba(232,226,212,.45);font-style:italic">' + n.metricsImpact.note + '</span>' : ''}`
+      ).join('<br>')
+    : 'No news items loaded from params.json. Upload news[] array via Admin to populate this row.';
+  const newsRowBadge = newsItems.length > 0
+    ? badge(newsItems.length + ' events', newsItems.some(n => n.severity === 'red') ? 'alert' : 'warn')
+    : badge('No data', 'neu');
+
   const rows = [
     {
       action: 'Portal masthead check',
@@ -1392,6 +1472,11 @@ function runBriefing() {
       action: 'Eq.8 — Hegemony decay (ρ, H)',
       learn: `Decay rate ρ_total ≈ ${(0.03 + MODEL.n * 0.005).toFixed(3)}/round. H after ${closureDays} rounds ≈ ${Math.round(MODEL.H * Math.pow(1 - (0.03 + MODEL.n * 0.005), closureDays) * 10) / 10} (${Math.round(Math.pow(1 - (0.03 + MODEL.n * 0.005), closureDays) * 100)}% of H₀). Iran payoff: +${MODEL.G} every round — constant.`,
       badge: badge('Day ' + closureDays, 'neu'),
+    },
+    {
+      action: 'News feed — all uploaded events with metrics impact',
+      learn: newsRowLearn,
+      badge: newsRowBadge,
     },
   ];
 
