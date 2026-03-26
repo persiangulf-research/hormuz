@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hormuz Gambit — Geoeconomics Research</title>
+<meta name="description" content="Strategic game-theoretic analysis of the 2026 Hormuz crisis, Iran's de-dollarisation, and the collapse of petrodollar hegemony.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+
+/* ── RESET & BASE ──────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #080c12;
+  --surface:   #0d1219;
+  --surface2:  #111820;
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.13);
+  --text:      #e8e2d4;
+  --muted:     rgba(232,226,212,0.45);
+  --faint:     rgba(232,226,212,0.18);
+  --amber:     #d4870a;
+  --amber-l:   #f0a830;
+  --amber-dim: rgba(212,135,10,0.15);
+  --red:       #c0392b;
+  --red-l:     #e74c3c;
+  --red-dim:   rgba(192,57,43,0.12);
+  --green:     #1a6b3c;
+  --green-l:   #27ae60;
+  --green-dim: rgba(39,174,96,0.10);
+  --blue:      #1a4a8a;
+  --blue-l:    #3498db;
+  --blue-dim:  rgba(52,152,219,0.10);
+  --mono:      'IBM Plex Mono', monospace;
+  --serif:     'Libre Baskerville', Georgia, serif;
+  --display:   'Bebas Neue', 'Impact', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NOISE OVERLAY ─────────────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  background-size: 200px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* ── SCAN LINES ────────────────────────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+}
+
+/* all content above overlays */
+.wrap { position: relative; z-index: 1; }
+
+/* ── HEADER ────────────────────────────────────────────────────────── */
+header {
+  border-bottom: 1px solid var(--border2);
+  padding: 0 clamp(1.5rem, 4vw, 3rem);
+  display: flex; align-items: stretch;
+  height: 56px;
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(8,12,18,0.95);
+  backdrop-filter: blur(12px);
+}
+.h-left {
+  display: flex; align-items: center; gap: 1.25rem;
+  border-right: 1px solid var(--border);
+  padding-right: 1.5rem;
+  margin-right: 1.5rem;
+}
+.h-logo {
+  font-family: var(--display);
+  font-size: 22px; letter-spacing: 0.04em;
+  color: var(--amber-l);
+  white-space: nowrap;
+}
+.h-badge {
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border2);
+  padding: 3px 8px; border-radius: 2px;
+}
+.h-center {
+  display: flex; align-items: center; flex: 1;
+  font-size: 11px; color: var(--faint);
+  gap: 1.5rem;
+}
+.h-ticker {
+  display: flex; gap: 2rem; overflow: hidden;
+}
+.h-tick {
+  display: flex; align-items: center; gap: 0.4rem;
+  white-space: nowrap;
+}
+.h-tick-label { color: var(--muted); }
+.h-tick-val { color: var(--amber-l); font-weight: 600; }
+.h-tick-val.red { color: #e74c3c; }
+.h-tick-val.green { color: #27ae60; }
+.h-right {
+  display: flex; align-items: center; gap: 1rem;
+  border-left: 1px solid var(--border);
+  padding-left: 1.5rem; margin-left: auto;
+}
+.h-date { font-size: 11px; color: var(--muted); }
+
+/* ── HERO MASTHEAD ─────────────────────────────────────────────────── */
+.masthead {
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 4vw, 3rem) clamp(2rem, 4vw, 3rem);
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: end;
+}
+@media (max-width: 800px) { .masthead { grid-template-columns: 1fr; } }
+
+.masthead-left {}
+.masthead-kicker {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--amber); margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.masthead-kicker::before {
+  content: '';
+  display: inline-block; width: 24px; height: 1px;
+  background: var(--amber);
+}
+.masthead-title {
+  font-family: var(--display);
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  line-height: 0.92;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+.masthead-title em {
+  font-style: normal;
+  color: var(--amber-l);
+}
+.masthead-desc {
+  font-family: var(--serif);
+  font-size: 1rem; line-height: 1.8;
+  color: var(--muted);
+  max-width: 520px;
+}
+
+.masthead-right {
+  display: flex; flex-direction: column; gap: 0;
+  border-left: 1px solid var(--border);
+  padding-left: 3rem;
+}
+@media (max-width: 800px) {
+  .masthead-right { border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 2rem; }
+}
+.mast-stat {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--border);
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: baseline; gap: 1rem;
+}
+.mast-stat:last-child { border-bottom: none; }
+.mast-stat-label {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--faint);
+}
+.mast-stat-val {
+  font-family: var(--display);
+  font-size: 2rem; letter-spacing: 0.04em;
+  color: var(--amber-l);
+}
+.mast-stat-val.danger { color: #e74c3c; }
+.mast-stat-val.neutral { color: var(--text); }
+
+/* ── SECTION LABEL ─────────────────────────────────────────────────── */
+.section-bar {
+  padding: 0 clamp(1.5rem, 4vw, 3rem);
+  height: 40px; display: flex; align-items: center;
+  border-bottom: 1px solid var(--border);
+  gap: 1rem;
+}
+.section-bar-label {
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--amber);
+}
+.section-bar-line {
+  flex: 1; height: 1px;
+  background: var(--border);
+}
+.section-bar-count {
+  font-size: 10px; color: var(--faint);
+}
+
+/* ── ANALYSIS GRID ─────────────────────────────────────────────────── */
+.analyses {
+  padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3rem);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1px;
+  background: var(--border);
+}
+
+/* ── ANALYSIS CARD ─────────────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  padding: 2rem;
+  display: flex; flex-direction: column;
+  gap: 0;
+  transition: background 0.2s;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--card-accent, var(--border2));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.card:hover { background: var(--surface2); }
+.card:hover::before { transform: scaleX(1); }
+
+/* accent colours per status */
+.card.live { --card-accent: var(--amber-l); }
+.card.active { --card-accent: var(--red-l); }
+.card.complete { --card-accent: var(--green-l); }
+.card.coming { --card-accent: var(--border2); }
+
+.card-meta {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+.card-id {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.14em; color: var(--faint);
+}
+.card-status {
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 2px;
+  margin-left: auto;
+}
+.card.live    .card-status { background: var(--amber-dim); color: var(--amber-l); border: 1px solid rgba(212,135,10,0.3); }
+.card.active  .card-status { background: var(--red-dim);   color: var(--red-l);   border: 1px solid rgba(192,57,43,0.3); }
+.card.complete .card-status { background: var(--green-dim); color: var(--green-l); border: 1px solid rgba(39,174,96,0.3); }
+.card.coming  .card-status { background: transparent;      color: var(--faint);   border: 1px solid var(--border); }
+
+.card-eq {
+  font-family: var(--mono); font-size: 11.5px; font-weight: 600;
+  color: var(--amber-l); margin-bottom: 0.75rem;
+  letter-spacing: 0.01em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.card.coming .card-eq { color: var(--faint); }
+
+.card-title {
+  font-family: var(--display);
+  font-size: 1.6rem; line-height: 1.05;
+  letter-spacing: 0.03em; color: var(--text);
+  margin-bottom: 0.75rem;
+}
+.card.coming .card-title { color: var(--muted); }
+
+.card-desc {
+  font-family: var(--serif);
+  font-size: 0.875rem; line-height: 1.7;
+  color: var(--muted); flex: 1;
+  margin-bottom: 1.5rem;
+}
+
+.card-tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 1.5rem;
+}
+.tag {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 3px 8px;
+  border: 1px solid var(--border2); color: var(--faint);
+  border-radius: 2px;
+}
+
+.card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  font-size: 10px; color: var(--faint);
+}
+.card-date { letter-spacing: 0.06em; }
+.card-cta {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-weight: 600; letter-spacing: 0.08em;
+  color: var(--amber); text-transform: uppercase;
+  font-size: 9.5px;
+  transition: gap 0.2s, color 0.2s;
+}
+.card:hover .card-cta { gap: 0.75rem; color: var(--amber-l); }
+.card.coming .card-cta { color: var(--faint); pointer-events: none; }
+.card-arrow { font-size: 14px; }
+
+/* featured card — spans 2 columns */
+.card.featured {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  padding: 2.5rem 3rem;
+}
+@media (max-width: 700px) {
+  .card.featured { grid-template-columns: 1fr; }
+}
+.card.featured .card-left {}
+.card.featured .card-right {
+  border-left: 1px solid var(--border);
+  padding-left: 3rem;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+@media (max-width: 700px) {
+  .card.featured .card-right { border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 2rem; }
+}
+.card.featured .card-title { font-size: 2.6rem; }
+.card.featured .card-eq { font-size: 13px; margin-bottom: 1rem; }
+.card.featured .card-desc { font-size: 0.95rem; }
+
+.feature-stats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--border);
+  margin-top: 1.5rem;
+}
+.fstat {
+  background: var(--surface);
+  padding: 1rem;
+}
+.card:hover .fstat { background: var(--surface2); }
+.fstat-label {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint); margin-bottom: 4px;
+}
+.fstat-val {
+  font-family: var(--display); font-size: 1.5rem;
+  color: var(--amber-l); letter-spacing: 0.04em;
+}
+.fstat-val.danger { color: var(--red-l); }
+
+/* ── COMING SOON PLACEHOLDER ───────────────────────────────────────── */
+.card-placeholder {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 200px; flex: 1;
+  border: 1px dashed var(--border2); border-radius: 2px;
+  color: var(--faint); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+/* ── ABOUT STRIP ───────────────────────────────────────────────────── */
+.about-strip {
+  padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem);
+  border-top: 1px solid var(--border);
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+}
+@media (max-width: 700px) { .about-strip { grid-template-columns: 1fr; } }
+
+.about-col {}
+.about-heading {
+  font-size: 9.5px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--amber); margin-bottom: 0.75rem;
+}
+.about-text {
+  font-family: var(--serif);
+  font-size: 0.875rem; color: var(--muted); line-height: 1.8;
+}
+
+/* ── FOOTER ────────────────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem clamp(1.5rem, 4vw, 3rem);
+  display: flex; align-items: center; flex-wrap: wrap; gap: 1.5rem;
+}
+.footer-logo {
+  font-family: var(--display); font-size: 18px;
+  color: var(--amber-l); letter-spacing: 0.04em;
+}
+.footer-meta {
+  font-size: 10px; color: var(--faint);
+  letter-spacing: 0.08em;
+}
+.footer-right {
+  margin-left: auto; font-size: 10px; color: var(--faint);
+  letter-spacing: 0.06em;
+}
+
+/* ── RESEARCH ARTICLES LINK ────────────────────────────────────────── */
+.h-research-link {
+  font-family: var(--mono);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--amber-l);
+  text-decoration: none;
+  border: 1px solid rgba(212,135,10,0.35);
+  padding: 4px 12px; border-radius: 2px;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.h-research-link:hover {
+  background: rgba(212,135,10,0.12);
+  border-color: var(--amber-l);
+  color: #fff;
+}
+
+/* ── BREAKING BANNER ───────────────────────────────────────────────── */
+.breaking-banner {
+  background: linear-gradient(90deg, #7f1d1d 0%, #991b1b 50%, #7f1d1d 100%);
+  border-bottom: 1px solid rgba(239,68,68,0.5);
+  padding: 0 clamp(1.5rem, 4vw, 3rem);
+  display: flex; align-items: center; gap: 1.5rem;
+  height: 52px; position: relative; z-index: 101;
+}
+.bb-badge {
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  background: #ef4444; color: #fff;
+  padding: 5px 14px; border-radius: 3px; white-space: nowrap;
+  animation: bb-pulse 2.5s ease-in-out infinite;
+  box-shadow: 0 0 12px rgba(239,68,68,0.5);
+}
+@keyframes bb-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.85;transform:scale(1.02)} }
+.bb-scroll {
+  flex: 1; overflow: hidden; position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.bb-text {
+  font-family: var(--mono); font-size: 15px; font-weight: 600;
+  color: #fca5a5;
+  white-space: nowrap;
+  animation: bb-scroll 60s linear infinite;
+  display: inline-block;
+  padding-left: 100%;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  letter-spacing: 0.02em;
+}
+@keyframes bb-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+.bb-separator {
+  color: rgba(252,165,165,0.4);
+  margin: 0 1.5rem;
+  font-size: 16px;
+}
+.bb-time {
+  font-family: var(--mono); font-size: 12px; color: rgba(252,165,165,0.7);
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+/* ── ALERT CARD ────────────────────────────────────────────────────── */
+.alert-card {
+  margin: 0; padding: 1.75rem clamp(1.5rem,4vw,3rem);
+  background: linear-gradient(135deg, #1c0a0a 0%, #0d1219 100%);
+  border-bottom: 1px solid rgba(239,68,68,0.25);
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+}
+@media (max-width:768px){ .alert-card { grid-template-columns: 1fr; } }
+.ac-item { display: flex; flex-direction: column; gap: .4rem; }
+.ac-tag {
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase;
+  display: flex; align-items: center; gap: .5rem;
+}
+.ac-tag::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor; flex-shrink: 0;
+}
+.ac-tag.red { color: #ef4444; }
+.ac-tag.amber { color: var(--amber-l); }
+.ac-tag.green { color: #22c55e; }
+.ac-title {
+  font-family: var(--display); font-size: 1.05rem; letter-spacing: .03em;
+  color: #fff; line-height: 1.2;
+}
+.ac-body {
+  font-family: var(--serif); font-size: .8rem; color: rgba(255,255,255,.55);
+  line-height: 1.6;
+}
+.ac-eq {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 600;
+  color: var(--amber-l); margin-top: .25rem;
+}
+
+/* ── AUTOMATED BRIEFING ────────────────────────────────────────────── */
+.briefing-wrap {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  gap: 1px;
+  background: var(--border);
+  border-bottom: 1px solid var(--border);
+}
+@media (max-width: 800px) { .briefing-wrap { grid-template-columns: 1fr; } }
+
+.brief-panel {
+  background: var(--surface);
+  padding: 1.75rem 2rem;
+  display: flex; flex-direction: column; gap: 1rem;
+}
+
+.brief-panel-head {
+  display: flex; align-items: baseline; gap: .75rem;
+  flex-wrap: wrap; margin-bottom: .25rem;
+}
+.brief-panel-id {
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--amber); white-space: nowrap;
+}
+.brief-panel-title {
+  font-family: var(--display); font-size: 1.25rem;
+  letter-spacing: .03em; color: var(--text);
+}
+.brief-panel-subtitle {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--faint); margin-left: auto;
+}
+.brief-refresh {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase;
+  background: transparent; border: 1px solid var(--border2);
+  color: var(--amber); padding: 4px 12px; border-radius: 2px;
+  cursor: pointer; transition: background .2s, color .2s;
+  white-space: nowrap;
+}
+.brief-refresh:hover { background: rgba(212,135,10,.12); color: var(--amber-l); }
+
+/* w1 rows */
+.brief-rows { display: flex; flex-direction: column; gap: 0; }
+.brief-row {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  align-items: start; gap: .6rem;
+  padding: .7rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.brief-row:last-child { border-bottom: none; }
+.br-num {
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  color: var(--faint); padding-top: 1px;
+}
+.br-body {}
+.br-action {
+  font-family: var(--mono); font-size: 11px; font-weight: 600;
+  color: var(--text); margin-bottom: 3px;
+}
+.br-learn {
+  font-family: var(--serif); font-size: 12px;
+  color: var(--muted); line-height: 1.5;
+}
+.br-badge {
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  padding: 3px 8px; border-radius: 2px; white-space: nowrap;
+  letter-spacing: .08em; text-transform: uppercase;
+  align-self: start; margin-top: 2px;
+}
+.br-badge.ok    { background: rgba(39,174,96,.15);  color: #27ae60; }
+.br-badge.warn  { background: rgba(239,159,39,.15); color: var(--amber-l); }
+.br-badge.alert { background: rgba(192,57,43,.15);  color: #e74c3c; }
+.br-badge.neu   { background: rgba(95,94,90,.15);   color: var(--muted); }
+
+.brief-verdict {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--amber);
+  padding: .875rem 1rem;
+  font-family: var(--serif); font-size: .82rem;
+  color: var(--muted); line-height: 1.6;
+  border-radius: 0 4px 4px 0;
+}
+.brief-verdict strong { color: var(--amber-l); font-weight: 600; }
+
+/* w2 classifier */
+.w2-input-row {
+  display: flex; gap: 8px;
+}
+.w2-input-row input {
+  flex: 1; background: rgba(255,255,255,.05);
+  border: 1px solid var(--border2); color: var(--text);
+  font-family: var(--mono); font-size: 12px;
+  padding: 8px 12px; border-radius: 2px; outline: none;
+}
+.w2-input-row input::placeholder { color: var(--faint); }
+.w2-input-row input:focus { border-color: var(--amber); }
+
+.w2-examples {
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.w2-ex-label {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--faint); letter-spacing: .08em;
+}
+.w2-chip {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  background: transparent; border: 1px solid var(--border2);
+  color: var(--muted); padding: 4px 10px; border-radius: 2px;
+  cursor: pointer; transition: background .15s, color .15s, border-color .15s;
+}
+.w2-chip:hover { background: rgba(255,255,255,.06); color: var(--text); border-color: var(--amber); }
+
+.w2-result {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: 4px; overflow: hidden;
+}
+.w2-eq-header {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .875rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.w2-eq-num {
+  font-family: var(--display); font-size: 1.6rem;
+  letter-spacing: .04em; line-height: 1;
+}
+.w2-eq-title {
+  font-family: var(--mono); font-size: 11px; font-weight: 600;
+  color: var(--text); letter-spacing: .04em;
+}
+.w2-eq-formula {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--faint); margin-top: 2px;
+}
+.w2-body { padding: .875rem 1rem; }
+.w2-param-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline; gap: .75rem;
+  padding: .45rem 0;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  font-size: 12px;
+}
+.w2-param-row:last-child { border-bottom: none; }
+.w2-param-name { font-family: var(--mono); color: var(--muted); }
+.w2-param-val  { font-family: var(--mono); font-weight: 600; color: var(--amber-l); }
+.w2-param-note { font-family: var(--serif); color: var(--faint); font-size: 11px; flex: 1; text-align: right; }
+.w2-analysis {
+  margin-top: .75rem; padding-top: .75rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--serif); font-size: .82rem;
+  color: var(--muted); line-height: 1.6;
+}
+.w2-link {
+  display: inline-block; margin-top: .5rem;
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--amber); text-decoration: none;
+  border-bottom: 1px solid rgba(212,135,10,.3);
+}
+.w2-link:hover { color: var(--amber-l); border-color: var(--amber-l); }
+
+.brent-live-dot {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: #22c55e; margin-right: 4px; vertical-align: middle;
+  animation: bb-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+.masthead-kicker { animation: fadeIn 0.6s 0.1s both; }
+.masthead-title  { animation: fadeIn 0.6s 0.2s both; }
+.masthead-desc   { animation: fadeIn 0.6s 0.3s both; }
+.masthead-right  { animation: fadeIn 0.6s 0.4s both; }
+.card { animation: fadeIn 0.5s both; }
+.card:nth-child(1) { animation-delay: 0.35s; }
+.card:nth-child(2) { animation-delay: 0.42s; }
+.card:nth-child(3) { animation-delay: 0.49s; }
+.card:nth-child(4) { animation-delay: 0.56s; }
+.card:nth-child(5) { animation-delay: 0.63s; }
+.card:nth-child(6) { animation-delay: 0.70s; }
+
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- BREAKING BANNER -->
+<div class="breaking-banner">
+  <span class="bb-badge">Breaking</span>
+  <div class="bb-scroll">
+    <span class="bb-text" id="bb-text">
+      ★ 26 MAR 2026 — Iran threatens full Hormuz closure — IRGC declares strait closed indefinitely — Brent remains elevated above $85 — U.S. 5th Fleet maintains carrier strike groups in Gulf — Saudi Arabia and UAE coordinate on safe-passage protocols — China increases mBridge transactions by 45% — European nations call for de-escalation talks — IMF warns of global economic impact — Hormuz closure enters Day <span id="bb-days">26</span>
+    </span>
+  </div>
+  <span class="bb-time" id="bb-time">—</span>
+</div>
+
+<!-- ALERT CARDS — breaking developments mapped to equations -->
+<div class="alert-card">
+  <div class="ac-item">
+    <div class="ac-tag red">CRITICAL · Eq.5 — E* impact</div>
+    <div class="ac-title">IRGC declares Hormuz closure indefinite</div>
+    <div class="ac-body">Iran announces strait will remain closed until sanctions lifted. U.S. 5th Fleet maintains carrier strike groups. Military confrontation risk elevated. Model: c(credibility) remains high at 0.90+. E* ≈ 13.4. Deterrence gap = 6.4 (feasible escalation).</div>
+    <div class="ac-eq">ΔE* ≈ 0 · c → 0.90+ · Deterrence gap remains</div>
+  </div>
+  <div class="ac-item">
+    <div class="ac-tag amber">ALERT · Eq.12 — Sr watch</div>
+    <div class="ac-title">China increases mBridge transactions 45%</div>
+    <div class="ac-body">Yuan settlement infrastructure expanding rapidly. European nations seeking de-escalation. Iran demands full OFAC/SWIFT relief - not market waivers. Model: G(Tehran yuan gain) rising. Sr gap remains 18+. Dominance trap intact.</div>
+    <div class="ac-eq">Sr(min) = 18 · Sr(offered) = 0.78 · Gap = 17.22+</div>
+  </div>
+  <div class="ac-item">
+    <div class="ac-tag green">Update · Eq.8 — Hegemony decay</div>
+    <div class="ac-title">Brent remains elevated above $85</div>
+    <div class="ac-body">Oil markets pricing sustained disruption premium. China and Russia accelerating de-dollarization. mBridge transaction volume up 45%. Nations hedging dollar exposure. Model: H(hegemony loss) accelerating. ρI decay rate increasing.</div>
+    <div class="ac-eq">H ↓ 1-2 points · ρI increases · Dollar share eroding</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="h-left">
+    <div class="h-logo">HORMUZ GAMBIT</div>
+    <div class="h-badge">Research Series</div>
+  </div>
+  <div class="h-center">
+    <div class="h-ticker">
+      <div class="h-tick"><span class="h-tick-label">BRENT</span><span class="h-tick-val red" id="brent-price">$—</span></div>
+      <div class="h-tick"><span class="h-tick-label">CLOSURE</span><span class="h-tick-val" id="closure-days">Day —</span></div>
+      <div class="h-tick"><span class="h-tick-label">E*</span><span class="h-tick-val" id="tick-estar">≈14.0</span></div>
+      <div class="h-tick"><span class="h-tick-label">c</span><span class="h-tick-val" id="tick-c">≈0.90</span></div>
+      <div class="h-tick"><span class="h-tick-label">TROOPS</span><span class="h-tick-val red">5th Fleet</span></div>
+      <div class="h-tick"><span class="h-tick-label">TALKS</span><span class="h-tick-val green" id="tick-talks">Trump-Iran signal</span></div>
+      <div class="h-tick"><span class="h-tick-label">Sr</span><span class="h-tick-val" id="tick-sr">0.78 / 18 req.</span></div>
+    </div>
+  </div>
+  <div class="h-right">
+    <a href="https://persian-gulf.medium.com/" target="_blank" rel="noopener" class="h-research-link">
+      Research Articles ↗
+    </a>
+    <div class="h-date" id="live-date">21 March 2026</div>
+  </div>
+</header>
+
+<!-- MASTHEAD -->
+<section class="masthead">
+  <div class="masthead-left">
+    <div class="masthead-kicker">Geoeconomics · Game Theory · Strategic Analysis</div>
+    <h1 class="masthead-title">THE<br><em>HORMUZ</em><br>GAMBIT<span class="cursor"></span></h1>
+    <p class="masthead-desc">
+      A running game-theoretic analysis of Iran's de-dollarisation strategy, the 2026 Hormuz crisis,
+      and the structural conditions under which the petrodollar's fifty-two-year monopoly on energy
+      invoicing is being challenged. Each analysis is a standalone module. New modules added as events develop.
+    </p>
+  </div>
+  <div class="masthead-right">
+    <div class="mast-stat">
+      <span class="mast-stat-label">Active analyses published</span>
+      <span class="mast-stat-val">05</span>
+    </div>
+    <div class="mast-stat">
+      <span class="mast-stat-label">Equations formalised</span>
+      <span class="mast-stat-val neutral">13</span>
+    </div>
+    <div class="mast-stat">
+      <span class="mast-stat-label">Dominant strategy broken</span>
+      <span class="mast-stat-val danger" id="ms-dom-broken">No</span>
+    </div>
+    <div class="mast-stat">
+      <span class="mast-stat-label">Sr required vs offered</span>
+      <span class="mast-stat-val danger" id="ms-sr">18 vs 0.78</span>
+    </div>
+  </div>
+</section>
+
+<!-- ANALYSES LABEL -->
+<div class="section-bar">
+  <span class="section-bar-label">Active Analyses</span>
+  <span class="section-bar-line"></span>
+  <span class="section-bar-count">5 live · 0 in preparation</span>
+</div>
+
+<!-- ANALYSIS GRID -->
+<div class="analyses">
+
+  <!-- FEATURED: EQ5 -->
+  <a href="eq5/index.html" class="card featured live">
+    <div class="card-left">
+      <div class="card-meta">
+        <span class="card-id">ANALYSIS-001</span>
+        <span class="card-status">Live</span>
+      </div>
+      <div class="card-eq">E* = E × [1 + c(m − 1)]</div>
+      <div class="card-title">The Hormuz Commitment Device</div>
+      <div class="card-desc">
+        Complete mathematical and strategic analysis of Equation 5 — how Iran weaponises the
+        Strait of Hormuz to amplify U.S. escalation costs beyond what military doctrine can
+        absorb. Includes full derivation, all boundary conditions, seven worked examples spanning
+        1987 to the live March 2026 crisis, sensitivity analysis across the full c × m parameter
+        space, and a real-world test against the Bessent 19 March sanctions waiver.
+      </div>
+      <div class="card-tags">
+        <span class="tag">Commitment Device</span>
+        <span class="tag">Eq. 5</span>
+        <span class="tag">Hormuz Strait</span>
+        <span class="tag">Credibility</span>
+        <span class="tag">Geographic Multiplier</span>
+      </div>
+      <div class="card-footer">
+        <span class="card-date">Published 17 Mar 2026 · Updated 19 Mar 2026</span>
+        <span class="card-cta">Open Analysis <span class="card-arrow">→</span></span>
+      </div>
+    </div>
+    <div class="card-right">
+      <div>
+        <div style="font-size:9.5px;font-weight:600;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin-bottom:1rem;">Live calibration · 21 March 2026</div>
+        <div class="feature-stats">
+          <div class="fstat">
+            <div class="fstat-label">E* (effective cost)</div>
+            <div class="fstat-val" id="fs-estar">14.0</div>
+          </div>
+          <div class="fstat">
+            <div class="fstat-label">E*/E amplification</div>
+            <div class="fstat-val" id="fs-ratio">2.80×</div>
+          </div>
+          <div class="fstat">
+            <div class="fstat-label">U.S. Escalate payoff</div>
+            <div class="fstat-val danger" id="fs-esc">−21</div>
+          </div>
+          <div class="fstat">
+            <div class="fstat-label">Deterrence gap</div>
+            <div class="fstat-val" id="fs-gap">14.0</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:2rem;">
+        <div style="font-size:9.5px;font-weight:600;letter-spacing:.14em;color:var(--faint);text-transform:uppercase;margin-bottom:.75rem;">Bessent offer · 19 March 2026</div>
+        <div style="font-family:var(--mono);font-size:12px;color:var(--amber-l);margin-bottom:.4rem;">Sr(offered) = 0.78 units</div>
+        <div style="font-family:var(--mono);font-size:12px;color:var(--red-l);margin-bottom:.4rem;">Sr(required) = G + S = 18</div>
+        <div style="font-family:var(--mono);font-size:12px;color:var(--muted);">Coverage = 4.3% of threshold</div>
+        <div style="font-family:var(--serif);font-size:.82rem;color:var(--muted);margin-top:.75rem;line-height:1.6;">Dominant strategy: intact. E*: unchanged. The waiver does not affect c, m, or E.</div>
+      </div>
+    </div>
+  </a>
+
+  <!-- COMING: EQ4 -->
+  <a href="eq4/index.html" class="card live">
+    <div class="card-meta">
+      <span class="card-id">ANALYSIS-002</span>
+      <span class="card-status">Live</span>
+    </div>
+    <div class="card-eq">a* = argmax min U_A(s,a)</div>
+    <div class="card-title">The Dominant Strategy Trap</div>
+    <div class="card-desc">
+      Deep analysis of Equation 4 — the U.S. minimax problem. Why Washington cannot escape
+      the Yuan row of the payoff matrix, why both High Response columns are negative, and
+      the formal proof that the (0,0) status quo is permanently inaccessible once Iran's
+      dominant strategy is active.
+    </div>
+    <div class="card-tags">
+      <span class="tag">Minimax</span>
+      <span class="tag">Eq. 4</span>
+      <span class="tag">Nash Equilibrium</span>
+      <span class="tag">Payoff Matrix</span>
+    </div>
+    <div class="card-footer">
+      <span class="card-date">Coming soon</span>
+      <span class="card-cta">Open Analysis <span class="card-arrow">→</span></span>
+    </div>
+ </a>
+
+  <!-- COMING: EQ7 CASCADE -->
+  <a href="eq7/index.html" class="card live">
+    <div class="card-meta">
+      <span class="card-id">ANALYSIS-003</span>
+      <span class="card-status">Live</span>
+    </div>
+    <div class="card-eq">G_s + kν > P_s⁽⁰⁾(1−δ)^k</div>
+    <div class="card-title">The Swing Producer Cascade</div>
+    <div class="card-desc">
+      Equation 7 — the network externality tipping model for Gulf state de-dollarisation.
+      Why the cascade is supermodular, when the tipping threshold is crossed, and how
+      Saudi Arabia's Yanbu diversion has inadvertently demonstrated the pipeline arithmetic
+      that validates m ≈ 3.
+    </div>
+    <div class="card-tags">
+      <span class="tag">Cascade</span>
+      <span class="tag">Eq. 7</span>
+      <span class="tag">Swing Producers</span>
+      <span class="tag">Network Effects</span>
+    </div>
+    <div class="card-footer">
+      <span class="card-date">Coming soon</span>
+      <span class="card-cta">Open Analysis <span class="card-arrow">→</span></span>
+    </div>
+ </a>
+
+  <!-- COMING: EQ12 SR -->
+  <a href="eq12/index.html" class="card live">
+    <div class="card-meta">
+      <span class="card-id">ANALYSIS-004</span>
+      <span class="card-status">Live</span>
+    </div>
+    <div class="card-eq">S_r ≥ G + S = 18</div>
+    <div class="card-title">The Sanctions Relief Threshold</div>
+    <div class="card-desc">
+      Equation 12 — the only variable that can break Iran's dominant strategy. A complete
+      map of the Sr ladder from Bessent's 0.78-unit waiver to the 18-unit full threshold.
+      Includes the Bessent 19 March announcement as a live calibration event.
+    </div>
+    <div class="card-tags">
+      <span class="tag">Sanctions Relief</span>
+      <span class="tag">Eq. 12</span>
+      <span class="tag">Dominance Condition</span>
+      <span class="tag">Diplomacy</span>
+    </div>
+    <div class="card-footer">
+      <span class="card-date">Coming soon</span>
+      <span class="card-cta">Open Analysis <span class="card-arrow">→</span></span>
+    </div>
+ </a>
+
+  <!-- COMING: EQ8 REPEATED -->
+  <a href="eq8/index.html" class="card live">
+    <div class="card-meta">
+      <span class="card-id">ANALYSIS-005</span>
+      <span class="card-status">Live</span>
+    </div>
+    <div class="card-eq">H_{t+1} = H_t · (1 − ρ_I − n_t·ρ_S)</div>
+    <div class="card-title">Hegemony Decay &amp; the Repeated Game</div>
+    <div class="card-desc">
+      Equation 8 — the intertemporal trap. How each round of yuan-denominated Hormuz transit
+      compounds the erosion of dollar hegemony, why Iran's payoff is constant at G every round
+      while U.S. payoff declines, and why the trap tightens automatically without strategy changes.
+    </div>
+    <div class="card-tags">
+      <span class="tag">Repeated Game</span>
+      <span class="tag">Eq. 8</span>
+      <span class="tag">Hegemony Decay</span>
+      <span class="tag">Intertemporal</span>
+    </div>
+    <div class="card-footer">
+      <span class="card-date">Coming soon</span>
+      <span class="card-cta">Open Analysis <span class="card-arrow">→</span></span>
+    </div>
+ </a>
+
+</div>
+
+<!-- AUTOMATED BRIEFING SECTION -->
+<div class="section-bar" id="briefing">
+  <span class="section-bar-label">Automated Briefing</span>
+  <span class="section-bar-line"></span>
+  <span class="section-bar-count" id="brief-ts">—</span>
+</div>
+
+<div class="briefing-wrap">
+
+  <!-- W1: DAILY BRIEFING PANEL -->
+  <div class="brief-panel">
+    <div class="brief-panel-head">
+      <div class="brief-panel-id">Workflow 1</div>
+      <div class="brief-panel-title">Daily strategic briefing</div>
+      <div class="brief-panel-subtitle">auto-generated · updates every 5 min</div>
+      <button class="brief-refresh" id="w1-refresh" onclick="runBriefing()">↻ Refresh</button>
+    </div>
+
+    <div class="brief-rows" id="w1-rows">
+      <!-- injected by JS -->
+    </div>
+
+    <div class="brief-verdict" id="w1-verdict">
+      <!-- injected by JS -->
+    </div>
+  </div>
+
+  <!-- W2: EVENT CLASSIFIER PANEL -->
+  <div class="brief-panel">
+    <div class="brief-panel-head">
+      <div class="brief-panel-id">Workflow 2</div>
+      <div class="brief-panel-title">Event classifier</div>
+      <div class="brief-panel-subtitle">paste a headline · get the equation mapping</div>
+    </div>
+
+    <div class="w2-input-row">
+      <input type="text" id="w2-input" placeholder="Paste headline or describe the event…" />
+      <button class="brief-refresh" onclick="classifyEvent()">Classify ↗</button>
+    </div>
+
+    <div class="w2-examples">
+      <span class="w2-ex-label">Try:</span>
+      <button class="w2-chip" onclick="classifyPreset(this)">Trump offers sanctions waiver</button>
+      <button class="w2-chip" onclick="classifyPreset(this)">Iran attacks 3 tankers</button>
+      <button class="w2-chip" onclick="classifyPreset(this)">Saudi yuan tranche announced</button>
+      <button class="w2-chip" onclick="classifyPreset(this)">US deploys aircraft carrier</button>
+      <button class="w2-chip" onclick="classifyPreset(this)">Brent falls $10</button>
+      <button class="w2-chip" onclick="classifyPreset(this)">Germany refuses coalition</button>
+      <button class="w2-chip" onclick="classifyPreset(this)">mBridge processes $10B</button>
+      <button class="w2-chip" onclick="classifyPreset(this)">Iran denies talks</button>
+    </div>
+
+    <div class="w2-result" id="w2-result" style="display:none">
+      <!-- injected by JS -->
+    </div>
+  </div>
+
+</div>
+
+<!-- ABOUT STRIP -->
+<div class="section-bar" style="margin-top:0;">
+  <span class="section-bar-label">About This Research</span>
+  <span class="section-bar-line"></span>
+</div>
+<div class="about-strip">
+  <div class="about-col">
+    <div class="about-heading">Framework</div>
+    <p class="about-text">
+      Each analysis in this series formalises one equation from a complete game-theoretic
+      model of Iran's yuan shift strategy. The full model contains 13 equations spanning
+      the 2-player payoff matrix, strict dominance, Nash equilibrium, the dominant strategy
+      trap, Hormuz commitment device, China's strategy, the Swing Producer cascade,
+      repeated game hegemony decay, and the coalition extension (naval escort, separability,
+      dominance resilience, and the three-column minimax).
+    </p>
+  </div>
+  <div class="about-col">
+    <div class="about-heading">Methodology</div>
+    <p class="about-text">
+      All equations are derived from first principles with full boundary condition analysis,
+      sensitivity tables, and worked numerical examples calibrated against live market data.
+      Every analysis includes a real-world validation test against observed events in the
+      March 2026 Hormuz crisis — treating the live geopolitical situation as an empirical
+      test of the model's predictions.
+    </p>
+  </div>
+  <div class="about-col">
+    <div class="about-heading">Series status</div>
+    <p class="about-text">
+      The Hormuz Gambit is a running series updated as events develop.
+      Analysis-001 (Equation 5) was published 17 March and updated 19 March with the
+      Bessent waiver assessment. Analyses 002–005 are in preparation and will be
+      published as the crisis evolves. Each module is a standalone site deployable
+      independently on GitHub Pages.
+    </p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">HORMUZ GAMBIT</div>
+  <div class="footer-meta">Geoeconomics Analysis Series · March 2026</div>
+  <div class="footer-right">13 equations · 1 active module · 4 in preparation</div>
+</footer>
+
+</div><!-- /wrap -->
+
+<script>
+// ── Constants ────────────────────────────────────────────────────────
+const WAR_START = new Date('2026-02-28T00:00:00Z');
+const G = 8, S = 10, H = 7, E_BASE = 5, C = 0.90, M = 3.0;
+
+// ── Closure day counter (auto-updates every minute) ─────────────────
+function updateClosureDays() {
+  const now = new Date();
+  const days = Math.floor((now - WAR_START) / (1000 * 60 * 60 * 24));
+  const txt = 'Day ' + days;
+  const el = document.getElementById('closure-days');
+  const bbEl = document.getElementById('bb-days');
+  if (el) el.textContent = txt;
+  if (bbEl) bbEl.textContent = days;
+}
+updateClosureDays();
+setInterval(updateClosureDays, 60000);
+
+// ── Live date ────────────────────────────────────────────────────────
+(function(){
+  const el = document.getElementById('live-date');
+  if (!el) return;
+  const d = new Date();
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  el.textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+})();
+
+// ── Breaking banner time ─────────────────────────────────────────────
+(function(){
+  const el = document.getElementById('bb-time');
+  if (!el) return;
+  function tick() {
+    const d = new Date();
+    el.textContent = d.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'}) + ' UTC';
+  }
+  tick();
+  setInterval(tick, 30000);
+})();
+
+// Fetch dynamic news from params.json and update banner
+(function() {
+  const bbText = document.getElementById('bb-text');
+  if (!bbText) return;
+  
+  fetch('params.json')
+    .then(r => r.json())
+    .then(data => {
+      const items = [];
+      
+      // Add strategic summary if available
+      if (data.meta && data.meta.strategicSummary) {
+        items.push(data.meta.strategicSummary);
+      }
+      
+      // Add most significant event if available
+      if (data.meta && data.meta.mostSignificantEvent) {
+        items.push(data.meta.mostSignificantEvent);
+      }
+      
+      // Add trap status
+      if (data.meta && data.meta.trapStatus) {
+        items.push('Trap: ' + data.meta.trapStatus.toUpperCase());
+      }
+      
+      // Add fetched headlines if available
+      if (data.meta && data.meta.headlines && data.meta.headlines.length > 0) {
+        const hlItems = data.meta.headlines.slice(0, 5).map(h => h.title);
+        items.push('LATEST: ' + hlItems.join(' | '));
+      }
+      
+      // Add analyst notes
+      if (data.meta && data.meta.analystNotes) {
+        items.push('Analysis: ' + data.meta.analystNotes);
+      }
+      
+      if (items.length > 0) {
+        // Prepend to existing banner text with separator
+        const currentText = bbText.innerHTML;
+        const separator = ' — ';
+        bbText.innerHTML = items.join(separator) + separator + currentText;
+      }
+    })
+    .catch(err => {
+      console.log('[Banner] Could not fetch dynamic news from params.json:', err.message);
+    });
+})();
+
+// ── Model calculations ───────────────────────────────────────────────
+function calcModel(brent) {
+  // Infer c from Brent: baseline $65, each $10 rise above = 0.05c increase from 0.7
+  const c = Math.min(0.98, Math.max(0.70, 0.70 + ((brent - 65) / 10) * 0.04));
+  // If Brent falls sharply (talks signal), reduce c slightly
+  const cDisplay = brent < 100 ? (c - 0.05).toFixed(2) : c.toFixed(2);
+  const estar = E_BASE * (1 + c * (M - 1));
+  const ratio = estar / E_BASE;
+  const uEsc = -H - estar;
+  const dom = G + S;
+  return { c: parseFloat(cDisplay), estar: Math.round(estar * 10) / 10, ratio: Math.round(ratio * 100) / 100, uEsc: Math.round(uEsc * 10) / 10, dom };
+}
+
+function updateDisplay(brent, isLive) {
+  MODEL.brent = brent;
+  MODEL.isLive = isLive;
+  const { c, estar, ratio, uEsc, dom } = calcModel(brent);
+
+  // Header ticker
+  const brentEl = document.getElementById('brent-price');
+  if (brentEl) {
+    brentEl.innerHTML = (isLive ? '<span class="brent-live-dot"></span>' : '') + '$' + brent.toFixed(2);
+    brentEl.className = 'h-tick-val ' + (brent > 100 ? 'red' : brent > 90 ? '' : 'green');
+  }
+  const cEl = document.getElementById('tick-c');
+  if (cEl) cEl.textContent = '≈' + c;
+  const estarEl = document.getElementById('tick-estar');
+  if (estarEl) estarEl.textContent = '≈' + estar;
+
+  // Featured card stats
+  const fsEstar = document.getElementById('fs-estar');
+  const fsRatio = document.getElementById('fs-ratio');
+  const fsEsc   = document.getElementById('fs-esc');
+  const fsGap   = document.getElementById('fs-gap');
+  if (fsEstar) fsEstar.textContent = estar;
+  if (fsRatio) fsRatio.textContent = ratio.toFixed(2) + '×';
+  if (fsEsc)   fsEsc.textContent   = uEsc;
+  if (fsGap)   fsGap.textContent   = estar;
+
+  // Masthead Sr (Bessent offer stays at 0.78, threshold G+S=18)
+  const msEl = document.getElementById('ms-sr');
+  if (msEl) msEl.textContent = dom + ' vs 0.78';
+  if (typeof runBriefing === 'function') setTimeout(runBriefing, 100);
+}
+
+// ── Brent live fetch (oilpriceapi.com public endpoint) ───────────────
+// Falls back to last-known value if fetch fails or is rate-limited
+const BRENT_FALLBACK = 101.10; // as of 23 Mar 2026 ~14:38 NY
+
+async function fetchBrent() {
+  try {
+    // Try fetching from a CORS-friendly proxy of the public price
+    const r = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.oilpriceapi.com/api/v1/prices/latest?by_code=BRENT_CRUDE_USD'), { signal: AbortSignal.timeout(5000) });
+    if (!r.ok) throw new Error('API error');
+    const data = await r.json();
+    const parsed = JSON.parse(data.contents);
+    const price = parseFloat(parsed?.data?.price);
+    if (!isNaN(price) && price > 0) {
+      updateDisplay(price, true);
+      return;
+    }
+  } catch (_) {}
+
+  // Fallback: try a second public source
+  try {
+    const r2 = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?interval=1m&range=1d'), { signal: AbortSignal.timeout(5000) });
+    if (!r2.ok) throw new Error();
+    const d2 = await r2.json();
+    const parsed2 = JSON.parse(d2.contents);
+    const price2 = parsed2?.chart?.result?.[0]?.meta?.regularMarketPrice;
+    if (price2 && price2 > 0) {
+      updateDisplay(price2, true);
+      return;
+    }
+  } catch (_) {}
+
+  // Final fallback: use last-known value
+  updateDisplay(BRENT_FALLBACK, false);
+}
+
+// Fetch on load, then every 5 minutes
+fetchBrent();
+setInterval(fetchBrent, 300000);
+
+
+// ═══════════════════════════════════════════════════════════════════════
+// PARAMS.JSON LOADER — reads AI-calibrated values if available
+// ═══════════════════════════════════════════════════════════════════════
+
+// Model state — kept in sync with live Brent updates and params.json
+const MODEL = {
+  brent: 101.10, isLive: false,
+  E: 5, H: 7, G: 8, S: 10, m: 3.0, Sr: 0.78,
+  n: 1.3, k: 1.3,
+  c: 0.87, nu: 3, Ps: 12, rhoI: 0.03,
+  troops: true, talksSig: true,
+  paramsLoaded: false,
+  meta: {},
+};
+
+async function loadParams() {
+  try {
+    const r = await fetch('params.json?v=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) return;
+    const data = await r.json();
+    const p = data.parameters || {};
+    Object.assign(MODEL, {
+      E:    p.E    ?? MODEL.E,
+      c:    p.c    ?? MODEL.c,
+      m:    p.m    ?? MODEL.m,
+      H:    p.H    ?? MODEL.H,
+      G:    p.G    ?? MODEL.G,
+      S:    p.S    ?? MODEL.S,
+      Sr:   p.Sr   ?? MODEL.Sr,
+      k:    p.k    ?? MODEL.k,
+      nu:   p.nu   ?? MODEL.nu,
+      Ps:   p.Ps   ?? MODEL.Ps,
+      rhoI: p.rhoI ?? MODEL.rhoI,
+      n:    p.n    ?? MODEL.n,
+      paramsLoaded: true,
+      meta: data.meta || {},
+    });
+    // Update Sr ticker immediately
+    const srEl = document.getElementById('tick-sr');
+    if (srEl) srEl.textContent = MODEL.Sr.toFixed(2) + ' / ' + (MODEL.G + MODEL.S) + ' req.';
+    
+    // Update Brent price ticker if available in params.json
+    if (data.meta?.brentPrice) {
+      MODEL.brent = data.meta.brentPrice;
+      MODEL.isLive = true;
+      const brentEl = document.getElementById('brent-price');
+      if (brentEl) {
+        brentEl.innerHTML = '<span class="brent-live-dot"></span>$' + data.meta.brentPrice.toFixed(2);
+        brentEl.className = 'h-tick-val ' + (data.meta.brentPrice > 100 ? 'red' : 'amber');
+      }
+    }
+    
+    // Update E* and c values based on loaded parameters
+    const cValue = MODEL.c;
+    const estarValue = Math.round(MODEL.E * (1 + cValue * (MODEL.m - 1)) * 10) / 10;
+    const cEl = document.getElementById('tick-c');
+    if (cEl) cEl.textContent = '≈' + cValue.toFixed(2);
+    const estarEl = document.getElementById('tick-estar');
+    if (estarEl) estarEl.textContent = '≈' + estarValue.toFixed(1);
+    
+    // Show AI badge if calibrated
+    if (data.meta?.aiCalibrated) {
+      const ts = document.getElementById('brief-ts');
+      if (ts) ts.textContent = 'AI-calibrated · ' + new Date(data.meta.published).toLocaleDateString('en-GB');
+    }
+    if (typeof runBriefing === 'function') runBriefing();
+  } catch(_) {
+    // params.json not found — use defaults
+  }
+}
+
+// Load params immediately, then every 10 minutes (in case you push an update)
+loadParams();
+setInterval(loadParams, 600000);
+
+// ═══════════════════════════════════════════════════════════════════════
+// WORKFLOW 1 — AUTO DAILY BRIEFING ENGINE
+// ═══════════════════════════════════════════════════════════════════════
+
+function getC(brent) {
+  return Math.min(0.97, Math.max(0.80, 0.70 + ((brent - 65) / 10) * 0.04));
+}
+function getEstar(c, m, E) {
+  return Math.round(E * (1 + c * (m - 1)) * 10) / 10;
+}
+
+function badge(text, type) {
+  return `<span class="br-badge ${type}">${text}</span>`;
+}
+
+function runBriefing() {
+  const b = MODEL.brent;
+  const c = getC(b);
+  const estar = getEstar(c, MODEL.m, MODEL.E);
+  const dom = MODEL.G + MODEL.S - MODEL.Sr;
+  const trapActive = dom > 0;
+  const srCov = Math.round(MODEL.Sr / (MODEL.G + MODEL.S) * 100);
+  const brentChange = b < 100 ? 'below $100 — talks signal priced' : b > 110 ? 'above $110 — crisis premium elevated' : 'elevated above $100 — war premium active';
+  const brentBadge = b < 100 ? 'ok' : b > 110 ? 'alert' : 'warn';
+  const closureDays = Math.floor((new Date() - WAR_START) / 864e5);
+
+  const rows = [
+    {
+      action: 'Portal masthead check',
+      learn: `Dominant strategy broken: ${trapActive ? 'No' : '★ YES'}. Sr offered: ${MODEL.Sr} of ${MODEL.G + MODEL.S} required (${srCov}%). Analyses live: 5.`,
+      badge: trapActive ? badge('Trap active', 'alert') : badge('Broken', 'ok'),
+    },
+    {
+      action: 'Brent crude — live feed',
+      learn: `$${b.toFixed(2)} — ${brentChange}. ${MODEL.isLive ? 'Live data confirmed.' : 'Fallback value — API unavailable.'} Closure day ${closureDays}.`,
+      badge: badge('$' + b.toFixed(2), brentBadge),
+    },
+    {
+      action: 'Eq.5 — Commitment Device (c, E*)',
+      learn: `Inferred credibility c ≈ ${c.toFixed(2)} from Brent. E* = ${MODEL.E} × [1 + ${c.toFixed(2)} × ${(MODEL.m-1).toFixed(1)}] = ${estar}. Deterrence gap: ${estar}. U.S. Escalate payoff: ${-(MODEL.H + estar)}.`,
+      badge: estar > 12 ? badge('E*=' + estar, 'alert') : badge('E*=' + estar, 'warn'),
+    },
+    {
+      action: 'Eq.12 — Sr threshold watch',
+      learn: `Bessent waiver: Sr = ${MODEL.Sr} (${srCov}% of threshold). ${MODEL.talksSig ? 'Trump-Iran talks signal: expected Sr ≈ 2.7–4.6 (probability-weighted). Largest Sr signal of crisis.' : 'No new Sr signals.'} Gap to break: ${Math.max(0, (MODEL.G + MODEL.S) - MODEL.Sr).toFixed(1)} units.`,
+      badge: srCov < 10 ? badge(srCov + '%', 'alert') : srCov < 30 ? badge(srCov + '%', 'warn') : badge(srCov + '%', 'ok'),
+    },
+    {
+      action: 'Eq.7 — Swing cascade (k vs k*)',
+      learn: `Current k ≈ ${MODEL.k} (Iran=1 + India partial=0.3). k* estimated at 3–5 depending on ν and δ. ${MODEL.k < 2 ? 'Cascade has not reached tipping point.' : 'Cascade is approaching tipping zone.'} Saudi signal would push k to ≈2.3.`,
+      badge: MODEL.k >= 3 ? badge('Tipping', 'alert') : MODEL.k >= 2 ? badge('k=' + MODEL.k, 'warn') : badge('k=' + MODEL.k, 'neu'),
+    },
+    {
+      action: 'Eq.8 — Hegemony decay (ρ, H)',
+      learn: `Decay rate ρ_total ≈ ${(0.03 + MODEL.n * 0.005).toFixed(3)}/round. H after ${closureDays} rounds ≈ ${Math.round(MODEL.H * Math.pow(1 - (0.03 + MODEL.n * 0.005), closureDays) * 10) / 10} (${Math.round(Math.pow(1 - (0.03 + MODEL.n * 0.005), closureDays) * 100)}% of H₀). Iran payoff: +${MODEL.G} every round — constant.`,
+      badge: badge('Day ' + closureDays, 'neu'),
+    },
+  ];
+
+  if (MODEL.troops) {
+    rows.push({
+      action: 'Troop deployment — Eq.5 secondary',
+      learn: `2,500 Marines + USS Boxer. ΔE* ≈ −0.45 via m: 3.0 → 2.9. 3.2% reduction. Sr(troops) = 0. Dominant strategy: unchanged. Navy operates on physical plane Φ; yuan settlement on financial plane Ψ. Separability (Eq.9): ΔΨ(escort) = 0.`,
+      badge: badge('Sr=0', 'alert'),
+    });
+  }
+
+  const container = document.getElementById('w1-rows');
+  if (!container) return;
+  container.innerHTML = rows.map((row, i) => `
+    <div class="brief-row">
+      <div class="br-num">${String(i + 1).padStart(2, '0')}</div>
+      <div class="br-body">
+        <div class="br-action">${row.action}</div>
+        <div class="br-learn">${row.learn}</div>
+      </div>
+      ${row.badge}
+    </div>
+  `).join('');
+
+  // Overall verdict
+  const verdict = document.getElementById('w1-verdict');
+  if (verdict) {
+    const regime = estar > 14 ? 'suicidal escalation zone' : estar > 10 ? 'active deterrence' : 'moderate deterrence';
+    const srcBadge = MODEL.paramsLoaded
+      ? (MODEL.meta?.aiCalibrated
+          ? '<span style="font-size:9px;background:rgba(167,139,250,.2);color:#a78bfa;padding:2px 7px;border-radius:2px;margin-left:6px">AI-calibrated</span>'
+          : '<span style="font-size:9px;background:rgba(212,135,10,.15);color:var(--amber-l);padding:2px 7px;border-radius:2px;margin-left:6px">params.json</span>')
+      : '<span style="font-size:9px;background:rgba(255,255,255,.07);color:rgba(232,226,212,.35);padding:2px 7px;border-radius:2px;margin-left:6px">heuristic</span>';
+    const aiBlock = (MODEL.meta?.strategicSummary)
+      ? `<div style="margin-top:.5rem;padding:.5rem .75rem;background:rgba(167,139,250,.08);border-left:2px solid #a78bfa;font-size:11px;line-height:1.5;color:rgba(232,226,212,.7)"><span style="font-family:var(--mono);font-size:9px;color:#a78bfa;letter-spacing:.1em;text-transform:uppercase">AI read · ${new Date(MODEL.meta.published||Date.now()).toLocaleDateString('en-GB')}</span><br>${MODEL.meta.strategicSummary}${MODEL.meta.mostSignificantEvent?'<div style=\'margin-top:.35rem;font-family:var(--mono);font-size:10px;color:var(--amber-l)\'>\u2605 '+MODEL.meta.mostSignificantEvent+'</div>':''}</div>`
+      : '';
+    verdict.innerHTML = `
+      <strong>Strategic read — ${new Date().toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'})} UTC</strong>${srcBadge}<br>
+      Trap <strong>${trapActive ? 'active' : '\u2605 BROKEN'}</strong>. E* = <strong>${estar}</strong> (${regime}).
+      Sr coverage: <strong>${srCov}%</strong> of ${MODEL.G + MODEL.S} required.
+      Dominant strategy: <strong>${trapActive ? 'Yuan \u227b Dollar. Iran collects +' + MODEL.G + ' per round.' : '\u2605 Dollar may now compete.'}</strong>
+      ${aiBlock}
+    `;
+  }
+
+  const ts = document.getElementById('brief-ts');
+  if (ts) ts.textContent = 'updated ' + new Date().toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// WORKFLOW 2 — EVENT CLASSIFIER ENGINE
+// ═══════════════════════════════════════════════════════════════════════
+
+const EVENT_RULES = [
+  // ── Eq.12 Sr signals ─────────────────────────────────────────────
+  {
+    patterns: ['sanction', 'ofac', 'waiver', 'unsanction', 'relief', 'swift', 'frozen asset', 'asset release', 'jcpoa', 'nuclear deal', 'diplomatic', 'resolution', 'talks', 'negotiat', 'productive conversation'],
+    eq: '12', eqTitle: 'Sanctions Relief Threshold', color: '#8b5cf6',
+    formula: 'Sr ≥ G + S = 18',
+    param: 'Sr',
+    link: 'eq12/',
+    calc: (txt) => {
+      const t = txt.toLowerCase();
+      let sr = 0, note = '';
+      if (/\$[\d,]+\s*b/i.test(txt)) {
+        const m = txt.match(/\$([\d.]+)\s*b/i);
+        if (m) { sr = parseFloat(m[1]) / 18; note = `$${m[1]}B ÷ $18B/yr ≈ ${sr.toFixed(2)} Sr units`; }
+      } else if (t.includes('jcpoa') || t.includes('nuclear deal')) {
+        sr = 11; note = 'JCPOA-equivalent Sr ≈ 11 (36% of current threshold of 18)';
+      } else if (t.includes('waiver') || t.includes('unsanction')) {
+        sr = 0.78; note = 'Bessent-type waiver ≈ 0.78 Sr units (4.3% of threshold)';
+      } else if (t.includes('talks') || t.includes('productive') || t.includes('resolution')) {
+        sr = 2.7; note = 'Talks signal (probability-weighted, Iran denial discounted) ≈ 2.7 Sr units';
+      } else if (t.includes('swift')) {
+        sr = 4.0; note = 'SWIFT restoration ≈ 4.0 Sr units (22.2% of threshold)';
+      } else {
+        sr = 1.5; note = 'Estimated Sr ≈ 1–3 units (check specific instrument against Sr ladder in Eq.12)';
+      }
+      const dom = 8 + 10 - sr;
+      const cov = Math.round(sr / 18 * 100);
+      return {
+        params: [
+          { name: 'Sr (estimated)', val: sr.toFixed(2), note },
+          { name: 'Dominance margin after', val: dom.toFixed(1) + (dom > 0 ? ' > 0 (trap active)' : ' ≤ 0 ★ BREAKS TRAP'), note: '' },
+          { name: 'Sr coverage', val: cov + '%', note: 'of Sr(min) = 18 threshold' },
+        ],
+        analysis: dom > 0
+          ? `Dominant strategy remains active. Sr = ${sr.toFixed(2)} reduces dominance margin from 18 to ${dom.toFixed(1)} but does not break it. Iran still prefers Yuan in all scenarios. Open Eq.12 simulator → Sr slider to ${Math.round(sr)} to visualise.`
+          : `★ Dominance breaks. Sr = ${sr.toFixed(2)} ≥ threshold of 18. Iran's Yuan strategy is no longer strictly dominant. This is the first potential trap-breaking event of the crisis. Open Eq.12 to confirm with full parameter set.`,
+        urgent: dom <= 0,
+      };
+    },
+  },
+  // ── Eq.5 credibility events ───────────────────────────────────────
+  {
+    patterns: ['attack', 'vessel', 'tanker', 'mine', 'strike', 'bomb', 'missile', 'drone', 'credib', 'closure', 'block', 'seize', 'irgc', 'hormuz clos', 'shut'],
+    eq: '5', eqTitle: 'Hormuz Commitment Device', color: '#f0a830',
+    formula: 'E* = E × [1 + c(m−1)]',
+    param: 'c',
+    link: 'eq5/',
+    calc: (txt) => {
+      const t = txt.toLowerCase();
+      const b = MODEL.brent; const c0 = getC(b);
+      let dc = 0, note = '';
+      if (t.includes('21') || t.includes('attack') && t.includes('again')) { dc = 0.03; note = 'Another vessel attack: c += ~0.03'; }
+      else if (t.includes('attack') || t.includes('strike')) { dc = 0.02; note = 'Confirmed attack: c += ~0.02'; }
+      else if (t.includes('clos') || t.includes('block') || t.includes('shut')) { dc = 0.02; note = 'Closure extension: c += ~0.02'; }
+      else if (t.includes('seize') || t.includes('capture')) { dc = 0.03; note = 'Vessel seizure: c += ~0.03'; }
+      const cNew = Math.min(0.99, c0 + dc);
+      const estarOld = getEstar(c0, MODEL.m, MODEL.E);
+      const estarNew = getEstar(cNew, MODEL.m, MODEL.E);
+      return {
+        params: [
+          { name: 'c (before)', val: c0.toFixed(2), note: 'inferred from Brent $' + b.toFixed(0) },
+          { name: 'c (after)', val: cNew.toFixed(2), note },
+          { name: 'E* (before)', val: estarOld, note: 'deterrence gap' },
+          { name: 'E* (after)', val: estarNew, note: `+${(estarNew-estarOld).toFixed(1)} — escalation becomes costlier` },
+        ],
+        analysis: `Credibility rises from ${c0.toFixed(2)} to ${cNew.toFixed(2)}. E* rises from ${estarOld} to ${estarNew}. U.S. Escalate payoff falls from ${-(MODEL.H+estarOld)} to ${-(MODEL.H+estarNew)}. ${estarNew > 14 ? 'Now in suicidal escalation zone — alliance refusals structurally justified.' : 'Active deterrence zone maintained.'} Open Eq.5 simulator → c slider to ${Math.round(cNew*10)} to visualise.`,
+        urgent: estarNew > 16,
+      };
+    },
+  },
+  // ── Eq.7 swing cascade events ─────────────────────────────────────
+  {
+    patterns: ['saudi', 'uae', 'iraq', 'kuwait', 'qatar', 'gulf state', 'swing', 'yuan pric', 'mbridge', 'petrodollar', 'brics', 'cips', 'bilateral'],
+    eq: '7', eqTitle: 'Swing Producer Cascade', color: '#10b981',
+    formula: 'Gs + kν > Ps(0)·(1−δ)^k',
+    param: 'k',
+    link: 'eq7/',
+    calc: (txt) => {
+      const t = txt.toLowerCase();
+      let dk = 0, note = '';
+      if (t.includes('saudi')) { dk = 1.0; note = 'Saudi Arabia full switch: k += 1.0 (largest single cascade event)'; }
+      else if (t.includes('uae') && (t.includes('yuan') || t.includes('switch'))) { dk = 0.7; note = 'UAE yuan switch: k += 0.7'; }
+      else if (t.includes('iraq') || t.includes('kuwait') || t.includes('qatar')) { dk = 0.5; note = 'Gulf state bilateral: k += 0.5'; }
+      else if (t.includes('mbridge') || t.includes('cips')) { dk = 0.2; note = 'Payment infrastructure event: k += ~0.2 (raises ν)'; }
+      else { dk = 0.3; note = 'Bilateral deal signal: k += ~0.3'; }
+      const kNew = MODEL.k + dk;
+      const kstar = 3.2; // estimated at current ν=3, δ=0.15
+      return {
+        params: [
+          { name: 'k (before)', val: MODEL.k.toFixed(1), note: 'Iran + India partial' },
+          { name: 'k (after)', val: kNew.toFixed(1), note },
+          { name: 'k* (tipping point)', val: '≈' + kstar, note: 'at ν=3, δ=0.15' },
+          { name: 'Distance to tipping', val: Math.max(0, kstar - kNew).toFixed(1), note: kNew >= kstar ? '★ TIPPING POINT CROSSED' : 'switchers remaining' },
+        ],
+        analysis: kNew >= kstar
+          ? `★ Tipping point crossed. k = ${kNew.toFixed(1)} ≥ k* ≈ ${kstar}. The cascade is now self-completing — remaining Gulf states face a yuan side above the guarantee side. This is irreversible. Open Eq.7 simulator → n slider to ${Math.round(kNew)} to confirm.`
+          : `Cascade advancing. k rises from ${MODEL.k.toFixed(1)} to ${kNew.toFixed(1)}. ${(kstar - kNew).toFixed(1)} more equivalent switchers needed to reach tipping point k* ≈ ${kstar}. Open Eq.7 simulator → n slider to ${Math.round(kNew)} to visualise decay.`,
+        urgent: kNew >= kstar,
+      };
+    },
+  },
+  // ── Eq.5 military / m events ──────────────────────────────────────
+  {
+    patterns: ['troops', 'marines', 'carrier', 'destroyer', 'naval', 'escort', 'warship', 'military', 'deploy', 'pentagon', 'a-10', 'apache', 'boxer', 'meu'],
+    eq: '5', eqTitle: 'Hormuz Commitment Device (m effect)', color: '#f0a830',
+    formula: 'E* = E × [1 + c(m−1)]',
+    param: 'm',
+    link: 'eq5/',
+    calc: (txt) => {
+      const c0 = getC(MODEL.brent);
+      const mOld = MODEL.m;
+      const mNew = Math.max(2.5, mOld - 0.1);
+      const eOld = getEstar(c0, mOld, MODEL.E);
+      const eNew = getEstar(c0, mNew, MODEL.E);
+      return {
+        params: [
+          { name: 'm (before)', val: mOld.toFixed(1), note: 'Hormuz ~20% global oil, ~42% bypass' },
+          { name: 'm (after escort)', val: mNew.toFixed(1), note: 'Escort restores ~3–5% of volume' },
+          { name: 'E* change', val: eOld + ' → ' + eNew, note: `Δ = ${(eNew-eOld).toFixed(2)} (${Math.round((eNew-eOld)/eOld*100)}%)` },
+          { name: 'Sr(military)', val: '0', note: 'No sanctions relief delivered by Navy' },
+        ],
+        analysis: `Military deployment reduces m marginally from ${mOld} to ${mNew}. E* falls from ${eOld} to ${eNew} — a ${Math.abs(Math.round((eNew-eOld)/eOld*100))}% reduction, within calibration uncertainty. Dominant strategy: unchanged (G+S=${MODEL.G+MODEL.S} > 0). Separability principle (Eq.9): escorts restore physical transit (ΔΦ > 0) but yuan settlement continues via CIPS (ΔΨ = 0). Sr(military) = 0. Open Eq.5 → m slider to ${Math.round(mNew*10)/10} to verify.`,
+        urgent: false,
+      };
+    },
+  },
+  // ── Eq.4 NE confirmation events ───────────────────────────────────
+  {
+    patterns: ['accommodate', 'allow', 'fine with', 'refus', 'withdraw', 'coalition', 'germany', 'france', 'australia', 'nato refus', 'ally', 'bessent', 'treasury', 'ceasefire'],
+    eq: '4', eqTitle: 'Dominant Strategy Trap (NE)', color: '#e74c3c',
+    formula: 'a* = argmax min U_A = Accommodate',
+    param: 'NE',
+    link: 'eq4/',
+    calc: (txt) => {
+      const t = txt.toLowerCase();
+      const c0 = getC(MODEL.brent);
+      const estar = getEstar(c0, MODEL.m, MODEL.E);
+      let interp = '', signal = '';
+      if (t.includes('refus') || t.includes('withdraw') || t.includes('germany') || t.includes('france') || t.includes('australia')) {
+        signal = 'Alliance defection';
+        interp = `Coalition refusal is empirical validation of Eq.4. E* = ${estar} makes Escalate payoff ${-(MODEL.H+estar)} vs Accommodate ${-MODEL.H}. Rational allies choose not to absorb this cost. Each refusal also reduces P_s(0) in Eq.7, deepening the Swing cascade.`;
+      } else if (t.includes('allow') || t.includes('fine with') || t.includes('accommodate') || t.includes('bessent')) {
+        signal = 'U.S. Accommodate confirmed';
+        interp = `U.S. action consistent with minimax prediction a* = Accommodate. Payoff: −H = ${-MODEL.H}. This is the Nash Equilibrium (Yuan, Accommodate) playing out in real time. Not a concession — a structural prediction of the payoff matrix.`;
+      } else if (t.includes('ceasefire')) {
+        signal = 'Ceasefire signal';
+        interp = `A ceasefire is a move toward Accommodate + partial Sr. Check Eq.12 for the Sr component — ceasefire alone does not break dominance unless accompanied by genuine Sr ≥ 18. Monitor whether yuan settlement condition is included in ceasefire terms.`;
+      } else {
+        signal = 'U.S. strategic action';
+        interp = `Map this action to the payoff matrix: does it move U.S. toward Accommodate or Escalate? Accommodate payoff = −${MODEL.H}. Escalate payoff = ${-(MODEL.H+estar)}. Any action that does not deliver Sr moves the U.S. further into the Accommodate column.`;
+      }
+      return {
+        params: [
+          { name: 'Signal type', val: signal, note: '' },
+          { name: 'NE prediction', val: '(Yuan, Acc)', note: 'Nash Equilibrium: stable and unique' },
+          { name: 'U.S. Accommodate', val: formatN(-MODEL.H), note: 'current best response' },
+          { name: 'U.S. Escalate', val: formatN(-(MODEL.H+estar)), note: `gap = E* = ${estar}` },
+        ],
+        analysis: interp,
+        urgent: false,
+      };
+    },
+  },
+  // ── Eq.8 hegemony decay events ────────────────────────────────────
+  {
+    patterns: ['cips', 'yuan settle', 'payment', 'iea', 'reserve', 'mbridge process', 'bilateral pay', 'renminbi', 'petrodollar', 'dollar share', 'hegemony', 'india pay', 'pakistan pay', 'turkey pay'],
+    eq: '8', eqTitle: 'Hegemony Decay', color: '#0ea5e9',
+    formula: 'H_{t+1} = H_t·(1−ρ_I−n·ρ_S)',
+    param: 'ρ',
+    link: 'eq8/',
+    calc: (txt) => {
+      const t = txt.toLowerCase();
+      const days = Math.floor((new Date() - WAR_START) / 864e5);
+      let drho = 0, note = '';
+      if (t.includes('india') || t.includes('pakistan') || t.includes('turkey')) { drho = 0.005; note = 'Major importer yuan deal: ρ_I += ~0.005'; }
+      else if (t.includes('cips') || t.includes('mbridge') || t.includes('payment')) { drho = 0.003; note = 'Payment infrastructure event: ρ += ~0.003'; }
+      else if (t.includes('iea') || t.includes('reserve')) { drho = 0.002; note = 'Reserve release: permanently downgrade deterrent value, ρ += ~0.002'; }
+      else { drho = 0.003; note = 'Yuan settlement event: ρ += ~0.003'; }
+      const rhoOld = 0.03 + MODEL.n * 0.005;
+      const rhoNew = rhoOld + drho;
+      const hRatioOld = Math.round(Math.pow(1-rhoOld, days) * 100);
+      const hRatioNew = Math.round(Math.pow(1-rhoNew, days) * 100);
+      return {
+        params: [
+          { name: 'ρ_total (before)', val: rhoOld.toFixed(3), note: 'per round decay rate' },
+          { name: 'ρ_total (after)', val: rhoNew.toFixed(3), note },
+          { name: `H(${days}) before`, val: hRatioOld + '%', note: 'of original H₀' },
+          { name: `H(${days}) after`, val: hRatioNew + '%', note: 'permanent — does not reverse' },
+        ],
+        analysis: `This event raises the hegemony decay rate from ${rhoOld.toFixed(3)} to ${rhoNew.toFixed(3)} per round. H after ${days} rounds falls from ${hRatioOld}% to ${hRatioNew}% of H₀. Crucially: this change is permanent — when the crisis ends, the payment infrastructure remains operational, the CIPS record persists, and ρ stays elevated. Iran's payoff remains +${MODEL.G} every round regardless. Open Eq.8 simulator → ρ_I slider to see long-run trajectory.`,
+        urgent: false,
+      };
+    },
+  },
+  // ── Brent price move ─────────────────────────────────────────────
+  {
+    patterns: ['brent', 'oil price', 'crude', 'barrel', 'wti', 'opec'],
+    eq: '5', eqTitle: 'Brent as E* signal', color: '#f0a830',
+    formula: 'E* = E × [1 + c(m−1)]',
+    param: 'c (Brent-inferred)',
+    link: 'eq5/',
+    calc: (txt) => {
+      const m = txt.match(/\$(\d+)/);
+      const newB = m ? parseFloat(m[1]) : MODEL.brent;
+      const cOld = getC(MODEL.brent); const cNew = getC(newB);
+      const eOld = getEstar(cOld, MODEL.m, MODEL.E);
+      const eNew = getEstar(cNew, MODEL.m, MODEL.E);
+      return {
+        params: [
+          { name: 'Brent old', val: '$' + MODEL.brent.toFixed(2), note: '' },
+          { name: 'Brent new', val: '$' + newB.toFixed(2), note: m ? 'from headline' : 'assumed unchanged' },
+          { name: 'c change', val: cOld.toFixed(2) + ' → ' + cNew.toFixed(2), note: 'inferred credibility' },
+          { name: 'E* change', val: eOld + ' → ' + eNew, note: 'effective escalation cost' },
+        ],
+        analysis: `Brent at $${newB.toFixed(2)} implies c ≈ ${cNew.toFixed(2)} and E* = ${eNew}. ${newB < 100 ? 'Below $100 suggests market is pricing ceasefire/talks probability. Check Eq.12 for Sr signal.' : newB > 110 ? 'Above $110: elevated crisis premium. War scenario being priced as persistent.' : 'Between $90–110: moderate war premium. Active deterrence regime.'} The live Brent feed will update the featured card E* automatically within 5 minutes.`,
+        urgent: newB < 95,
+      };
+    },
+  },
+];
+
+function formatN(n) { return (n >= 0 ? '+' : '') + Math.round(n * 10) / 10; }
+
+function matchEvent(text) {
+  const t = text.toLowerCase();
+  for (const rule of EVENT_RULES) {
+    if (rule.patterns.some(p => t.includes(p))) return rule;
+  }
+  return null;
+}
+
+function renderResult(rule, txt) {
+  const { params, analysis, urgent } = rule.calc(txt);
+  const el = document.getElementById('w2-result');
+  if (!el) return;
+  el.style.display = 'block';
+  el.style.borderColor = urgent ? 'rgba(239,68,68,0.4)' : 'var(--border)';
+  el.style.borderLeftWidth = '3px';
+  el.style.borderLeftColor = rule.color;
+  el.innerHTML = `
+    <div class="w2-eq-header" style="border-bottom-color:${rule.color}22">
+      <div class="w2-eq-num" style="color:${rule.color}">Eq.${rule.eq}</div>
+      <div>
+        <div class="w2-eq-title">${rule.eqTitle}</div>
+        <div class="w2-eq-formula">${rule.formula} · parameter: ${rule.param}</div>
+      </div>
+      ${urgent ? '<span class="br-badge alert" style="margin-left:auto">★ Urgent</span>' : ''}
+    </div>
+    <div class="w2-body">
+      ${params.map(p => `
+        <div class="w2-param-row">
+          <span class="w2-param-name">${p.name}</span>
+          <span class="w2-param-val">${p.val}</span>
+          <span class="w2-param-note">${p.note}</span>
+        </div>
+      `).join('')}
+      <div class="w2-analysis">${analysis}</div>
+      <a class="w2-link" href="${rule.link}">Open ${rule.eqTitle} →</a>
+    </div>
+  `;
+}
+
+function classifyEvent() {
+  const txt = document.getElementById('w2-input')?.value?.trim();
+  if (!txt) return;
+  const rule = matchEvent(txt);
+  const el = document.getElementById('w2-result');
+  if (!rule) {
+    if (el) {
+      el.style.display = 'block';
+      el.style.borderLeftColor = 'var(--border2)';
+      el.innerHTML = `<div class="w2-body"><div class="w2-analysis">No equation match found for this event. Try rephrasing with keywords like: sanction, attack, tanker, Saudi, yuan, deploy, Brent, coalition, ceasefire. Or use one of the preset chips below.</div></div>`;
+    }
+    return;
+  }
+  renderResult(rule, txt);
+}
+
+function classifyPreset(btn) {
+  const txt = btn.textContent;
+  const inp = document.getElementById('w2-input');
+  if (inp) inp.value = txt;
+  const rule = matchEvent(txt);
+  if (rule) renderResult(rule, txt);
+}
+
+// Run briefing on load and after each Brent update
+runBriefing();
+setInterval(runBriefing, 300000);
+
+const vals = document.querySelectorAll('.h-tick-val');
+setInterval(() => {
+  vals.forEach(v => {
+    v.style.opacity = '0.4';
+    setTimeout(() => v.style.opacity = '1', 120);
+  });
+}, 8000);
+</script>
+</body>
+</html>

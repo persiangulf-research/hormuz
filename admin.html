@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hormuz Gambit — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Libre+Baskerville:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080c12;--s1:#0d1219;--s2:#111820;--s3:#161e2a;
+  --b:rgba(255,255,255,.07);--b2:rgba(255,255,255,.13);
+  --t:#e8e2d4;--mu:rgba(232,226,212,.5);--fa:rgba(232,226,212,.2);
+  --am:#d4870a;--al:#f0a830;--ad:rgba(212,135,10,.15);
+  --gn:#22c55e;--gd:rgba(34,197,94,.12);
+  --rd:#ef4444;--rdd:rgba(239,68,68,.12);
+  --pp:#a78bfa;--pd:rgba(167,139,250,.12);
+  --mo:'IBM Plex Mono',monospace;--se:'Libre Baskerville',Georgia,serif;
+}
+html{font-size:14px;background:var(--bg);color:var(--t);font-family:var(--mo)}
+body{min-height:100vh;display:flex;flex-direction:column}
+.bar{height:52px;background:rgba(8,12,18,.98);border-bottom:1px solid var(--b2);display:flex;align-items:center;padding:0 1.5rem;gap:1rem;position:sticky;top:0;z-index:100;flex-shrink:0}
+.logo{font-size:15px;font-weight:600;color:var(--al)}
+.badge{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;background:var(--gd);color:var(--gn);border:1px solid rgba(34,197,94,.3);padding:3px 10px;border-radius:2px}
+.brent-box{font-size:12px;font-weight:700;padding:4px 12px;background:var(--s2);border:1px solid var(--b2);border-radius:3px;display:flex;align-items:center;gap:6px;margin-left:auto}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--fa)}
+.bdot.live{background:var(--gn);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.bval{color:var(--al)}
+.bage{font-size:10px;color:var(--mu)}
+.pub-status{font-size:11px;color:var(--fa);margin-left:1rem;white-space:nowrap}
+.pub-status span{color:var(--al)}
+
+/* layout */
+.layout{display:grid;grid-template-columns:290px 1fr 285px;flex:1;min-height:0;overflow:hidden}
+@media(max-width:1000px){.layout{grid-template-columns:240px 1fr 240px}}
+@media(max-width:700px){.layout{grid-template-columns:1fr;overflow:unset}}
+.col{border-right:1px solid var(--b);display:flex;flex-direction:column;overflow-y:auto}
+.col:last-child{border-right:none}
+.col-head{padding:.7rem 1.1rem;border-bottom:1px solid var(--b);background:rgba(255,255,255,.02);flex-shrink:0;display:flex;align-items:center;gap:.7rem}
+.cn{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--am)}
+.ct{font-size:13px;font-weight:600}
+.cs{font-size:10px;color:var(--fa);margin-left:auto}
+.cb{padding:1.1rem;flex:1}
+
+/* forms */
+.f{margin-bottom:.8rem}
+.f label{display:block;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:4px}
+input,textarea,select{width:100%;background:var(--s2);border:1px solid var(--b2);color:var(--t);font-family:var(--mo);font-size:12px;padding:7px 9px;border-radius:3px;outline:none;transition:border-color .2s}
+input:focus,textarea:focus,select:focus{border-color:var(--am)}
+input[type=password]{letter-spacing:.1em}
+textarea{resize:vertical;line-height:1.5}
+.hint{font-size:10px;color:var(--fa);margin-top:3px;line-height:1.5}
+hr{border:none;border-top:1px solid var(--b);margin:.8rem 0}
+
+/* buttons */
+.btn{font-family:var(--mo);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border-radius:3px;cursor:pointer;padding:7px 13px;transition:all .2s;border:1px solid;white-space:nowrap}
+.bp{background:var(--am);color:#000;border-color:var(--am)}.bp:hover{background:var(--al)}
+.bp:disabled{background:var(--b2);color:var(--fa);border-color:var(--b2);cursor:not-allowed}
+.bg{background:transparent;color:var(--al);border-color:rgba(212,135,10,.35)}.bg:hover{background:var(--ad)}
+.br{background:transparent;color:var(--rd);border-color:rgba(239,68,68,.35)}.br:hover{background:var(--rdd)}
+.brow{display:flex;gap:8px;flex-wrap:wrap;margin-top:.5rem}
+
+/* keywords */
+.kwrap{display:flex;flex-wrap:wrap;gap:5px;min-height:26px;margin-bottom:.4rem}
+.kwchip{display:flex;align-items:center;gap:4px;background:var(--s2);border:1px solid var(--b2);border-radius:3px;padding:3px 7px;font-size:11px}
+.kwchip button{background:none;border:none;color:var(--fa);cursor:pointer;font-size:12px;line-height:1}
+.kwchip button:hover{color:var(--rd)}
+.kwadd{display:flex;gap:5px;margin-top:.25rem}.kwadd input{flex:1}
+
+/* news list */
+.nlist{display:flex;flex-direction:column}
+.ni{padding:.6rem 0;border-bottom:1px solid var(--b);display:grid;grid-template-columns:1fr auto;gap:.5rem;align-items:start}
+.ni:last-child{border-bottom:none}
+.nit{font-family:var(--se);font-size:12px;line-height:1.4;margin-bottom:2px}
+.nim{font-size:10px;color:var(--fa)}
+.neq{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:2px;white-space:nowrap;margin-top:2px}
+.e12{background:rgba(167,139,250,.15);color:var(--pp)}.e7{background:rgba(34,197,94,.15);color:var(--gn)}
+.e5{background:rgba(240,168,48,.15);color:var(--al)}.e4{background:rgba(239,68,68,.15);color:#f87171}
+.e8{background:rgba(59,130,246,.15);color:#93c5fd}.ex{background:var(--b);color:var(--fa)}
+
+/* state UI */
+.empty{text-align:center;padding:1.5rem 1rem;color:var(--fa);font-size:11px;line-height:1.8;border:1px dashed var(--b2);border-radius:3px}
+.loading{display:flex;align-items:center;gap:.7rem;padding:.875rem;color:var(--mu);font-size:11px}
+.spin{width:13px;height:13px;border:2px solid var(--b2);border-top-color:var(--al);border-radius:50%;animation:sp .8s linear infinite;flex-shrink:0}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ale{padding:.65rem .85rem;border-radius:3px;font-size:11px;line-height:1.5;margin-bottom:.65rem}
+.aok{background:var(--gd);border:1px solid rgba(34,197,94,.3);color:var(--gn)}
+.aer{background:var(--rdd);border:1px solid rgba(239,68,68,.3);color:var(--rd)}
+.ain{background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);color:#93c5fd}
+
+/* AI result */
+.air{background:var(--s2);border:1px solid var(--b2);border-radius:3px;margin-bottom:.65rem;overflow:hidden}
+.airh{padding:.6rem .875rem;background:var(--pd);border-bottom:1px solid var(--b);display:flex;align-items:center;gap:.7rem;font-size:11px;font-weight:600;color:var(--pp)}
+.airb{padding:.7rem .875rem}
+.apr{display:grid;grid-template-columns:72px 48px 48px 1fr;gap:.3rem;align-items:start;padding:.3rem 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:11px}
+.apr:last-child{border-bottom:none}
+.anam{color:var(--mu);font-weight:500}.aold{color:var(--fa)}.anew{color:var(--al);font-weight:700}
+.ajus{color:var(--fa);font-size:10px;line-height:1.35}
+.cnf{font-size:9px;font-weight:700;letter-spacing:.06em;padding:1px 5px;border-radius:2px}
+.ch{background:var(--gd);color:var(--gn)}.cm{background:var(--ad);color:var(--al)}.cl{background:var(--rdd);color:var(--rd)}
+
+/* param grid */
+.pgh{display:grid;grid-template-columns:70px 46px 1fr 50px;gap:.3rem;padding-bottom:.3rem;border-bottom:1px solid var(--b);margin-bottom:.2rem;font-size:9px;color:var(--fa);letter-spacing:.08em;text-transform:uppercase}
+.pgr{display:grid;grid-template-columns:70px 46px 1fr 50px;gap:.3rem;align-items:center;padding:.38rem 0 .38rem 2px;border-bottom:1px solid var(--b);border-radius:2px}
+.pgr:last-child{border-bottom:none}
+.pgr.mod{background:rgba(240,168,48,.07)}
+.pgs{font-size:12px;font-weight:700;color:var(--al)}.pgsub{font-size:9px;color:var(--fa);line-height:1.2}
+.pgn{font-size:12px;font-weight:700;text-align:center;background:var(--s2);border:1px solid var(--b2);border-radius:3px;padding:2px 0;width:100%;font-family:var(--mo);color:var(--t)}
+.pgn:focus{outline:none;border-color:var(--am)}
+input[type=range]{-webkit-appearance:none;height:3px;background:var(--b2);border-radius:2px;outline:none;width:100%}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--al);cursor:pointer;border:2px solid var(--bg)}
+.sb{font-size:9px;font-weight:700;letter-spacing:.06em;padding:2px 5px;border-radius:2px;white-space:nowrap}
+.sbai{background:var(--pd);color:var(--pp)}.sbbr{background:var(--gd);color:var(--gn)}
+.sbed{background:var(--ad);color:var(--al)}.sbdf{background:var(--b);color:var(--fa)}
+
+/* derived box */
+.dbox{background:var(--s3);border:1px solid var(--b2);border-radius:3px;padding:.65rem;display:grid;grid-template-columns:1fr 1fr;gap:.22rem;font-size:11px;margin-bottom:.65rem;margin-top:.65rem}
+.di label{font-size:9px;color:var(--fa);letter-spacing:.06em;text-transform:uppercase}
+.di .dv{font-weight:700}
+
+/* json / log */
+.jbox{background:var(--s3);border:1px solid var(--b2);border-radius:3px;padding:.65rem;font-size:10.5px;color:#86efac;white-space:pre-wrap;word-break:break-all;max-height:190px;overflow-y:auto;margin-bottom:.65rem;line-height:1.5}
+.llist{display:flex;flex-direction:column;margin-bottom:.65rem}
+.li{display:flex;align-items:start;gap:.5rem;padding:.32rem 0;border-bottom:1px solid var(--b);font-size:11px}
+.li:last-child{border-bottom:none}
+.ld{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.lai{background:var(--pp)}.lm{background:var(--am)}.lp{background:var(--gn)}.ls{background:var(--fa)}
+.lt{color:var(--mu);line-height:1.4;flex:1}.lts{color:var(--fa);font-size:10px;white-space:nowrap}
+
+.pubbtn{width:100%;padding:10px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--gn);color:#000;border:none;border-radius:3px;cursor:pointer;transition:background .2s;margin-bottom:.4rem}
+.pubbtn:hover{background:#16a34a}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="logo">&#x2B21; Hormuz Admin</div>
+  <div class="badge">Online</div>
+  <div class="brent-box">
+    <div class="bdot" id="bdot"></div>
+    <span style="font-size:10px;color:var(--fa)">BRENT</span>
+    <span class="bval" id="bval">$&#x2014;</span>
+    <span class="bage" id="bage">no key</span>
+  </div>
+  <div class="pub-status">params.json: <span id="last-pub">never</span></div>
+</div>
+
+<div class="layout">
+
+<!-- COL 1: KEYS & CONFIG -->
+<div class="col">
+  <div class="col-head"><span class="cn">01</span><span class="ct">Keys &amp; config</span></div>
+  <div class="cb">
+
+    <div class="ale ain" style="margin-bottom:.875rem;font-size:11px">
+      Keys stored in <strong>browser localStorage only</strong> &#x2014; never uploaded.<br>
+      Works fully online at <code style="color:var(--al)">yoursite/admin.html</code>
+    </div>
+
+    <div class="f">
+      <label>Anthropic API key</label>
+      <input type="password" id="k-ant" placeholder="sk-ant-&#x2026;" autocomplete="off">
+      <div class="hint">For AI parameter calibration via Claude.</div>
+    </div>
+
+    <div class="f">
+      <label>Guardian API key &#x2014; <a href="https://open-platform.theguardian.com/access/" target="_blank" style="color:var(--al);font-size:10px;font-weight:400;text-transform:none;letter-spacing:0">get free key &#x2197;</a></label>
+      <input type="password" id="k-news" placeholder="guardian-api-key&#x2026;" autocomplete="off">
+      <div class="hint">Free &#x2014; 12,000 req/day. No browser restrictions. Works from any domain.</div>
+    </div>
+
+    <div class="f">
+      <label>Financial Modeling Prep key (optional) &#x2014; <a href="https://site.financialmodelingprep.com/developer/docs" target="_blank" style="color:var(--al);font-size:10px;font-weight:400;text-transform:none;letter-spacing:0">get free key &#x2197;</a></label>
+      <input type="password" id="k-brent" placeholder="fmp-api-key&#x2026;" autocomplete="off">
+      <div class="hint"><strong style="color:var(--al)">Optional.</strong> If omitted, automatically uses Yahoo Finance fallback (free, no API key).</div>
+    </div>
+
+    <div class="f">
+      <label>Claude model</label>
+      <select id="k-model">
+        <option value="claude-sonnet-4-6">claude-sonnet-4-6 (recommended)</option>
+        <option value="claude-opus-4-6">claude-opus-4-6 (best accuracy)</option>
+        <option value="claude-haiku-4-5-20251001">claude-haiku-4-5-20251001 (fastest / cheapest)</option>
+      </select>
+    </div>
+
+    <div class="brow">
+      <button class="btn bg" onclick="saveKeys()">&#x1F4BE; Save keys</button>
+      <button class="btn br" onclick="clearKeys()">Clear</button>
+    </div>
+    <div id="keys-ale" style="margin-top:.5rem"></div>
+
+    <hr>
+
+    <div class="f">
+      <label>Search keywords</label>
+      <div class="kwrap" id="kwrap"></div>
+      <div class="kwadd">
+        <input type="text" id="kw-inp" placeholder="Add keyword&#x2026;">
+        <button class="btn bg" onclick="addKw()" style="padding:7px 10px">+</button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">
+      <div class="f" style="margin:0"><label>Lookback (hours)</label><input type="text" id="k-hours" value="24"></div>
+      <div class="f" style="margin:0"><label>Max headlines</label><input type="text" id="k-maxh" value="15"></div>
+    </div>
+
+    <hr>
+
+    <div class="f">
+      <label>Claude system prompt (editable)</label>
+      <textarea id="k-sys" style="min-height:120px;font-size:10.5px"></textarea>
+    </div>
+    <button class="btn bg" style="width:100%" onclick="saveCfg()">&#x1F4BE; Save all config</button>
+    <div id="cfg-ale" style="margin-top:.4rem"></div>
+  </div>
+</div>
+
+<!-- COL 2: FETCH + CALIBRATE -->
+<div class="col">
+  <div class="col-head"><span class="cn">02</span><span class="ct">Fetch &#x2192; calibrate</span><span class="cs" id="nc">0 headlines</span></div>
+  <div class="cb">
+
+    <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:.5rem">Brent crude &#x2014; auto-scrape</div>
+    <div class="brow" style="margin-top:0;margin-bottom:.65rem">
+      <button class="btn bg" onclick="fetchBrent()" id="brent-btn">&#x2B07; Fetch Brent price</button>
+      <span id="brent-res" style="font-size:11px;color:var(--mu);align-self:center"></span>
+    </div>
+    <div id="brent-ale"></div>
+    <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.65rem;margin-top:.5rem">
+      <label style="font-size:10px;color:var(--fa);white-space:nowrap">Manual override:</label>
+      <input type="text" id="brent-manual" placeholder="e.g. 75.42" style="width:80px;text-align:center;font-weight:700;font-size:11px">
+      <button class="btn bg" onclick="setBrentManual()" id="brent-set-btn" style="font-size:10px">Set</button>
+    </div>
+
+    <hr>
+
+    <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:.5rem">Step 1 &#x2014; fetch headlines</div>
+    <div class="brow" style="margin-top:0;margin-bottom:.65rem">
+      <button class="btn bg" onclick="fetchNews()" id="fetch-btn">&#x2B07; Fetch headlines</button>
+      <button class="btn bg" onclick="clearNews()" style="font-size:10px">Clear</button>
+    </div>
+    <div id="news-ale"></div>
+    <div id="news-area"><div class="empty">Headlines appear here after fetching.<br>Each is pre-labelled with the equation it likely affects.</div></div>
+
+    <hr>
+
+    <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:.5rem">Step 2 &#x2014; AI calibration</div>
+    <div class="brow" style="margin-top:0;margin-bottom:.65rem">
+      <button class="btn bp" onclick="runCalib()" id="calib-btn">&#x26A1; Run Claude calibration</button>
+      <button class="btn bg" onclick="useManual()" style="font-size:10px">Use manual paste</button>
+    </div>
+    <div id="calib-ale"></div>
+    <div id="ai-area"><div class="empty">AI calibration results appear here.<br>Claude reasons about each parameter from the headlines.</div></div>
+
+    <hr>
+    <div class="f">
+      <label>Manual headline paste (fallback if NewsAPI unavailable)</label>
+      <textarea id="manual-hl" placeholder="One headline per line&#x2026;" style="min-height:70px"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- COL 3: PARAMS + PUBLISH -->
+<div class="col">
+  <div class="col-head"><span class="cn">03</span><span class="ct">Parameters &#x2192; publish</span></div>
+  <div class="cb">
+
+    <div class="pgh"><div>Symbol</div><div>Value</div><div>Slider</div><div>Source</div></div>
+    <div id="pgrid"></div>
+    <div class="dbox" id="dbox"></div>
+
+    <hr>
+    <div class="f"><label>Analyst notes</label><textarea id="notes" placeholder="Context for this update&#x2026;" style="min-height:50px"></textarea></div>
+
+    <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:.35rem">params.json preview</div>
+    <div class="jbox" id="jbox">{}</div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)">Changelog</div>
+      <button class="btn bg" onclick="viewChangelog()" style="font-size:9px;padding:4px 8px">View history</button>
+    </div>
+    <div id="changelog-area"></div>
+
+    <hr>
+
+    <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:.35rem">Session log</div>
+    <div class="llist" id="llist">
+      <div class="li"><div class="ld ls"></div><div class="lt">Session started</div><div class="lts" id="sess-t">&#x2014;</div></div>
+    </div>
+
+    <div id="pub-ale"></div>
+    <button class="pubbtn" onclick="publish()">&#x2191; Download params.json</button>
+    <div style="font-size:10px;color:var(--fa);line-height:1.5">
+      Save to <code style="color:var(--al)">github_site/params.json</code> &#x2192; push to GitHub.<br>
+      The portal fetches this file automatically every 10 minutes.
+    </div>
+  </div>
+</div>
+
+</div><!-- /layout -->
+
+<script>
+const WAR_START=new Date('2026-02-28T00:00:00Z');
+const PD={
+  E:   {v:5,  mn:1,  mx:15,  s:.5,  l:'Base escalation cost'},
+  c:   {v:.90,mn:0,  mx:1,   s:.01, l:'Credibility scalar c'},
+  m:   {v:3.0,mn:1,  mx:5,   s:.1,  l:'Geographic multiplier m'},
+  H:   {v:7,  mn:1,  mx:12,  s:.5,  l:'U.S. hegemony loss H'},
+  G:   {v:8,  mn:1,  mx:15,  s:.5,  l:'Iran yuan gain G'},
+  S:   {v:10, mn:1,  mx:15,  s:.5,  l:'Iran sanctions cost S'},
+  Sr:  {v:.78,mn:0,  mx:25,  s:.1,  l:'Sanctions relief Sr'},
+  k:   {v:1.3,mn:0,  mx:10,  s:.1,  l:'Cascade switchers k'},
+  nu:  {v:3,  mn:1,  mx:8,   s:.5,  l:'Network gain/switcher nu'},
+  Ps:  {v:12, mn:5,  mx:20,  s:.5,  l:'U.S. guarantee value Ps'},
+  rhoI:{v:.03,mn:.005,mx:.15,s:.005,l:'Iran decay rate rhoI'},
+  n:   {v:1.3,mn:0,  mx:5,   s:.1,  l:'Swing states n_t'},
+};
+const DEFKWS=['Hormuz','Iran sanctions','Brent crude','IRGC','Saudi yuan','USS Boxer','Bessent oil','Iran ceasefire','mBridge yuan','CIPS settlement','Iran nuclear','petrodollar'];
+const SYS=`You calibrate a game-theoretic model of the 2026 Hormuz crisis.
+c: Credibility (0=bluff,1=certain). Rises with attacks/closure. Falls with ceasefire/talks.
+m: Hormuz multiplier (~3.0 = ~20% global oil). Changes only if bypass built/destroyed.
+E: Base escalation cost (4-6). Rises if conflict broadens.
+H: U.S. hegemony loss (6-9). Rises as yuan infrastructure deepens.
+G: Iran yuan gain (7-10). Rises as CIPS/mBridge grows.
+S: Iran sanctions cost (8-12). Falls ONLY with formal OFAC/SWIFT relief - NOT market waivers.
+Sr: Sanctions relief (0=none, 18=breaks dominance). Only formal diplomatic actions count.
+k/n: Swing producer switchers (Iran=1, India partial=0.3, Saudi full=+1).
+nu: Network gain per switcher (2-4). Rises with CIPS liquidity.
+Ps: U.S. guarantee (5-20). Falls with coalition defections.
+rhoI: Iran decay rate (0.02-0.08). Rises with more yuan settlements.
+Be CONSERVATIVE. Only move parameters when you have clear evidence.
+Return ONLY valid JSON - no other text before or after:
+{"parameters":{"c":{"value":0.90,"delta":0.00,"confidence":"high","justification":"one sentence"},"m":{"value":3.0,"delta":0.00,"confidence":"high","justification":"one sentence"},"E":{"value":5,"delta":0,"confidence":"medium","justification":"one sentence"},"H":{"value":7,"delta":0,"confidence":"medium","justification":"one sentence"},"G":{"value":8,"delta":0,"confidence":"medium","justification":"one sentence"},"S":{"value":10,"delta":0,"confidence":"high","justification":"one sentence"},"Sr":{"value":0.78,"delta":0,"confidence":"high","justification":"one sentence"},"k":{"value":1.3,"delta":0,"confidence":"medium","justification":"one sentence"},"nu":{"value":3,"delta":0,"confidence":"low","justification":"one sentence"},"Ps":{"value":12,"delta":0,"confidence":"medium","justification":"one sentence"},"rhoI":{"value":0.03,"delta":0,"confidence":"low","justification":"one sentence"},"n":{"value":1.3,"delta":0,"confidence":"medium","justification":"one sentence"}},"summary":"One paragraph strategic read.","most_significant_event":"Most important headline and why.","primary_equation":"Eq.X","trap_status":"active|weakening|broken"}`;
+
+let P={},SR={},HL=[],AIR=null,BRT={p:null,ts:null,live:false};
+
+function init(){
+  const c=cfg();
+  if(c.ant) document.getElementById('k-ant').value=c.ant;
+  if(c.news) document.getElementById('k-news').value=c.news;
+  if(c.bkey) document.getElementById('k-brent').value=c.bkey;
+  if(c.model) document.getElementById('k-model').value=c.model;
+  if(c.hours) document.getElementById('k-hours').value=c.hours;
+  if(c.maxh) document.getElementById('k-maxh').value=c.maxh;
+  document.getElementById('k-sys').value=c.sys||SYS;
+  const sp=JSON.parse(localStorage.getItem('hg_p')||'{}');
+  Object.keys(PD).forEach(k=>{P[k]=sp[k]!==undefined?sp[k]:PD[k].v;SR[k]=sp[k]!==undefined?'manual':'default';});
+  (JSON.parse(localStorage.getItem('hg_kws')||'null')||DEFKWS).forEach(addKwChip);
+  const lp=localStorage.getItem('hg_pub');
+  if(lp) document.getElementById('last-pub').textContent=lp;
+  document.getElementById('sess-t').textContent=ft(new Date());
+  renderPG();upD();upJ();
+  
+  // Initial Brent fetch on load
+  setTimeout(fetchBrent, 1000);
+  
+  // Auto-fetch every 5 minutes (300000ms)
+  setInterval(() => {
+    console.log('[Auto-fetch] 5-minute interval triggered');
+    fetchBrent();
+  }, 300000);
+}
+
+function cfg(){return JSON.parse(localStorage.getItem('hg_cfg')||'{}');}
+function saveKeys(){const c=cfg();c.ant=document.getElementById('k-ant').value.trim();c.news=document.getElementById('k-news').value.trim();c.bkey=document.getElementById('k-brent').value.trim();c.model=document.getElementById('k-model').value;localStorage.setItem('hg_cfg',JSON.stringify(c));sal('keys-ale','Keys saved.','ok');if(c.bkey)fetchBrent(true);}
+function saveCfg(){const c=cfg();c.sys=document.getElementById('k-sys').value;c.hours=document.getElementById('k-hours').value;c.maxh=document.getElementById('k-maxh').value;localStorage.setItem('hg_cfg',JSON.stringify(c));localStorage.setItem('hg_kws',JSON.stringify(getKws()));sal('cfg-ale','Config saved.','ok');}
+function clearKeys(){localStorage.removeItem('hg_cfg');['k-ant','k-news','k-brent'].forEach(id=>document.getElementById(id).value='');sal('keys-ale','Keys cleared.','ok');}
+
+function getKws(){return Array.from(document.querySelectorAll('.kwchip')).map(c=>c.dataset.kw);}
+function addKwChip(kw){const w=document.getElementById('kwrap');const d=document.createElement('div');d.className='kwchip';d.dataset.kw=kw;d.innerHTML=`${kw}<button onclick="this.parentElement.remove()">x</button>`;w.appendChild(d);}
+function addKw(){const i=document.getElementById('kw-inp');const v=i.value.trim();if(!v)return;addKwChip(v);i.value='';}
+document.addEventListener('keydown',e=>{if(e.target.id==='kw-inp'&&e.key==='Enter')addKw();});
+
+async function fetchBrent(){
+  document.getElementById('brent-btn').disabled=true;
+  document.getElementById('brent-res').textContent='Fetching...';
+  sal('brent-ale','','');
+  
+  let price=null;
+  let source='';
+  
+  // Try oilprice.com scraping via AllOrigins
+  try {
+    console.log('[Brent] Attempting oilprice.com scrape...');
+    const targetUrl = 'https://oilprice.com/';
+    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl);
+    
+    const response = await fetch(proxyUrl);
+    if (response.ok) {
+      const data = await response.json();
+      const html = data.contents;
+      console.log('[Brent] HTML received, length:', html.length);
+      
+      // Try multiple regex patterns for Brent crude price
+      const patterns = [
+        /Brent[^$]*\$\s*([\d,]+\.?\d*)/i,
+        /<[^>]*>Brent[^<]*<[^>]*>\s*\$?\s*([\d,]+\.?\d*)/i,
+        /Brent\s+Crude[^$]*\$\s*([\d,]+\.?\d*)/i,
+        /"Brent"[^$]*\$\s*([\d,]+\.?\d*)/i
+      ];
+      
+      for (const pattern of patterns) {
+        const match = html.match(pattern);
+        if (match && match[1]) {
+          const priceStr = match[1].replace(/,/g, '');
+          const parsedPrice = parseFloat(priceStr);
+          if (parsedPrice > 30 && parsedPrice < 200) { // Sanity check
+            price = parsedPrice;
+            source = 'oilprice.com';
+            console.log('[Brent] Price found via pattern:', pattern, '=', price);
+            break;
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.log('[Brent] oilprice.com error:', err.message);
+  }
+  
+  // Fallback: Try Yahoo Finance
+  if (!price) {
+    try {
+      console.log('[Brent] Attempting Yahoo Finance fallback...');
+      const yahooUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/BZ=F?interval=1d';
+      const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(yahooUrl);
+      
+      const response = await fetch(proxyUrl);
+      if (response.ok) {
+        const data = await response.json();
+        const content = JSON.parse(data.contents);
+        const priceData = content?.chart?.result?.[0]?.meta?.regularMarketPrice;
+        if (priceData && !isNaN(priceData) && priceData > 30 && priceData < 200) {
+          price = parseFloat(priceData);
+          source = 'Yahoo Finance';
+          console.log('[Brent] Yahoo price:', price);
+        }
+      }
+    } catch (err) {
+      console.log('[Brent] Yahoo Finance error:', err.message);
+    }
+  }
+  
+  // Update if price found
+  if (price) {
+    BRT = {p: price, ts: new Date(), live: true};
+    updBrentBar();
+    P.c = Math.min(0.98, Math.max(0.80, 0.70 + ((price - 65) / 10) * 0.04));
+    SR.c = 'auto';
+    renderPG();
+    upD();
+    upJ();
+    document.getElementById('brent-res').textContent = '$' + price.toFixed(2) + ' via ' + source;
+    sal('brent-ale', 'Brent $' + price.toFixed(2) + ' via ' + source + ' - c auto-updated to ' + P.c.toFixed(2), 'ok');
+    addLog('m', 'Brent $' + price.toFixed(2) + ' (' + source + ') -> c=' + P.c.toFixed(2));
+  } else {
+    document.getElementById('brent-res').textContent = 'Failed';
+    sal('brent-ale', 'Auto-fetch failed. Use manual override below.', 'er');
+    console.log('[Brent] All fetch attempts failed');
+  }
+  
+  document.getElementById('brent-btn').disabled = false;
+}
+
+function setBrentManual(){
+  const input=document.getElementById('brent-manual').value.trim();
+  const price=parseFloat(input);
+  if(!input || isNaN(price) || price<=0){
+    sal('brent-ale','Enter valid price (e.g. 75.42)','er');
+    return;
+  }
+  BRT={p:price,ts:new Date(),live:true};
+  updBrentBar();
+  P.c=Math.min(0.98,Math.max(0.80,0.70+((price-65)/10)*0.04));
+  SR.c='manual';
+  renderPG();upD();upJ();
+  document.getElementById('brent-res').textContent='$'+price.toFixed(2)+' (manual)';
+  sal('brent-ale','Brent $'+price.toFixed(2)+' - c auto-updated to '+P.c.toFixed(2),'ok');
+  addLog('m','Brent $'+price.toFixed(2)+' (manual) -> c='+P.c.toFixed(2));
+  document.getElementById('brent-manual').value='';
+}
+function updBrentBar(){
+  const {p,ts,live}=BRT;if(!p)return;
+  document.getElementById('bval').textContent='$'+p.toFixed(2);
+  document.getElementById('bval').style.color=p>100?'#f87171':p>90?'var(--al)':'var(--gn)';
+  document.getElementById('bdot').className='bdot'+(live?' live':'');
+  const m=Math.round((new Date()-ts)/60000);
+  document.getElementById('bage').textContent=m<1?'live':m+'m ago';
+}
+setInterval(updBrentBar,30000);
+
+function gEq(t){const s=t.toLowerCase();
+  if(/sanction|ofac|waiver|swift|jcpoa|asset release|talks|resolution|nuclear deal/.test(s))return'12';
+  if(/saudi|gulf state|mbridge|cips|brics|yuan pric|petrodollar|bilateral/.test(s))return'7';
+  if(/attack|vessel|tanker|mine|irgc|drone|clos|seize|missile|credib/.test(s))return'5';
+  if(/troop|marines|carrier|destroyer|naval|escort|military|deploy|pentagon|a-10/.test(s))return'5m';
+  if(/accommodate|refus|coalition|ceasefire|bessent|treasury/.test(s))return'4';
+  if(/cips|yuan settle|hegemony|dollar share|renminbi|iea reserve/.test(s))return'8';
+  return'x';}
+const EQC={'12':'e12','7':'e7','5':'e5','5m':'e5','4':'e4','8':'e8','x':'ex'};
+const EQL={'12':'Eq.12','7':'Eq.7','5':'Eq.5','5m':'Eq.5/m','4':'Eq.4','8':'Eq.8','x':'other'};
+
+async function fetchNews(){
+  const c=cfg();const key=c.news||document.getElementById('k-news').value.trim();
+  if(!key){sal('news-ale','Enter Guardian API key in Config.','er');return;}
+  const kws=getKws();if(!kws.length){sal('news-ale','Add at least one keyword.','er');return;}
+  const hours=parseInt(document.getElementById('k-hours').value)||24;
+  const maxh=parseInt(document.getElementById('k-maxh').value)||15;
+  const fromDate=new Date(Date.now()-hours*3600000).toISOString().split('T')[0];
+  const q=kws.map(k=>k).join(' OR ');
+  sLoad('news-area','Fetching headlines...');document.getElementById('fetch-btn').disabled=true;
+  try{
+    const r=await fetch('https://content.guardianapis.com/search?q='+encodeURIComponent(q)+'&from-date='+fromDate+'&order-by=newest&page-size='+maxh+'&api-key='+key);
+    if(!r.ok) {
+      const e = await r.text().catch(()=>'{}');
+      throw new Error('HTTP '+r.status+': '+e.slice(0,200));
+    }
+    const d=await r.json();
+    if(!d.response||d.response.status!=='ok') {
+      throw new Error('API error: '+JSON.stringify(d).slice(0,200));
+    }
+    HL=(d.response.results||[]).slice(0,maxh).map(a=>({title:a.webTitle,desc:'',src:'The Guardian',time:a.webPublicationDate,eq:gEq(a.webTitle)}));
+    document.getElementById('nc').textContent=HL.length+' headlines';
+    renderNews();sal('news-ale',HL.length+' headlines fetched ('+hours+'h lookback).','ok');addLog('m','Fetched '+HL.length+' headlines via Guardian');
+  }catch(e){sal('news-ale','Guardian API error: '+e.message,'er');document.getElementById('news-area').innerHTML='<div class="empty">Fetch failed. Try manual paste below.</div>';}
+  finally{document.getElementById('fetch-btn').disabled=false;}
+}
+function renderNews(){
+  if(!HL.length){document.getElementById('news-area').innerHTML='<div class="empty">No results.</div>';return;}
+  document.getElementById('news-area').innerHTML='<div class="nlist">'+HL.map(h=>'<div class="ni"><div><div class="nit">'+h.title+'</div><div class="nim">'+h.src+' - '+ft(new Date(h.time))+'</div></div><div class="neq '+(EQC[h.eq]||'ex')+'">'+( EQL[h.eq]||'-')+'</div></div>').join('')+'</div>';
+}
+function clearNews(){HL=[];document.getElementById('news-area').innerHTML='<div class="empty">Cleared.</div>';document.getElementById('nc').textContent='0 headlines';}
+function useManual(){const t=document.getElementById('manual-hl').value.trim();if(!t){sal('calib-ale','Paste headlines first.','er');return;}HL=t.split('\n').filter(l=>l.trim()).map(l=>({title:l.trim(),desc:'',src:'manual',time:new Date().toISOString(),eq:gEq(l)}));document.getElementById('nc').textContent=HL.length+' (manual)';renderNews();sal('news-ale','Manual headlines loaded. Run calibration.','ok');}
+
+async function runCalib(){
+  const c=cfg();const key=c.ant||document.getElementById('k-ant').value.trim();
+  if(!key){sal('calib-ale','Enter Anthropic API key in Config.','er');return;}
+  const all=HL.length?HL:document.getElementById('manual-hl').value.trim().split('\n').filter(l=>l.trim()).map(l=>({title:l.trim(),desc:'',src:'manual',time:new Date().toISOString(),eq:gEq(l)}));
+  if(!all.length){sal('calib-ale','Fetch or paste headlines first.','er');return;}
+  const model=c.model||document.getElementById('k-model').value;
+  const sys=document.getElementById('k-sys').value||SYS;
+  const maxh=parseInt(document.getElementById('k-maxh').value)||15;
+  const days=Math.floor((new Date()-WAR_START)/864e5);
+  const hlTxt=all.slice(0,maxh).map((h,i)=>(i+1)+'. ['+h.src+'] '+h.title+(h.desc?' - '+h.desc.slice(0,120):'')).join('\n');
+  const umsg='Current params: '+JSON.stringify(P)+'\nDate: '+new Date().toDateString()+', closure day '+days+(BRT.p?'\nLive Brent: $'+BRT.p.toFixed(2):'')+'\n\nHeadlines:\n'+hlTxt+'\n\nCalibrate all parameters based on these headlines.';
+  document.getElementById('ai-area').innerHTML='<div class="loading"><div class="spin"></div>Claude is calibrating parameters...</div>';
+  document.getElementById('calib-btn').disabled=true;
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:model,max_tokens:2000,system:sys,messages:[{role:'user',content:umsg}]})});
+    if(!resp.ok){const e=await resp.json();throw new Error(e.error?.message||'API error '+resp.status);}
+    const data=await resp.json();const raw=data.content?.[0]?.text||'';
+    const m=raw.match(/\{[\s\S]*\}/);
+    if(!m)throw new Error('No JSON in response. Preview: '+raw.slice(0,200));
+    AIR=JSON.parse(m[0]);renderAI(AIR);
+    let ch=[];
+    let changeDetails = [];
+    Object.entries(AIR.parameters||{}).forEach(([k,v])=>{
+      if(P[k]!==undefined&&v.value!==undefined){
+        const pv=P[k];
+        P[k]=v.value;
+        SR[k]='ai';
+        if(Math.abs(pv-v.value)>0.001){
+          ch.push(k+':'+pv+'->'+v.value);
+          changeDetails.push({
+            param: k,
+            oldValue: pv,
+            newValue: v.value,
+            delta: v.delta,
+            confidence: v.confidence,
+            justification: v.justification,
+            timestamp: new Date().toISOString()
+          });
+        }
+      }
+    });
+    
+    // Store changelog to localStorage
+    if(changeDetails.length > 0){
+      const changelog = JSON.parse(localStorage.getItem('hg_changelog') || '[]');
+      changelog.push({
+        timestamp: new Date().toISOString(),
+        headlines: HL.map(h => ({title: h.title, eq: h.eq, src: h.src})),
+        brentPrice: BRT.p,
+        changes: changeDetails,
+        strategicSummary: AIR.summary,
+        mostSignificantEvent: AIR.most_significant_event,
+        primaryEquation: AIR.primary_equation,
+        trapStatus: AIR.trap_status
+      });
+      // Keep last 50 changelog entries
+      if(changelog.length > 50) changelog.shift();
+      localStorage.setItem('hg_changelog', JSON.stringify(changelog));
+      console.log('[Changelog] Stored', changeDetails.length, 'parameter changes');
+    }
+    
+    renderPG(AIR.parameters);upD();upJ();
+    const msg=ch.length?'AI updated '+ch.length+' param(s): '+ch.slice(0,4).join(', '):'AI: no changes needed.';
+    sal('calib-ale',msg,'ok');addLog('ai',msg);
+  }catch(e){document.getElementById('ai-area').innerHTML='<div class="ale aer">'+e.message+'</div>';sal('calib-ale',e.message,'er');}
+  finally{document.getElementById('calib-btn').disabled=false;}
+}
+
+function renderAI(res){
+  const ps=res.parameters||{};
+  const rows=Object.entries(ps).map(([k,v])=>{const cc=v.confidence==='high'?'ch':v.confidence==='medium'?'cm':'cl';const changed=Math.abs(v.delta||0)>0.001;return '<div class="apr" style="'+(changed?'background:rgba(167,139,250,.05)':'')+'"><span class="anam">'+k+'</span><span class="aold">'+(PD[k]?.v||'-')+'</span><span class="anew" style="'+(changed?'color:#a78bfa':'')+'">'+v.value+'</span><span class="ajus">'+v.justification+' <span class="cnf '+cc+'">'+v.confidence+'</span></span></div>';}).join('');
+  document.getElementById('ai-area').innerHTML='<div class="air"><div class="airh">Claude calibration - '+ft(new Date())+'<span style="margin-left:auto;font-size:10px;color:var(--fa)">'+(res.primary_equation||'-')+' - '+(res.trap_status||'-')+'</span></div><div class="airb"><div style="display:grid;grid-template-columns:72px 48px 48px 1fr;gap:.3rem;padding-bottom:.3rem;border-bottom:1px solid var(--b);margin-bottom:.2rem;font-size:9px;color:var(--fa);text-transform:uppercase;letter-spacing:.08em"><div>Param</div><div>Before</div><div>After</div><div>Justification</div></div>'+rows+(res.summary?'<div style="margin-top:.6rem;padding:.6rem .7rem;background:var(--s3);border-radius:3px;font-family:var(--se);font-size:11px;color:var(--mu);line-height:1.6;border-left:2px solid var(--pp)"><div style="font-family:var(--mo);font-size:9px;color:var(--pp);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">Strategic read</div>'+res.summary+(res.most_significant_event?'<div style="margin-top:.3rem;font-family:var(--mo);font-size:10px;color:var(--al)">* '+res.most_significant_event+'</div>':'')+'</div>':'')+'</div></div>';
+}
+
+function renderPG(){
+  document.getElementById('pgrid').innerHTML=Object.entries(PD).map(([k,d])=>{
+    const v=P[k]??d.v;const s=SR[k]||'default';const mod=Math.abs(v-d.v)>0.001;
+    const sb=s==='ai'?'<span class="sb sbai">AI</span>':s==='brent'?'<span class="sb sbbr">Brent</span>':mod?'<span class="sb sbed">edited</span>':'<span class="sb sbdf">default</span>';
+    return '<div class="pgr'+(mod?' mod':'')+'" id="pr-'+k+'"><div><div class="pgs">'+k+'</div><div class="pgsub">'+d.l+'</div></div><input type="number" class="pgn" id="pn-'+k+'" value="'+rn(v)+'" min="'+d.mn+'" max="'+d.mx+'" step="'+d.s+'" onchange="onN(\''+k+'\',this.value)"><input type="range" id="pr-r-'+k+'" min="'+d.mn+'" max="'+d.mx+'" step="'+d.s+'" value="'+v+'" oninput="onR(\''+k+'\',this.value)">'+sb+'</div>';
+  }).join('');
+}
+function onN(k,v){const n=parseFloat(v);if(isNaN(n))return;P[k]=n;SR[k]='manual';const r=document.getElementById('pr-r-'+k);if(r)r.value=n;document.getElementById('pr-'+k)?.classList.toggle('mod',Math.abs(n-PD[k].v)>0.001);upD();upJ();addLog('m',k+' -> '+n);}
+function onR(k,v){const n=parseFloat(v);P[k]=n;SR[k]='manual';const p=document.getElementById('pn-'+k);if(p)p.value=rn(n);document.getElementById('pr-'+k)?.classList.toggle('mod',Math.abs(n-PD[k].v)>0.001);upD();upJ();}
+function rn(n){return Math.round(n*10000)/10000;}
+
+function upD(){
+  const p=P;const e=rn(p.E*(1+p.c*(p.m-1)));const dm=rn(p.G+p.S-p.Sr);
+  const cv=Math.round(p.Sr/(p.G+p.S)*100);const days=Math.floor((new Date()-WAR_START)/864e5);
+  const hp=Math.round(Math.pow(1-p.rhoI-p.n*0.005,days)*100);
+  const reg=e>14?'Suicidal esc.':e>10?'Active deterrence':'Moderate';
+  const tc=dm>0?'var(--rd)':'var(--gn)';
+  document.getElementById('dbox').innerHTML=
+    '<div class="di"><label>E*</label><div class="dv" style="color:var(--al)">'+e+'</div></div>'+
+    '<div class="di"><label>E*/E</label><div class="dv">'+rn(e/p.E)+'x</div></div>'+
+    '<div class="di"><label>Dom. margin</label><div class="dv" style="color:'+tc+'">'+(dm>0?'+':'')+dm+'</div></div>'+
+    '<div class="di"><label>Sr coverage</label><div class="dv" style="color:'+(cv<20?'var(--rd)':cv<50?'var(--al)':'var(--gn)')+'">'+cv+'%</div></div>'+
+    '<div class="di"><label>U.S. Acc.</label><div class="dv" style="color:#f87171">'+rn(-p.H)+'</div></div>'+
+    '<div class="di"><label>U.S. Esc.</label><div class="dv" style="color:#f87171">'+rn(-(p.H+e))+'</div></div>'+
+    '<div class="di"><label>H(day '+days+')</label><div class="dv">'+hp+'% H0</div></div>'+
+    '<div class="di"><label>Regime</label><div class="dv" style="font-size:10px;color:'+(e>14?'var(--rd)':'var(--al)')+'">'+reg+'</div></div>';
+}
+
+function bldJ(){
+  const p=P;const e=rn(p.E*(1+p.c*(p.m-1)));
+  return{meta:{published:new Date().toISOString(),closureDays:Math.floor((new Date()-WAR_START)/864e5),analystNotes:document.getElementById('notes').value.trim()||null,aiCalibrated:AIR!==null,brentPrice:BRT.p||null,brentFetched:BRT.ts?.toISOString()||null,primaryEquation:AIR?.primary_equation||null,trapStatus:AIR?.trap_status||(p.G+p.S-p.Sr>0?'active':'broken'),strategicSummary:AIR?.summary||null,mostSignificantEvent:AIR?.most_significant_event||null,headlines:HL.slice(0,10).map(h=>({title:h.title,eq:h.eq}))},parameters:Object.fromEntries(Object.entries(P).map(([k,v])=>[k,rn(v)])),derived:{estar:e,estarRatio:rn(e/p.E),dominanceMargin:rn(p.G+p.S-p.Sr),srCoverage:Math.round(p.Sr/(p.G+p.S)*100),uAccommodate:rn(-p.H),uEscalate:rn(-(p.H+e))}};
+}
+function upJ(){document.getElementById('jbox').textContent=JSON.stringify(bldJ(),null,2);}
+function publish(){
+  const j=bldJ();const b=new Blob([JSON.stringify(j,null,2)],{type:'application/json'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='params.json';a.click();URL.revokeObjectURL(u);
+  const ts=new Date().toLocaleString('en-GB');localStorage.setItem('hg_pub',ts);localStorage.setItem('hg_p',JSON.stringify(P));document.getElementById('last-pub').textContent=ts;
+  sal('pub-ale','params.json downloaded. Save to github_site/ and push to GitHub.','ok');
+  addLog('p','Published - E*='+j.derived.estar+', Sr='+j.parameters.Sr+', trap='+j.meta.trapStatus);
+}
+function ft(d){return d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
+function sLoad(id,msg){document.getElementById(id).innerHTML='<div class="loading"><div class="spin"></div>'+msg+'</div>';}
+function sal(id,msg,t){const el=document.getElementById(id);if(!el)return;if(!msg){el.innerHTML='';return;}const c=t==='ok'?'aok':t==='er'?'aer':'ain';el.innerHTML='<div class="ale '+c+'">'+msg+'</div>';}
+function addLog(t,msg){const l=document.getElementById('llist');const dc=t==='ai'?'lai':t==='m'?'lm':t==='p'?'lp':'ls';const d=document.createElement('div');d.className='li';d.innerHTML='<div class="ld '+dc+'"></div><div class="lt">'+msg+'</div><div class="lts">'+ft(new Date())+'</div>';l.insertBefore(d,l.children[1]||null);}
+
+function viewChangelog(){
+  const changelog = JSON.parse(localStorage.getItem('hg_changelog') || '[]');
+  const area = document.getElementById('changelog-area');
+  
+  if(changelog.length === 0){
+    area.innerHTML = '<div class="empty" style="padding:1rem;font-size:10px">No parameter changes recorded yet.<br>Run AI calibration to populate changelog.</div>';
+    return;
+  }
+  
+  // Show most recent 10 entries
+  const recent = changelog.slice(-10).reverse();
+  
+  let html = '<div style="max-height:300px;overflow-y:auto;font-size:10px;line-height:1.5">';
+  
+  recent.forEach((entry, idx) => {
+    const ts = new Date(entry.timestamp);
+    const tsStr = ts.toLocaleString('en-GB', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
+    
+    html += '<div style="border:1px solid var(--b2);border-radius:3px;padding:.6rem;margin-bottom:.5rem;background:var(--s2)">';
+    html += '<div style="display:flex;justify-content:space-between;margin-bottom:.4rem">';
+    html += '<span style="color:var(--al);font-weight:700;font-size:9px;letter-spacing:.08em">'+tsStr+'</span>';
+    html += '<span style="color:var(--fa);font-size:9px">'+entry.changes.length+' param(s) changed</span>';
+    html += '</div>';
+    
+    // Most significant event
+    if(entry.mostSignificantEvent){
+      html += '<div style="margin-bottom:.4rem;padding:.4rem;background:var(--s3);border-left:2px solid var(--pp);border-radius:2px">';
+      html += '<div style="font-size:8px;color:var(--pp);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px">KEY EVENT</div>';
+      html += '<div style="color:var(--mu);font-size:10px">'+entry.mostSignificantEvent+'</div>';
+      html += '</div>';
+    }
+    
+    // Changes
+    entry.changes.forEach(ch => {
+      const confColor = ch.confidence==='high'?'var(--gn)':ch.confidence==='medium'?'var(--al)':'var(--rd)';
+      html += '<div style="display:grid;grid-template-columns:auto 1fr;gap:.4rem;margin-bottom:.3rem;padding:.3rem;background:rgba(167,139,250,.05);border-radius:2px">';
+      html += '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:50px">';
+      html += '<span style="font-weight:700;color:var(--al)">'+ch.param+'</span>';
+      html += '<span style="font-size:8px;color:var(--fa)">'+ch.oldValue.toFixed(2)+' → '+ch.newValue.toFixed(2)+'</span>';
+      html += '</div>';
+      html += '<div>';
+      html += '<div style="color:var(--mu);margin-bottom:2px">'+ch.justification+'</div>';
+      html += '<div style="font-size:8px;color:'+confColor+';text-transform:uppercase;letter-spacing:.06em">'+ch.confidence+' confidence</div>';
+      html += '</div>';
+      html += '</div>';
+    });
+    
+    // Brent price if available
+    if(entry.brentPrice){
+      html += '<div style="font-size:9px;color:var(--fa);margin-top:.3rem">Brent: $'+entry.brentPrice.toFixed(2)+'</div>';
+    }
+    
+    // Headlines count
+    if(entry.headlines && entry.headlines.length > 0){
+      const eqCounts = {};
+      entry.headlines.forEach(h => {
+        eqCounts[h.eq] = (eqCounts[h.eq] || 0) + 1;
+      });
+      html += '<div style="font-size:9px;color:var(--fa);margin-top:.2rem">Headlines: '+entry.headlines.length+' total (';
+      html += Object.entries(eqCounts).map(([eq,cnt]) => 'Eq.'+eq+'×'+cnt).join(', ')+')';
+      html += '</div>';
+    }
+    
+    html += '</div>';
+  });
+  
+  html += '</div>';
+  html += '<div style="margin-top:.5rem;font-size:9px;color:var(--fa);text-align:center">Showing '+recent.length+' of '+changelog.length+' total entries</div>';
+  
+  area.innerHTML = html;
+}
+
+init();
+</script>
+</body>
+</html>
