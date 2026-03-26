@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Equation 7 — The Swing Producer Cascade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  :root{--accent:#10b981;--accent-l:#34d399;--accent-dim:rgba(16,185,129,0.12);--accent2:#059669;}
+  .eq-main{border-left-color:var(--accent);}
+  .term-sym{color:var(--accent);}
+  .insight-icon{color:var(--accent-l);}
+  .step-eq{border-left-color:var(--accent);color:var(--accent-l);}
+  .bc-current{background:rgba(16,185,129,0.12)!important;border-color:rgba(16,185,129,0.3);}
+  .bc-current .bc-label,.bc-current .bc-eq{color:var(--accent-l);}
+  .hero-tag{color:var(--accent-l);}
+  .section-tag{color:var(--accent);}
+  .section-dark .section-tag{color:var(--accent-l);}
+  .stat-val{color:var(--accent-l);}
+  .hero-cta{color:var(--accent-l);border-bottom-color:var(--accent);}
+  .cell-current{background:rgba(16,185,129,0.25)!important;color:var(--accent-l)!important;outline-color:var(--accent-l);}
+  .sim-verdict{border-left-color:var(--accent);background:rgba(16,185,129,0.06);}
+  .sm-val.accent{color:var(--accent-l);}
+  .sim-eq-display{border-left-color:var(--accent);color:var(--accent-l);}
+  .ex-step-label{color:var(--accent);}
+  .tl-bar{background:var(--accent);}
+  .tl-current .tl-bar{background:var(--accent-l);}
+  .card-cta{color:var(--accent);}
+  .card:hover .card-cta{color:var(--accent-l);}
+  .m-bar{background:var(--accent);}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">G_s + kν > P_s(0)·(1−δ)^k</div>
+    <div class="nav-links">
+      <a href="../index.html" style="border-right:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);font-size:11px">← Portal</a>
+      <a href="#equation">Equation</a>
+      <a href="#derivation">Mechanics</a>
+      <a href="#producers">Producers</a>
+      <a href="#sensitivity">Sensitivity</a>
+      <a href="#examples">Examples</a>
+      <a href="#simulator">Simulator</a>
+    </div>
+    <button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-grid">
+    <div class="hero-tag">Geoeconomics Analysis · March 2026 · Analysis-003</div>
+    <h1 class="hero-title">
+      <span class="hero-eq">G_s + kν > P_s(0)·(1−δ)^k</span>
+      <span class="hero-subtitle">The Swing Producer Cascade</span>
+    </h1>
+    <p class="hero-desc">Why Gulf state de-dollarisation is self-completing once it starts. The supermodular network externality model that explains when Saudi Arabia, UAE, Iraq, Kuwait, and Qatar cross the tipping threshold — and why the cascade, once entered, cannot be reversed.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-val">ν &gt; 0</span><span class="stat-label">Network effect per switcher</span></div>
+      <div class="stat"><span class="stat-val">δ &gt; 0</span><span class="stat-label">Guarantee erosion per switcher</span></div>
+      <div class="stat"><span class="stat-val">25–30%</span><span class="stat-label">Estimated tipping threshold</span></div>
+      <div class="stat"><span class="stat-val">10–15%</span><span class="stat-label">Current yuan Hormuz share</span></div>
+    </div>
+    <a href="#equation" class="hero-cta">Explore the cascade ↓</a>
+  </div>
+  <div class="hero-bg"><canvas id="hero-canvas"></canvas></div>
+</section>
+
+<section id="equation" class="section">
+  <div class="section-inner">
+    <div class="section-tag">01 · The Function</div>
+    <h2 class="section-title">Equation 7</h2>
+    <div class="eq-display">
+      <div class="eq-main">State i switches when: G_s + kν &gt; P_s(0)·(1−δ)^k</div>
+      <div class="eq-terms">
+        <div class="term">
+          <div class="term-sym">G_s</div>
+          <div class="term-name">Swing base yuan gain</div>
+          <div class="term-desc">The base economic benefit to a Gulf state from switching to yuan pricing: Chinese crude premium, BRICS solidarity bonus, mBridge infrastructure access. Unlike Iran's G, Gulf states have a genuine choice — they are not sanctioned. G_s ≈ 3–5 on the calibrated scale.</div>
+        </div>
+        <div class="term">
+          <div class="term-sym">kν</div>
+          <div class="term-name">Network gain from k prior switchers</div>
+          <div class="term-desc">ν = benefit per prior switcher. As more producers price in yuan, CIPS liquidity deepens, FX spreads tighten, and yuan credibility as an invoicing currency rises. The gain grows linearly in k — supermodular. Each additional switcher makes the next switch more attractive.</div>
+        </div>
+        <div class="term">
+          <div class="term-sym">P_s(0)</div>
+          <div class="term-name">Initial U.S. security guarantee</div>
+          <div class="term-desc">The value of the U.S. security umbrella to Gulf states at k=0: arms sales, base access, mutual defence commitments, carrier group deployments. Calibrated at P_s(0) ≈ 12–15 for Saudi Arabia, lower for states with less dependence on U.S. military presence.</div>
+        </div>
+        <div class="term">
+          <div class="term-sym">(1−δ)^k</div>
+          <div class="term-name">Guarantee erosion after k switchers</div>
+          <div class="term-desc">δ = fraction by which each prior switcher erodes guarantee credibility. Exponential decay: as more Gulf states switch, the U.S. guarantee becomes less credible for the remaining states. After Saudi Arabia switches, U.S. guarantee value for UAE is materially lower.</div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-strip">
+      <div class="insight">
+        <div class="insight-icon">Left side grows linearly in k</div>
+        <div class="insight-text">G_s + kν increases by ν with each switcher. The yuan option becomes more attractive as the network deepens.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">Right side decays exponentially in k</div>
+        <div class="insight-text">P_s(0)(1−δ)^k shrinks by a fraction δ with each switcher. The guarantee erodes faster as defections accumulate.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">Must cross if ν &gt; 0 and δ &gt; 0</div>
+        <div class="insight-text">A growing line always crosses a decaying curve. The cascade is mathematically self-completing once started — the question is only when, not if.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="derivation" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">02 · Cascade Mechanics</div>
+    <h2 class="section-title">Why the Cascade Is Self-Completing</h2>
+    <div class="deriv-steps">
+      <div class="deriv-step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h3>Supermodularity: cooperation becomes more attractive as k rises</h3>
+          <div class="step-eq">∂(G_s + kν)/∂k = ν &gt; 0 — marginal gain is constant and positive</div>
+          <p>Each additional switcher adds exactly ν to the yuan side's attractiveness. This is a network externality: the value of the yuan payment rail increases with usage. CIPS liquidity, tighter FX spreads, deeper market-making — all improve as volume grows.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h3>Guarantee erosion: the U.S. commitment loses value with each defection</h3>
+          <div class="step-eq">P_s(k) = P_s(0)·(1−δ)^k — exponential decay in k</div>
+          <p>When Saudi Arabia begins yuan pricing, the U.S. guarantee to UAE becomes less credible: if Washington cannot keep Riyadh in the dollar system, can it keep Abu Dhabi? Each defection signals that the guarantee is revocable, reducing its strategic value for remaining states.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h3>The tipping point: when LHS first exceeds RHS</h3>
+          <div class="step-eq">k* = min{k : G_s + kν &gt; P_s(0)·(1−δ)^k}</div>
+          <p>Below k*, remaining in the dollar system is rational. At or above k*, switching to yuan is rational. The tipping point k* is not symmetric: it is easier to pass it than to reverse it, because the guarantee decay is permanent while the network gain is cumulative.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h3>Irreversibility: why the cascade cannot be reversed</h3>
+          <div class="step-eq">Once k ≥ k*, reversal requires P_s(k) to recover — but guarantee decay is not undone by future commitment</div>
+          <p>A Gulf state that has switched to yuan pricing has demonstrated that the U.S. guarantee is insufficient. Reversing that signal requires U.S. actions so costly (military deployment, formal treaty upgrade) that they are rarely achievable. The cascade is a one-way valve.</p>
+        </div>
+      </div>
+    </div>
+    <div class="boundary-grid">
+      <div class="boundary bc-zero">
+        <div class="bc-label">k=0 · No prior switchers</div>
+        <div class="bc-eq">G_s vs P_s(0) — dollar wins</div>
+        <div class="bc-note">At k=0, the yuan option must overcome the full U.S. guarantee alone. Requires G_s > P_s(0). Rarely satisfied initially.</div>
+      </div>
+      <div class="boundary bc-one">
+        <div class="bc-label">k=1 · Iran switches (current)</div>
+        <div class="bc-eq">G_s + ν vs P_s(0)(1−δ)</div>
+        <div class="bc-note">Iran's yuan shift is k=1. Gulf states now face a partially eroded guarantee. India, Pakistan, Turkey's bilateral deals = further erosion.</div>
+      </div>
+      <div class="boundary bc-m1">
+        <div class="bc-label">k=k* · Tipping point</div>
+        <div class="bc-eq">G_s + k*ν = P_s(0)(1−δ)^k*</div>
+        <div class="bc-note">Estimated at 25–30% of Hormuz volume in yuan. Current share: 10–15%. Saudi Arabia's first yuan tranche would push through the threshold.</div>
+      </div>
+      <div class="boundary bc-current">
+        <div class="bc-label">Post-tipping · Irreversible</div>
+        <div class="bc-eq">All remaining states switch</div>
+        <div class="bc-note">Beyond k*, every remaining state's calculation flips. The cascade completes. Dollar hegemony in energy invoicing is permanently broken.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="producers" class="section">
+  <div class="section-inner">
+    <div class="section-tag">03 · State-by-State Analysis</div>
+    <h2 class="section-title">The Gulf Swing Producers</h2>
+    <p style="color:#555;font-size:.95rem;margin-bottom:2rem;max-width:640px;line-height:1.7;">Each Gulf state faces the cascade inequality with different parameter values. The knife-edge varies by state based on U.S. military dependence, Chinese trade exposure, bypass pipeline access, and existing yuan infrastructure participation.</p>
+    <div id="producers-table"></div>
+  </div>
+</section>
+
+<section id="sensitivity" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">04 · Tipping Point Analysis</div>
+    <h2 class="section-title">k* Across ν × δ Space</h2>
+    <p class="section-lead">Number of switchers required to reach tipping point (k*) across network effect ν and guarantee erosion δ. Lower k* = faster cascade. Current estimated zone highlighted.</p>
+    <div class="sens-table-wrap">
+      <table class="sens-table" id="sens-table">
+        <thead><tr><th>ν \ δ</th><th>δ=0.05</th><th>δ=0.10</th><th class="col-current">δ=0.15</th><th>δ=0.20</th><th>δ=0.25</th></tr></thead>
+        <tbody id="sens-body"></tbody>
+      </table>
+    </div>
+    <div class="sens-legend">
+      <span class="leg-item leg-low">k* ≤ 2 · very fast cascade</span>
+      <span class="leg-item leg-mid">k* 3–5 · moderate cascade</span>
+      <span class="leg-item leg-high">k* 6–9 · slow cascade</span>
+      <span class="leg-item leg-max">k* ≥ 10 · very slow / may not tip</span>
+      <span class="leg-item leg-curr">★ estimated current zone</span>
+    </div>
+  </div>
+</section>
+
+<section id="examples" class="section">
+  <div class="section-inner">
+    <div class="section-tag">05 · Historical Cases</div>
+    <h2 class="section-title">Five Cascade Examples</h2>
+    <div class="examples-list" id="examples-list"></div>
+  </div>
+</section>
+
+<section id="simulator" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">06 · Interactive</div>
+    <h2 class="section-title">Cascade Simulator</h2>
+    <p class="section-lead">Adjust parameters and watch the cascade trajectory. The chart shows the yuan side (G_s + kν) vs the guarantee side (P_s(0)(1−δ)^k) as k rises from 0 to 10.</p>
+    <div class="sim-layout">
+      <div class="sim-controls">
+        <div class="sim-param"><label>G_s — swing base yuan gain</label><input type="range" id="sim-Gs" min="1" max="10" step="1" value="4"><span class="sim-val" id="sim-Gsv">4</span></div>
+        <div class="sim-param"><label>ν — network gain per switcher</label><input type="range" id="sim-nu" min="1" max="8" step="1" value="3"><span class="sim-val" id="sim-nuv">3</span></div>
+        <div class="sim-param"><label>P_s(0) — initial guarantee value</label><input type="range" id="sim-Ps" min="5" max="20" step="1" value="12"><span class="sim-val" id="sim-Psv">12</span></div>
+        <div class="sim-param"><label>δ — guarantee erosion per switcher</label><input type="range" id="sim-delta" min="1" max="30" step="1" value="15"><span class="sim-val" id="sim-deltav">0.15</span></div>
+        <div class="sim-param"><label>F_d — asset-freeze fear bonus</label><input type="range" id="sim-Fd" min="0" max="6" step="1" value="2"><span class="sim-val" id="sim-Fdv">2</span></div>
+      </div>
+      <div class="sim-outputs">
+        <div class="sim-eq-display" id="sim-eq">G_s + kν vs P_s(0)(1−δ)^k</div>
+        <div class="sim-metrics">
+          <div class="sim-met"><div class="sm-label">Tipping point k*</div><div class="sm-val accent" id="sm-kstar">—</div></div>
+          <div class="sim-met"><div class="sm-label">Yuan side at k=0</div><div class="sm-val green" id="sm-y0">—</div></div>
+          <div class="sim-met"><div class="sm-label">Guarantee at k=0</div><div class="sm-val red" id="sm-g0">—</div></div>
+          <div class="sim-met"><div class="sm-label">Gap at k=0</div><div class="sm-val amber" id="sm-gap0">—</div></div>
+          <div class="sim-met"><div class="sm-label">Gap at k*</div><div class="sm-val" id="sm-gapk">—</div></div>
+          <div class="sim-met"><div class="sm-label">Current k (Iran=1)</div><div class="sm-val" style="color:#fff">≥1</div></div>
+        </div>
+        <div class="sim-verdict" id="sim-verdict"></div>
+      </div>
+    </div>
+    <div class="sim-chart-wrap"><canvas id="sim-chart" height="220"></canvas></div>
+    <div class="sim-legend">
+      <span><span class="leg-sq" style="background:#34d399"></span>Yuan side: G_s + kν (+F_d)</span>
+      <span><span class="leg-sq" style="background:#f87171;border:2px dashed #f87171"></span>Guarantee: P_s(0)·(1−δ)^k</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-eq">G_s + kν &gt; P_s(0)·(1−δ)^k</div>
+    <div class="footer-meta">Analysis-003 · The Swing Producer Cascade · March 2026</div>
+    <div class="footer-links"><a href="../index.html">← Back to portal</a></div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

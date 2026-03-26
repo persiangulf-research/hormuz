@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Equation 4 — The Dominant Strategy Trap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  :root {
+    --accent: #e74c3c;
+    --accent-l: #f87171;
+    --accent-dim: rgba(231,76,60,0.12);
+    --accent2: #c0392b;
+  }
+  .eq-main { border-left-color: var(--accent); }
+  .term-sym { color: var(--accent); }
+  .insight { }
+  .insight-icon { color: var(--accent-l); }
+  .step-eq { border-left-color: var(--accent); color: var(--accent-l); }
+  .bc-current { background: rgba(231,76,60,0.12) !important; border-color: rgba(231,76,60,0.3); }
+  .bc-current .bc-label, .bc-current .bc-eq { color: var(--accent-l); }
+  .hero-tag { color: var(--accent-l); }
+  .hero-eq { color: #fff; }
+  .section-tag { color: var(--accent); }
+  .section-dark .section-tag { color: var(--accent-l); }
+  .stat-val { color: var(--accent-l); }
+  .hero-cta { color: var(--accent-l); border-bottom-color: var(--accent); }
+  .tl-bar { background: var(--accent); }
+  .tl-current .tl-bar { background: var(--accent-l); }
+  .cell-current { background: rgba(231,76,60,0.25) !important; color: var(--accent-l) !important; outline-color: var(--accent-l); }
+  .sim-verdict { border-left-color: var(--accent); background: rgba(231,76,60,0.06); }
+  .sm-val.accent { color: var(--accent-l); }
+  .sim-eq-display { border-left-color: var(--accent); color: var(--accent-l); }
+  .ex-step-label { color: var(--accent); }
+  .card-cta { color: var(--accent); }
+  .card:hover .card-cta { color: var(--accent-l); }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">a* = argmax min U_A(s,a)</div>
+    <div class="nav-links">
+      <a href="../index.html" style="border-right:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);font-size:11px">← Portal</a>
+      <a href="#equation">Equation</a>
+      <a href="#derivation">Derivation</a>
+      <a href="#matrix">Matrix</a>
+      <a href="#sensitivity">Sensitivity</a>
+      <a href="#examples">Examples</a>
+      <a href="#simulator">Simulator</a>
+    </div>
+    <button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-grid">
+    <div class="hero-tag">Geoeconomics Analysis · March 2026 · Analysis-002</div>
+    <h1 class="hero-title">
+      <span class="hero-eq">a* = argmax min U_A(s,a)</span>
+      <span class="hero-subtitle">The Dominant Strategy Trap</span>
+    </h1>
+    <p class="hero-desc">Why the United States cannot escape the Yuan row of the payoff matrix. Why both U.S. strategy columns are negative. Why the (0,0) status quo is permanently inaccessible once Iran's dominant strategy is active — and why Washington has been choosing Accommodate since day one.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-val">−H</span><span class="stat-label">U.S. Accommodate payoff</span></div>
+      <div class="stat"><span class="stat-val">−H−E*</span><span class="stat-label">U.S. Escalate payoff</span></div>
+      <div class="stat"><span class="stat-val">G+S=18</span><span class="stat-label">Iran dominance margin</span></div>
+      <div class="stat"><span class="stat-val">(0,0)</span><span class="stat-label">Status quo — inaccessible</span></div>
+    </div>
+    <a href="#equation" class="hero-cta">Explore the trap ↓</a>
+  </div>
+  <div class="hero-bg"><canvas id="hero-canvas"></canvas></div>
+</section>
+
+<section id="equation" class="section">
+  <div class="section-inner">
+    <div class="section-tag">01 · The Function</div>
+    <h2 class="section-title">Equation 4</h2>
+    <div class="eq-display">
+      <div class="eq-main">−H &lt; 0  ∧  −H−E &lt; 0  ⟹  a* = argmax min U_A = Accommodate</div>
+      <div class="eq-terms">
+        <div class="term">
+          <div class="term-sym">−H</div>
+          <div class="term-name">U.S. Accommodate payoff</div>
+          <div class="term-desc">The cost the U.S. pays when Iran shifts to yuan and Washington does not escalate. H = hegemony loss — the erosion of dollar reserve-currency privilege. At calibrated values H ≈ 7. Always negative; the trap cannot produce zero.</div>
+        </div>
+        <div class="term">
+          <div class="term-sym">−H−E</div>
+          <div class="term-name">U.S. Escalate payoff</div>
+          <div class="term-desc">The cost the U.S. pays when it chooses High Response. Worse than Accommodate by exactly E (the escalation cost). At March 2026 calibration with E* replacing E: −H−E* = −7−14 = −21. The deterrence gap is E*.</div>
+        </div>
+        <div class="term">
+          <div class="term-sym">a*</div>
+          <div class="term-name">U.S. minimax strategy</div>
+          <div class="term-desc">The action that maximises the minimum payoff (minimax). Since −H > −H−E always (E≥0), Accommodate is always the minimax solution. The U.S. is not maximising — it is minimising its minimum loss. That is the trap.</div>
+        </div>
+        <div class="term">
+          <div class="term-sym">(0,0)</div>
+          <div class="term-name">The inaccessible status quo</div>
+          <div class="term-desc">The Dollar/Accommodate cell where Iran accepts dollars and U.S. maintains hegemony at zero cost. Payoff: (−S, 0). Since Yuan ≻ Dollar for Iran (G+S>0), Iran never plays Dollar. The U.S. is permanently locked out of this cell.</div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-strip">
+      <div class="insight">
+        <div class="insight-icon">E ≥ 0 always</div>
+        <div class="insight-text">Since escalation cost E is non-negative, −H > −H−E is always true. Accommodate dominates Escalate for the U.S. regardless of parameter values.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">G + S > 0 → trap active</div>
+        <div class="insight-text">Iran's dominance condition G+S>0 locks the U.S. into the Yuan row. The trap exists because Iran's strategy is fixed, not because U.S. options are symmetric.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">NE at (Yuan, Accommodate)</div>
+        <div class="insight-text">The unique pure-strategy Nash Equilibrium. Iran prefers Yuan given U.S. plays Accommodate. U.S. prefers Accommodate given Iran plays Yuan. Both conditions hold simultaneously.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="derivation" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">02 · The Trap Geometry</div>
+    <h2 class="section-title">Why Both Payoffs Are Negative</h2>
+    <div class="deriv-steps">
+      <div class="deriv-step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h3>Iran's dominant strategy locks the U.S. into the Yuan row</h3>
+          <div class="step-eq">Yuan ≻ Dollar ⟺ G + S > 0</div>
+          <p>Since G (yuan gain) > 0 and S (sanctions cost of staying in dollars) > 0, their sum is always positive. Iran's yuan shift is strictly dominant. The U.S. cannot reach any Dollar-row cell — Iran never plays it. The game is permanently in the Yuan row.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h3>Both Yuan-row U.S. payoffs are negative</h3>
+          <div class="step-eq">U_A(Yuan, Acc) = −H &lt; 0  AND  U_A(Yuan, Esc) = −H−E &lt; 0</div>
+          <p>H > 0 (hegemony loss is real) and E > 0 (escalation has costs). Therefore both payoffs in the Yuan row are strictly negative. The U.S. cannot obtain a non-negative payoff in this game — the status quo (0,0) requires Iran to play Dollar, which Iran never does.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h3>U.S. minimax: choose the less-negative option</h3>
+          <div class="step-eq">a* = argmax{−H, −H−E} = Accommodate (since −H > −H−E for all E>0)</div>
+          <p>The U.S. cannot maximise — it can only minimise losses. Since −H is always greater than −H−E (by exactly E), Accommodate is always the minimax solution. This is not a preference — it is forced by the structure of the trap.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h3>Nash Equilibrium verification</h3>
+          <div class="step-eq">Iran: G ≥ −S ✓  |  U.S.: −H ≥ −H−E ⟺ E ≥ 0 ✓</div>
+          <p>Both NE conditions are satisfied simultaneously. No player can improve their payoff by unilaterally deviating. Iran cannot do better than Yuan given U.S. plays Accommodate. U.S. cannot do better than Accommodate given Iran plays Yuan. The equilibrium is stable and unique.</p>
+        </div>
+      </div>
+    </div>
+    <div class="boundary-grid">
+      <div class="boundary bc-zero">
+        <div class="bc-label">Status quo (0,0) — inaccessible</div>
+        <div class="bc-eq">Dollar / Accommodate cell</div>
+        <div class="bc-note">Iran payoff −S. U.S. payoff 0. Requires Iran to play Dollar. Iran never does (G+S>0). Permanently locked out.</div>
+      </div>
+      <div class="boundary bc-one">
+        <div class="bc-label">NE: (Yuan, Accommodate)</div>
+        <div class="bc-eq">Iran +G, U.S. −H</div>
+        <div class="bc-note">The equilibrium cell. Iran collects +8 per round. U.S. pays −7 per round. Stable, unavoidable, indefinite.</div>
+      </div>
+      <div class="boundary bc-m1">
+        <div class="bc-label">Trap deepens with E*</div>
+        <div class="bc-eq">Escalate: −H−E* = −21 (March 2026)</div>
+        <div class="bc-note">As Hormuz credibility rises, E* replaces E. The Escalate cell worsens from −12 to −21. The trap tightens automatically.</div>
+      </div>
+      <div class="boundary bc-current">
+        <div class="bc-label">Day 21 — Bessent confirms a*</div>
+        <div class="bc-eq">U.S. playing Accommodate empirically</div>
+        <div class="bc-note">Allowing Iranian transits, unsanctioning 140M bbl. The minimax solution is being played in real time. Model prediction confirmed.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="matrix" class="section">
+  <div class="section-inner">
+    <div class="section-tag">03 · The Full Payoff Matrix</div>
+    <h2 class="section-title">2×2 Payoff Structure</h2>
+    <p style="color:#555;font-size:.95rem;margin-bottom:2rem;max-width:640px;line-height:1.7;">The original two-column matrix from Equation 1. Each cell shows (Iran payoff, U.S. payoff). The Yuan row is the only row Iran ever plays. The Dollar row is permanently inaccessible. The U.S. chooses between two negative payoffs.</p>
+    <div class="matrix-display" id="matrix-display"></div>
+    <div style="margin-top:2rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+      <div style="background:var(--warm);padding:1.5rem;border-left:3px solid var(--accent);">
+        <div style="font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem;">The trap in one sentence</div>
+        <div style="font-family:var(--serif);font-size:.95rem;line-height:1.7;color:#333;">Because Iran's Yuan strategy is strictly dominant (G+S>0), the U.S. is permanently locked into the Yuan row — where both payoffs are negative and Accommodate is always the minimax choice.</div>
+      </div>
+      <div style="background:var(--warm);padding:1.5rem;border-left:3px solid var(--blue);">
+        <div style="font-family:var(--mono);font-size:11px;font-weight:600;color:var(--blue);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem;">What breaks the trap</div>
+        <div style="font-family:var(--serif);font-size:.95rem;line-height:1.7;color:#333;">Only a sanctions relief offer Sr ≥ G+S = 18 breaks Iran's dominance, making the Dollar row accessible. No military option delivers Sr. The Navy delivers Sr = 0. Only the Treasury can break the trap.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sensitivity" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">04 · Parameter Sensitivity</div>
+    <h2 class="section-title">Trap Depth Across G × S Space</h2>
+    <p class="section-lead">The dominance margin G+S determines how deep the trap is. The table shows Iran's dominance margin across all combinations of yuan gain G and sanctions cost S.</p>
+    <div class="sens-table-wrap">
+      <table class="sens-table" id="sens-table">
+        <thead><tr><th>G \ S</th><th>S=4</th><th>S=6</th><th>S=8</th><th class="col-current">S=10</th><th>S=12</th><th>S=14</th></tr></thead>
+        <tbody id="sens-body"></tbody>
+      </table>
+    </div>
+    <div class="sens-legend">
+      <span class="leg-item leg-low">1–8 · weak trap</span>
+      <span class="leg-item leg-mid">9–14 · active trap</span>
+      <span class="leg-item leg-high">15–20 · deep trap</span>
+      <span class="leg-item leg-max">21+ · extreme trap</span>
+      <span class="leg-item leg-curr">★ current (G=8, S=10)</span>
+    </div>
+  </div>
+</section>
+
+<section id="examples" class="section">
+  <div class="section-inner">
+    <div class="section-tag">05 · Historical Cases</div>
+    <h2 class="section-title">Five Worked Examples</h2>
+    <div class="examples-list" id="examples-list"></div>
+  </div>
+</section>
+
+<section id="simulator" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">06 · Interactive</div>
+    <h2 class="section-title">Live Trap Simulator</h2>
+    <p class="section-lead">Adjust parameters and watch the trap geometry update. Drag Sr rightward to see what sanctions relief would be required to break dominance.</p>
+    <div class="sim-layout">
+      <div class="sim-controls">
+        <div class="sim-param"><label>G — Iran yuan gain</label><input type="range" id="sim-G" min="1" max="15" step="1" value="8"><span class="sim-val" id="sim-Gv">8</span></div>
+        <div class="sim-param"><label>S — Iran sanctions cost</label><input type="range" id="sim-S" min="1" max="15" step="1" value="10"><span class="sim-val" id="sim-Sv">10</span></div>
+        <div class="sim-param"><label>H — U.S. hegemony loss</label><input type="range" id="sim-H" min="1" max="12" step="1" value="7"><span class="sim-val" id="sim-Hv">7</span></div>
+        <div class="sim-param"><label>E* — effective escalation cost</label><input type="range" id="sim-E" min="1" max="20" step="1" value="14"><span class="sim-val" id="sim-Ev">14</span></div>
+        <div class="sim-param"><label>Sr — sanctions relief offered</label><input type="range" id="sim-Sr" min="0" max="25" step="1" value="0"><span class="sim-val" id="sim-Srv">0</span></div>
+      </div>
+      <div class="sim-outputs">
+        <div class="sim-eq-display" id="sim-eq">Dominance: G+S−Sr = 8+10−0 = 18 > 0 → Trap active</div>
+        <div class="sim-metrics">
+          <div class="sim-met"><div class="sm-label">Dominance margin</div><div class="sm-val accent" id="sm-dom">+18</div></div>
+          <div class="sim-met"><div class="sm-label">U.S. Accommodate</div><div class="sm-val red" id="sm-acc">−7</div></div>
+          <div class="sim-met"><div class="sm-label">U.S. Escalate</div><div class="sm-val red" id="sm-esc">−21</div></div>
+          <div class="sim-met"><div class="sm-label">Deterrence gap E*</div><div class="sm-val" id="sm-gap">14</div></div>
+          <div class="sim-met"><div class="sm-label">Iran Yuan payoff</div><div class="sm-val green" id="sm-iy">+8</div></div>
+          <div class="sim-met"><div class="sm-label">Sr coverage</div><div class="sm-val amber" id="sm-src">0%</div></div>
+        </div>
+        <div class="sim-verdict" id="sim-verdict"></div>
+      </div>
+    </div>
+    <div class="sim-chart-wrap"><canvas id="sim-chart" height="220"></canvas></div>
+    <div class="sim-legend">
+      <span><span class="leg-sq" style="background:#f87171"></span>U.S. Accommodate −H</span>
+      <span><span class="leg-sq" style="background:#fca5a5;border:2px dashed #fca5a5"></span>U.S. Escalate −H−E*</span>
+      <span><span class="leg-sq" style="background:#86efac"></span>Iran Yuan +G</span>
+      <span><span class="leg-sq" style="background:#fde68a;border:2px dashed #fde68a"></span>Iran Dollar −S+Sr</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-eq">a* = argmax min U_A(s,a) = Accommodate</div>
+    <div class="footer-meta">Analysis-002 · The Dominant Strategy Trap · March 2026</div>
+    <div class="footer-links"><a href="../index.html">← Back to portal</a></div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Equation 12 — The Sanctions Relief Threshold</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  :root{--accent:#8b5cf6;--accent-l:#a78bfa;--accent-dim:rgba(139,92,246,0.12);--accent2:#7c3aed;}
+  .eq-main{border-left-color:var(--accent);}
+  .term-sym{color:var(--accent);}
+  .insight-icon{color:var(--accent-l);}
+  .step-eq{border-left-color:var(--accent);color:var(--accent-l);}
+  .bc-current{background:rgba(139,92,246,0.12)!important;border-color:rgba(139,92,246,0.3);}
+  .bc-current .bc-label,.bc-current .bc-eq{color:var(--accent-l);}
+  .hero-tag{color:var(--accent-l);}
+  .section-tag{color:var(--accent);}
+  .section-dark .section-tag{color:var(--accent-l);}
+  .stat-val{color:var(--accent-l);}
+  .hero-cta{color:var(--accent-l);border-bottom-color:var(--accent);}
+  .cell-current{background:rgba(139,92,246,0.25)!important;color:var(--accent-l)!important;outline-color:var(--accent-l);}
+  .sim-verdict{border-left-color:var(--accent);background:rgba(139,92,246,0.06);}
+  .sm-val.accent{color:var(--accent-l);}
+  .sim-eq-display{border-left-color:var(--accent);color:var(--accent-l);}
+  .ex-step-label{color:var(--accent);}
+  .tl-bar{background:var(--accent);}
+  .tl-current .tl-bar{background:var(--accent-l);}
+  .card-cta{color:var(--accent);}
+  .card:hover .card-cta{color:var(--accent-l);}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">S_r ≥ G + S = 18</div>
+    <div class="nav-links">
+      <a href="../index.html" style="border-right:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);font-size:11px">← Portal</a>
+      <a href="#equation">Equation</a>
+      <a href="#derivation">Derivation</a>
+      <a href="#ladder">Sr Ladder</a>
+      <a href="#bessent">Bessent Test</a>
+      <a href="#examples">Examples</a>
+      <a href="#simulator">Simulator</a>
+    </div>
+    <button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-grid">
+    <div class="hero-tag">Geoeconomics Analysis · March 2026 · Analysis-004</div>
+    <h1 class="hero-title">
+      <span class="hero-eq">S_r ≥ G + S = 18</span>
+      <span class="hero-subtitle">The Sanctions Relief Threshold</span>
+    </h1>
+    <p class="hero-desc">The single variable that can break Iran's dominant strategy. A complete analysis of what sanctions relief must look like, why the Bessent 19 March waiver is 4.3% of the required threshold, and why only the Treasury — not the Navy — can break the trap.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-val">18</span><span class="stat-label">Sr required to break dominance</span></div>
+      <div class="stat"><span class="stat-val">0.78</span><span class="stat-label">Bessent waiver Sr value</span></div>
+      <div class="stat"><span class="stat-val">4.3%</span><span class="stat-label">Coverage of threshold</span></div>
+      <div class="stat"><span class="stat-val">0</span><span class="stat-label">Sr delivered by Navy</span></div>
+    </div>
+    <a href="#equation" class="hero-cta">Explore the threshold ↓</a>
+  </div>
+  <div class="hero-bg"><canvas id="hero-canvas"></canvas></div>
+</section>
+
+<section id="equation" class="section">
+  <div class="section-inner">
+    <div class="section-tag">01 · The Function</div>
+    <h2 class="section-title">Equation 12</h2>
+    <div class="eq-display">
+      <div class="eq-main">Dominance breaks when: G + (S − S_r) ≤ 0  ⟺  S_r ≥ G + S</div>
+      <div class="eq-terms">
+        <div class="term">
+          <div class="term-sym">S_r</div>
+          <div class="term-name">Sanctions relief</div>
+          <div class="term-desc">The reduction in Iran's ongoing cost of operating under the sanctions regime. S_r must be structural (persistent) to break dominance — a temporary waiver only reduces S for the duration, not permanently. Must be ≥ G+S = 18 to flip the dominance condition.</div>
+        </div>
+        <div class="term">
+          <div class="term-sym">G</div>
+          <div class="term-name">Iran's yuan trade gain</div>
+          <div class="term-desc">The benefit Iran receives from yuan-denominated trade: sanctions bypass value, CIPS access, stable Chinese revenue. Calibrated at G ≈ 8. This must be overcome — sanctions relief must not only eliminate S but also exceed G to make dollar pricing rational.</div>
+        </div>
+        <div class="term">
+          <div class="term-sym">S</div>
+          <div class="term-name">Iran's sanctions cost</div>
+          <div class="term-desc">The ongoing economic cost of Maximum Pressure: SWIFT exclusion, oil export restrictions, frozen assets, secondary sanctions on trading partners. S ≈ 10 on the calibrated scale. Set by the U.S. Treasury, not the Pentagon.</div>
+        </div>
+        <div class="term">
+          <div class="term-sym">G+S</div>
+          <div class="term-name">The threshold = 18</div>
+          <div class="term-desc">The minimum sanctions relief required to break Iran's dominant strategy. At G=8, S=10: threshold = 18. This is the payoff-scale equivalent of near-total sanctions removal — the policy goal Iran has sought since 2018.</div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-strip">
+      <div class="insight">
+        <div class="insight-icon">Sr(Navy) = 0</div>
+        <div class="insight-text">No military operation can deliver Sr. Naval escort restores physical transit but does not reduce S (sanctions cost). The trap requires a diplomatic instrument, not a kinetic one.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">Sr must be structural</div>
+        <div class="insight-text">A temporary waiver reduces S only for its duration. The dominance condition G+(S−Sr)>0 uses the persistent S. Bessent's 140M barrel waiver is transient: Sr(structural)=0.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">Sr = 18 ≈ JCPOA 2.0</div>
+        <div class="insight-text">The instruments required to deliver Sr=18 are diplomatically equivalent to ending Maximum Pressure — exactly the comprehensive deal Iran has sought since 2018. The equation maps to Iran's stated reopening conditions.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="derivation" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">02 · Derivation</div>
+    <h2 class="section-title">From Dominance to Relief Threshold</h2>
+    <div class="deriv-steps">
+      <div class="deriv-step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h3>Start from Iran's dominance condition (Equation 2)</h3>
+          <div class="step-eq">Yuan ≻ Dollar ⟺ G + S > 0</div>
+          <p>Iran's Yuan strategy is strictly dominant as long as G+S > 0. The question for Equation 12 is: what value of Sr makes this condition fail?</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h3>Introduce sanctions relief as a reduction in S</h3>
+          <div class="step-eq">New sanctions cost: S' = S − S_r. New dominance condition: G + (S − S_r) > 0</div>
+          <p>Sr reduces Iran's cost of staying in the dollar system. As Sr rises, the cost of dollar pricing falls. At some threshold, yuan is no longer the dominant strategy.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h3>Find the threshold where dominance breaks</h3>
+          <div class="step-eq">G + (S − S_r) = 0  ⟹  S_r = G + S = 8 + 10 = 18</div>
+          <p>Dominance breaks exactly when Sr = G+S. Below this threshold, Yuan remains dominant. At or above it, Iran's dollar strategy becomes at least as good as yuan — the trap breaks.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h3>Why Sr must exceed G (not just equal S)</h3>
+          <div class="step-eq">Sr = S eliminates sanctions cost but Yuan still wins: G + 0 = G > 0</div>
+          <p>Even if all sanctions are lifted (Sr=S=10), Iran still prefers yuan if G>0. The relief must compensate for the entire yuan advantage G as well as the sanctions cost S. This is why Sr=18 is so demanding: it requires restoring the dollar's attractiveness beyond mere sanctions removal.</p>
+        </div>
+      </div>
+    </div>
+    <div class="boundary-grid">
+      <div class="boundary bc-zero">
+        <div class="bc-label">Sr = 0 (no relief)</div>
+        <div class="bc-eq">G+(S−0) = 18 > 0</div>
+        <div class="bc-note">Full trap active. Yuan dominant. Current state as of 21 March 2026.</div>
+      </div>
+      <div class="boundary bc-one">
+        <div class="bc-label">Sr = 0.78 (Bessent offer)</div>
+        <div class="bc-eq">G+(S−0.78) = 17.22 > 0</div>
+        <div class="bc-note">4.3% of threshold. Dominant strategy unchanged. Trap essentially intact.</div>
+      </div>
+      <div class="boundary bc-m1">
+        <div class="bc-label">Sr = 10 (full sanctions lift)</div>
+        <div class="bc-eq">G+(10−10) = 8 > 0</div>
+        <div class="bc-note">Even full sanctions removal is insufficient. Iran's yuan gain G=8 still makes yuan dominant. Sr must exceed G+S=18.</div>
+      </div>
+      <div class="boundary bc-current">
+        <div class="bc-label">Sr = 18 (threshold)</div>
+        <div class="bc-eq">G+(S−18) = 0 — trap breaks</div>
+        <div class="bc-note">Dominance exactly breaks. Requires OFAC removal + SWIFT + asset return + yuan trade formalisation. Diplomatically equivalent to JCPOA 2.0.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ladder" class="section">
+  <div class="section-inner">
+    <div class="section-tag">03 · The Sr Ladder</div>
+    <h2 class="section-title">From 0.78 to 18: The Full Spectrum</h2>
+    <p style="color:#555;font-size:.95rem;margin-bottom:2rem;max-width:640px;line-height:1.7;">Each diplomatic instrument has an Sr value. The ladder below maps every available U.S. lever to its payoff-scale impact. The Bessent offer sits at the very bottom.</p>
+    <div id="sr-ladder"></div>
+  </div>
+</section>
+
+<section id="bessent" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">04 · Real-World Test · 19 March 2026</div>
+    <h2 class="section-title">The Bessent Offer — Equation 12 Applied</h2>
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);padding:2rem;margin-bottom:2rem;border-left:3px solid var(--accent);">
+      <div style="font-family:var(--mono);font-size:10.5px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:.12em;margin-bottom:1rem">Quote · Fox Business · 19 March 2026</div>
+      <div style="font-family:var(--serif);font-size:1.1rem;font-style:italic;color:#fff;line-height:1.7;margin-bottom:.75rem">"In the coming days, we may unsanction the Iranian oil that's on the water — about 140 million barrels. Depending on how you count it, that's 10 days to two weeks of supply."</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--accent-l)">— Scott Bessent, U.S. Treasury Secretary</div>
+    </div>
+    <div class="deriv-steps">
+      <div class="deriv-step">
+        <div class="step-num">Sr</div>
+        <div class="step-content">
+          <h3>Calculating Sr from the Bessent offer</h3>
+          <div class="step-eq">140M bbl × $100/bbl = $14B ÷ $18B/yr (G) = Sr ≈ 0.78</div>
+          <p>Iran's annual yuan gain G ≈ 8 units ≈ $18B/year. The one-time $14B waiver represents 0.78 units of Sr — a temporary, asset-specific reduction in sanctions burden.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">Test</div>
+        <div class="step-content">
+          <h3>Applying to Equation 12</h3>
+          <div class="step-eq">G + (S − Sr) = 8 + (10 − 0.78) = 17.22 > 0 → Dominant strategy: intact</div>
+          <p>The dominance condition is satisfied at 17.22. Iran's Yuan strategy remains strictly dominant. The waiver reduced the dominance margin by 4.3% — from 18 to 17.22. The trap is structurally unchanged.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">Why</div>
+        <div class="step-content">
+          <h3>Why the offer cannot be structural Sr</h3>
+          <div class="step-eq">Sr(structural) = 0. Sr(transient) = 0.78. Net permanent effect on S = 0.</div>
+          <p>Equation 12's Sr requires a permanent reduction in Iran's sanctions cost S. The Bessent waiver is temporary (10–14 days), asset-specific (existing floating inventory), and made without Iranian coordination. The day after the 140M barrels clear, Iran's S is identical to before. Sr(structural) = 0.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="examples" class="section">
+  <div class="section-inner">
+    <div class="section-tag">05 · Historical Cases</div>
+    <h2 class="section-title">Five Sr Examples</h2>
+    <div class="examples-list" id="examples-list"></div>
+  </div>
+</section>
+
+<section id="simulator" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">06 · Interactive</div>
+    <h2 class="section-title">Sr Threshold Simulator</h2>
+    <p class="section-lead">Drag Sr to see how the dominance condition changes. The chart shows how Iran's payoff advantage shrinks as Sr rises toward the threshold.</p>
+    <div class="sim-layout">
+      <div class="sim-controls">
+        <div class="sim-param"><label>G — Iran yuan gain</label><input type="range" id="sim-G" min="1" max="15" step="1" value="8"><span class="sim-val" id="sim-Gv">8</span></div>
+        <div class="sim-param"><label>S — Iran sanctions cost</label><input type="range" id="sim-S" min="1" max="15" step="1" value="10"><span class="sim-val" id="sim-Sv">10</span></div>
+        <div class="sim-param"><label>Sr — sanctions relief offered</label><input type="range" id="sim-Sr" min="0" max="25" step="1" value="0"><span class="sim-val" id="sim-Srv">0</span></div>
+        <div class="sim-param"><label>H — U.S. hegemony loss</label><input type="range" id="sim-H" min="1" max="12" step="1" value="7"><span class="sim-val" id="sim-Hv">7</span></div>
+      </div>
+      <div class="sim-outputs">
+        <div class="sim-eq-display" id="sim-eq">G+(S−Sr) = 8+(10−0) = 18 > 0 → Dominant</div>
+        <div class="sim-metrics">
+          <div class="sim-met"><div class="sm-label">Dominance margin</div><div class="sm-val accent" id="sm-dom">+18</div></div>
+          <div class="sim-met"><div class="sm-label">Threshold required</div><div class="sm-val" id="sm-req">18</div></div>
+          <div class="sim-met"><div class="sm-label">Sr coverage</div><div class="sm-val amber" id="sm-cov">0%</div></div>
+          <div class="sim-met"><div class="sm-label">Remaining gap</div><div class="sm-val red" id="sm-gap">18</div></div>
+          <div class="sim-met"><div class="sm-label">Iran Yuan payoff</div><div class="sm-val green" id="sm-iy">+8</div></div>
+          <div class="sim-met"><div class="sm-label">Iran Dollar payoff</div><div class="sm-val red" id="sm-id">−10</div></div>
+        </div>
+        <div class="sim-verdict" id="sim-verdict"></div>
+      </div>
+    </div>
+    <div class="sim-chart-wrap"><canvas id="sim-chart" height="220"></canvas></div>
+    <div class="sim-legend">
+      <span><span class="leg-sq" style="background:#86efac"></span>Iran Yuan payoff +G (constant)</span>
+      <span><span class="leg-sq" style="background:#f87171;border:2px dashed #f87171"></span>Iran Dollar payoff −S+Sr (rises with Sr)</span>
+      <span><span class="leg-sq" style="background:#a78bfa;border:2px dashed #a78bfa"></span>Dominance margin G+(S−Sr)</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-eq">S_r ≥ G + S = 18 to break dominance</div>
+    <div class="footer-meta">Analysis-004 · The Sanctions Relief Threshold · March 2026</div>
+    <div class="footer-links"><a href="../index.html">← Back to portal</a></div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

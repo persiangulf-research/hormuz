@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Equation 8 — Hegemony Decay &amp; the Repeated Game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  :root{--accent:#0ea5e9;--accent-l:#38bdf8;--accent-dim:rgba(14,165,233,0.12);--accent2:#0284c7;}
+  .eq-main{border-left-color:var(--accent);}
+  .term-sym{color:var(--accent);}
+  .insight-icon{color:var(--accent-l);}
+  .step-eq{border-left-color:var(--accent);color:var(--accent-l);}
+  .bc-current{background:rgba(14,165,233,0.12)!important;border-color:rgba(14,165,233,0.3);}
+  .bc-current .bc-label,.bc-current .bc-eq{color:var(--accent-l);}
+  .hero-tag{color:var(--accent-l);}
+  .section-tag{color:var(--accent);}
+  .section-dark .section-tag{color:var(--accent-l);}
+  .stat-val{color:var(--accent-l);}
+  .hero-cta{color:var(--accent-l);border-bottom-color:var(--accent);}
+  .cell-current{background:rgba(14,165,233,0.25)!important;color:var(--accent-l)!important;outline-color:var(--accent-l);}
+  .sim-verdict{border-left-color:var(--accent);background:rgba(14,165,233,0.06);}
+  .sm-val.accent{color:var(--accent-l);}
+  .sim-eq-display{border-left-color:var(--accent);color:var(--accent-l);}
+  .ex-step-label{color:var(--accent);}
+  .tl-bar{background:var(--accent);}
+  .tl-current .tl-bar{background:var(--accent-l);}
+  .card-cta{color:var(--accent);}
+  .card:hover .card-cta{color:var(--accent-l);}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">H_{t+1} = H_t · (1 − ρ_I − n_t·ρ_S)</div>
+    <div class="nav-links">
+      <a href="../index.html" style="border-right:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);font-size:11px">← Portal</a>
+      <a href="#equation">Equation</a>
+      <a href="#derivation">Mechanics</a>
+      <a href="#asymmetry">Asymmetry</a>
+      <a href="#sensitivity">Sensitivity</a>
+      <a href="#examples">Examples</a>
+      <a href="#simulator">Simulator</a>
+    </div>
+    <button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-grid">
+    <div class="hero-tag">Geoeconomics Analysis · March 2026 · Analysis-005</div>
+    <h1 class="hero-title">
+      <span class="hero-eq">H_{t+1} = H_t·(1 − ρ_I − n_t·ρ_S)</span>
+      <span class="hero-subtitle">Hegemony Decay &amp; the Repeated Game</span>
+    </h1>
+    <p class="hero-desc">Each round of yuan-denominated Hormuz transit compounds the erosion of dollar hegemony. Iran's payoff is constant at G every round. U.S. payoff compounds downward. The trap tightens automatically without any strategy change — and the erosion does not reverse when the guns go quiet.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-val">G ∀t</span><span class="stat-label">Iran's payoff every round</span></div>
+      <div class="stat"><span class="stat-val">H→0</span><span class="stat-label">U.S. hegemony over time</span></div>
+      <div class="stat"><span class="stat-val">ρ_I+n·ρ_S</span><span class="stat-label">Decay rate per round</span></div>
+      <div class="stat"><span class="stat-val">∏ decay</span><span class="stat-label">Cumulative compounding</span></div>
+    </div>
+    <a href="#equation" class="hero-cta">Explore the decay ↓</a>
+  </div>
+  <div class="hero-bg"><canvas id="hero-canvas"></canvas></div>
+</section>
+
+<section id="equation" class="section">
+  <div class="section-inner">
+    <div class="section-tag">01 · The Function</div>
+    <h2 class="section-title">Equation 8</h2>
+    <div class="eq-display">
+      <div class="eq-main">H_{t+1} = H_t · (1 − ρ_I − n_t · ρ_S)  |  U_I(t) = G ∀t</div>
+      <div class="eq-terms">
+        <div class="term">
+          <div class="term-sym">H_t</div>
+          <div class="term-name">Hegemony at round t</div>
+          <div class="term-desc">The dollar's reserve-currency dominance at time t — the fraction of global energy invoiced in dollars, the depth of dollar liquidity, the credibility of dollar financial architecture. H_0 ≈ 1 at the start of the petrodollar era. Each round of yuan settlement erodes it.</div>
+        </div>
+        <div class="term">
+          <div class="term-sym">ρ_I</div>
+          <div class="term-name">Iran's decay contribution</div>
+          <div class="term-desc">The fraction of H eroded per round by Iran's yuan trades alone, regardless of other actors. Each Hormuz transit settled in yuan adds another CIPS transaction record, deepens the yuan payment rail, and sets a precedent for other importers. Estimated ρ_I ≈ 0.02–0.04 per round.</div>
+        </div>
+        <div class="term">
+          <div class="term-sym">n_t·ρ_S</div>
+          <div class="term-name">Swing state acceleration</div>
+          <div class="term-desc">n_t = number of Swing Producers who have switched to yuan by round t. ρ_S = per-Swing-state decay contribution, larger than ρ_I because Gulf states have larger oil volumes and higher credibility signals. As n grows, the decay rate accelerates.</div>
+        </div>
+        <div class="term">
+          <div class="term-sym">U_A(t)</div>
+          <div class="term-name">U.S. payoff compounds down</div>
+          <div class="term-desc">U_A(t) = −H_t. As H decays, U.S. payoff becomes less negative in absolute terms but the strategic loss is irreversible. U.S. payoff = −H_0 × ∏(1−ρ_I−n_j·ρ_S) across all prior rounds. The product of decay factors compounds.</div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-strip">
+      <div class="insight">
+        <div class="insight-icon">U_I(t) = G for all t</div>
+        <div class="insight-text">Iran's payoff is constant across every round. Its dominant strategy never changes, never decays, never requires additional action. Iran simply collects G each period.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">H → 0 as t → ∞</div>
+        <div class="insight-text">As long as ρ_I + n_t·ρ_S > 0, H decays toward zero. The trap tightens automatically — even during a ceasefire, if yuan trades continue.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">Decay is irreversible</div>
+        <div class="insight-text">Each CIPS transaction that clears is permanent operational history. When the crisis ends, the payment rail remains. H cannot be restored by negotiation alone.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="derivation" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">02 · Compounding Mechanics</div>
+    <h2 class="section-title">Why Decay Compounds</h2>
+    <div class="deriv-steps">
+      <div class="deriv-step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h3>Single-round decay: geometric, not arithmetic</h3>
+          <div class="step-eq">H_{t+1} = H_t × (1 − ρ_I − n_t·ρ_S)</div>
+          <p>Each round, a fraction of remaining hegemony is lost — not a fixed amount. This geometric decay means the absolute loss slows as H approaches zero, but H never fully recovers. Compare with arithmetic decay (H_{t+1} = H_t − c): geometric decay is more realistic because the dollar's strategic value scales with its current share, not an absolute quantity.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h3>Cumulative product formula</h3>
+          <div class="step-eq">H_t = H_0 × ∏[j=0 to t−1](1 − ρ_I − n_j·ρ_S)</div>
+          <p>The product of all prior decay factors gives hegemony at round t. Each factor is less than 1, so the product strictly decreases with t. As n grows (more Swing states switch), the factors themselves shrink, accelerating the compounding.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h3>U.S. payoff trajectory</h3>
+          <div class="step-eq">U_A(t) = −H_t = −H_0 × ∏(1 − ρ_I − n_j·ρ_S)</div>
+          <p>U.S. payoff becomes less negative over time as H decays — but this is not improvement. A smaller |H| means less hegemony remaining to lose, not a recovery. The U.S. is not recovering from the trap — it is watching the strategic stakes of defending the dollar gradually fall to zero.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h3>The asymmetry: Iran constant, U.S. compounds down</h3>
+          <div class="step-eq">U_I(t) = G ∀t  |  U_A(t) = −H_0·∏(decay) → 0</div>
+          <p>Iran's payoff is a constant G every round. It requires no new action, no strategy change, no investment. The U.S. payoff compounds downward each round, requiring ever-greater diplomatic and military investment to defend a position that is shrinking anyway. Time works for Iran and against Washington.</p>
+        </div>
+      </div>
+    </div>
+    <div class="boundary-grid">
+      <div class="boundary bc-zero">
+        <div class="bc-label">t=0 · Start of crisis</div>
+        <div class="bc-eq">H_0 = full hegemony</div>
+        <div class="bc-note">Dollar invoices 100% of Hormuz volume. CIPS has no operational war-time record. Status quo intact.</div>
+      </div>
+      <div class="boundary bc-one">
+        <div class="bc-label">t=21 · Day 21 (current)</div>
+        <div class="bc-eq">H_21 ≈ H_0·(0.97)^21 ≈ 0.53·H_0</div>
+        <div class="bc-note">At ρ_I=0.03 per day, 21 rounds remove ~47% of Iran's contribution to hegemony. India, Pakistan, Turkey deals add n_t·ρ_S.</div>
+      </div>
+      <div class="boundary bc-m1">
+        <div class="bc-label">n=1 · Saudi switches</div>
+        <div class="bc-eq">Decay rate jumps from ρ_I to ρ_I + ρ_S</div>
+        <div class="bc-note">If Saudi Arabia begins yuan pricing, ρ_S ≈ 0.05 adds to the decay rate every round. H decays twice as fast.</div>
+      </div>
+      <div class="boundary bc-current">
+        <div class="bc-label">t→∞ · Long-run</div>
+        <div class="bc-eq">H → 0, U_A → 0, Iran still collects +G</div>
+        <div class="bc-note">Asymptotically, hegemony decays to near zero. Iran's payoff remains G. The petrodollar era ends not with a bang but with a product of decay factors.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="asymmetry" class="section">
+  <div class="section-inner">
+    <div class="section-tag">03 · The Core Asymmetry</div>
+    <h2 class="section-title">Four Structural Changes Already Locked In</h2>
+    <p style="color:#555;font-size:.95rem;margin-bottom:2rem;max-width:640px;line-height:1.7;">These effects are permanent. They do not reverse when the Hormuz crisis ends. Each represents an increase in the decay rate or a direct H reduction that no subsequent policy can undo.</p>
+    <div id="locked-changes"></div>
+  </div>
+</section>
+
+<section id="sensitivity" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">04 · Sensitivity Analysis</div>
+    <h2 class="section-title">H(t)/H_0 Decay Table</h2>
+    <p class="section-lead">Fraction of original hegemony remaining after t rounds across different decay rates ρ_I + n·ρ_S. Current estimated zone highlighted.</p>
+    <div class="sens-table-wrap">
+      <table class="sens-table" id="sens-table">
+        <thead><tr><th>t \ ρ_total</th><th>0.02</th><th>0.04</th><th class="col-current">0.06</th><th>0.08</th><th>0.10</th><th>0.15</th></tr></thead>
+        <tbody id="sens-body"></tbody>
+      </table>
+    </div>
+    <div class="sens-legend">
+      <span class="leg-item leg-low">&gt;0.80 · minimal decay</span>
+      <span class="leg-item leg-mid">0.60–0.80 · moderate decay</span>
+      <span class="leg-item leg-high">0.40–0.59 · significant decay</span>
+      <span class="leg-item leg-max">&lt;0.40 · severe decay</span>
+      <span class="leg-item leg-curr">★ current estimated position</span>
+    </div>
+  </div>
+</section>
+
+<section id="examples" class="section">
+  <div class="section-inner">
+    <div class="section-tag">05 · Historical Cases</div>
+    <h2 class="section-title">Five Decay Examples</h2>
+    <div class="examples-list" id="examples-list"></div>
+  </div>
+</section>
+
+<section id="simulator" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">06 · Interactive</div>
+    <h2 class="section-title">Hegemony Decay Simulator</h2>
+    <p class="section-lead">Watch H decay over rounds as decay rates and Swing state switches accumulate. Iran's payoff line stays flat at G every round.</p>
+    <div class="sim-layout">
+      <div class="sim-controls">
+        <div class="sim-param"><label>ρ_I — Iran decay per round</label><input type="range" id="sim-rhoI" min="1" max="8" step="1" value="3"><span class="sim-val" id="sim-rhoIv">0.03</span></div>
+        <div class="sim-param"><label>ρ_S — per-Swing-state decay</label><input type="range" id="sim-rhoS" min="1" max="10" step="1" value="5"><span class="sim-val" id="sim-rhoSv">0.05</span></div>
+        <div class="sim-param"><label>n — Swing states switched</label><input type="range" id="sim-n" min="0" max="5" step="1" value="0"><span class="sim-val" id="sim-nv">0</span></div>
+        <div class="sim-param"><label>G — Iran yuan gain (constant)</label><input type="range" id="sim-G" min="1" max="15" step="1" value="8"><span class="sim-val" id="sim-Gv">8</span></div>
+        <div class="sim-param"><label>H_0 — initial hegemony</label><input type="range" id="sim-H0" min="5" max="15" step="1" value="10"><span class="sim-val" id="sim-H0v">10</span></div>
+      </div>
+      <div class="sim-outputs">
+        <div class="sim-eq-display" id="sim-eq">H(t+1) = H(t)·(1−0.03−0×0.05)</div>
+        <div class="sim-metrics">
+          <div class="sim-met"><div class="sm-label">Decay rate ρ_total</div><div class="sm-val accent" id="sm-rate">0.030</div></div>
+          <div class="sim-met"><div class="sm-label">H after 10 rounds</div><div class="sm-val" id="sm-h10">—</div></div>
+          <div class="sim-met"><div class="sm-label">H after 20 rounds</div><div class="sm-val red" id="sm-h20">—</div></div>
+          <div class="sim-met"><div class="sm-label">H after 50 rounds</div><div class="sm-val red" id="sm-h50">—</div></div>
+          <div class="sim-met"><div class="sm-label">Iran payoff (constant)</div><div class="sm-val green" id="sm-iran">+8</div></div>
+          <div class="sim-met"><div class="sm-label">Rounds to H = 50%</div><div class="sm-val amber" id="sm-half">—</div></div>
+        </div>
+        <div class="sim-verdict" id="sim-verdict"></div>
+      </div>
+    </div>
+    <div class="sim-chart-wrap"><canvas id="sim-chart" height="220"></canvas></div>
+    <div class="sim-legend">
+      <span><span class="leg-sq" style="background:#38bdf8"></span>U.S. payoff −H(t) (decaying)</span>
+      <span><span class="leg-sq" style="background:#86efac"></span>Iran payoff +G (constant)</span>
+      <span><span class="leg-sq" style="background:#fbbf24;border:2px dashed #fbbf24"></span>Hegemony H(t)</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-eq">H_{t+1} = H_t · (1 − ρ_I − n_t·ρ_S)  |  U_I(t) = G ∀t</div>
+    <div class="footer-meta">Analysis-005 · Hegemony Decay &amp; the Repeated Game · March 2026</div>
+    <div class="footer-links"><a href="../index.html">← Back to portal</a></div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

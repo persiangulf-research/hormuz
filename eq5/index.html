@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Equation 5 — The Hormuz Commitment Device</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">E* = E·[1 + c(m−1)]</div>
+    <div class="nav-links">
+      <a href="../index.html" style="border-right:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);font-size:11px">← Portal</a>
+      <a href="#equation">Equation</a>
+      <a href="#derivation">Derivation</a>
+      <a href="#parameters">Parameters</a>
+      <a href="#sensitivity">Sensitivity</a>
+      <a href="#examples">Examples</a>
+      <a href="#simulator">Simulator</a>
+      <a href="#bessent">Bessent Test</a>
+    </div>
+    <button class="nav-burger" id="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid">
+    <div class="hero-tag">Geoeconomics Analysis · March 2026</div>
+    <h1 class="hero-title">
+      <span class="hero-eq">E* = E·[1 + c(m−1)]</span>
+      <span class="hero-subtitle">The Hormuz Commitment Device</span>
+    </h1>
+    <p class="hero-desc">How Iran weaponised the world's most critical energy chokepoint to amplify U.S. escalation costs beyond what any military doctrine can absorb. A complete mathematical and strategic analysis of Equation 5.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-val" id="hero-estar">14.0</span><span class="stat-label">Effective E* (March 2026)</span></div>
+      <div class="stat"><span class="stat-val">2.8×</span><span class="stat-label">Amplification above base E</span></div>
+      <div class="stat"><span class="stat-val">c≈0.90</span><span class="stat-label">Credibility (empirically resolved)</span></div>
+      <div class="stat"><span class="stat-val">m≈3.0</span><span class="stat-label">Geographic multiplier</span></div>
+    </div>
+    <a href="#equation" class="hero-cta">Explore the equation ↓</a>
+  </div>
+  <div class="hero-bg">
+    <canvas id="hero-canvas"></canvas>
+  </div>
+</section>
+
+<!-- EQUATION SECTION -->
+<section id="equation" class="section">
+  <div class="section-inner">
+    <div class="section-tag">01 · The Function</div>
+    <h2 class="section-title">Equation 5</h2>
+    <div class="eq-display">
+      <div class="eq-main">E* = E × [1 + c(m − 1)]</div>
+      <div class="eq-terms">
+        <div class="term" data-term="E">
+          <div class="term-sym">E</div>
+          <div class="term-name">Base escalation cost</div>
+          <div class="term-desc">Military expenditure, oil price shock, reserve depletion, allied credibility damage. Exists before any Hormuz effect. Calibrated at ~5 on normalised payoff scale for March 2026.</div>
+        </div>
+        <div class="term" data-term="c">
+          <div class="term-sym">c</div>
+          <div class="term-name">Credibility scalar</div>
+          <div class="term-desc">c ∈ [0,1]. At c=0: pure bluff, zero amplification. At c=1: certain execution, full leverage. Empirically resolved at c≈0.90 after 17 days of actual Hormuz closure and 21 vessel attacks in March 2026.</div>
+        </div>
+        <div class="term" data-term="m">
+          <div class="term-sym">m</div>
+          <div class="term-name">Geographic multiplier</div>
+          <div class="term-desc">m ≥ 1. Hormuz carries ~20% of global crude oil and ~35% of global LNG. Bypass covers only ~42% of pre-war volume. Net irreplaceable fraction ~58%. Calibrated m ≈ 2.8–3.2.</div>
+        </div>
+        <div class="term" data-term="Estar">
+          <div class="term-sym">E*</div>
+          <div class="term-name">Effective escalation cost</div>
+          <div class="term-desc">Replaces base E in the U.S. High Response payoff column: U_A(Yuan, Escalate) = −H − E*. The deterrence gap between Accommodate and Escalate equals E*, not E.</div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-strip">
+      <div class="insight">
+        <div class="insight-icon">∂E*/∂c = E(m−1) ≥ 0</div>
+        <div class="insight-text">Credibility always raises E*. More demonstrated willingness → stronger deterrence.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">∂E*/∂m = Ec ≥ 0</div>
+        <div class="insight-text">Geographic importance always raises E*. A more critical strait → more leverage.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">∂²E*/∂c∂m = E > 0</div>
+        <div class="insight-text">Credibility and geography are complementary. Neither works without the other.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DERIVATION -->
+<section id="derivation" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">02 · From First Principles</div>
+    <h2 class="section-title">Derivation</h2>
+    <div class="deriv-steps">
+      <div class="deriv-step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h3>Base case: no commitment device</h3>
+          <div class="step-eq">U_A(Escalate) = −H − E</div>
+          <p>Before any Hormuz effect, escalation costs E plus hegemony loss H. E is the base military and economic cost of conflict in any theatre.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h3>Probabilistic expectation with bluff threat</h3>
+          <div class="step-eq">EU_A = p·(−H−E) + (1−p)·(−H) = −H − pE</div>
+          <p>If Iran threatens with probability p of execution, the U.S. expected escalation cost is −H − pE. At low p (bluff), this approaches −H. The U.S. may still escalate.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h3>Geographic maximum at full credibility</h3>
+          <div class="step-eq">E*(c=1) = E × m</div>
+          <p>At c=1, the probability collapses to certainty and geographic severity fully applies. At m=3: E*=3E. The strait's irreplaceable fraction (~58%) amplifies cost by m.</p>
+        </div>
+      </div>
+      <div class="deriv-step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h3>Linear interpolation across credibility</h3>
+          <div class="step-eq">E*(c) = E + c·(mE − E) = E·[1 + c(m−1)]</div>
+          <p>Between the bluff extreme (E) and the certain extreme (mE), E* interpolates linearly in c. This gives the final form: credibility scales geographic leverage proportionally.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="boundary-grid">
+      <div class="boundary bc-zero">
+        <div class="bc-label">c = 0 · Bluff</div>
+        <div class="bc-eq">E* = E × 1 = E</div>
+        <div class="bc-note">Geography irrelevant. No amplification. Iran's pre-2024 threat regime.</div>
+      </div>
+      <div class="boundary bc-one">
+        <div class="bc-label">c = 1 · Certain</div>
+        <div class="bc-eq">E* = E × m</div>
+        <div class="bc-note">Full geographic leverage. Maximum deterrence. E*=3E at m=3.</div>
+      </div>
+      <div class="boundary bc-m1">
+        <div class="bc-label">m = 1 · Irrelevant geography</div>
+        <div class="bc-eq">E* = E for all c</div>
+        <div class="bc-note">Even perfect credibility adds nothing. Hormuz's m≈3 is its strategic core advantage.</div>
+      </div>
+      <div class="boundary bc-current">
+        <div class="bc-label">Current · c=0.90, m=3.0</div>
+        <div class="bc-eq">E* = 5 × 2.80 = 14.0</div>
+        <div class="bc-note">March 2026. Active deterrence zone. Escalation gap = 14 units.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARAMETERS -->
+<section id="parameters" class="section">
+  <div class="section-inner">
+    <div class="section-tag">03 · Real-World Calibration</div>
+    <h2 class="section-title">Parameter Calibration</h2>
+    <div class="param-grid">
+      <div class="param-card param-c">
+        <div class="param-header">
+          <div class="param-sym">c</div>
+          <div class="param-title">Credibility evolution</div>
+        </div>
+        <div class="param-timeline">
+          <div class="tl-row"><span class="tl-date">Pre-2024</span><div class="tl-bar-wrap"><div class="tl-bar" style="width:15%"></div></div><span class="tl-val">c≈0.15</span><span class="tl-note">Bluff regime</span></div>
+          <div class="tl-row"><span class="tl-date">Jan 2026</span><div class="tl-bar-wrap"><div class="tl-bar" style="width:35%"></div></div><span class="tl-val">c≈0.35</span><span class="tl-note">Shadow fleet visible</span></div>
+          <div class="tl-row"><span class="tl-date">1–7 Mar</span><div class="tl-bar-wrap"><div class="tl-bar" style="width:65%"></div></div><span class="tl-val">c≈0.65</span><span class="tl-note">First closure week</span></div>
+          <div class="tl-row"><span class="tl-date">8–14 Mar</span><div class="tl-bar-wrap"><div class="tl-bar" style="width:80%"></div></div><span class="tl-val">c≈0.80</span><span class="tl-note">Kharg strikes; yuan condition</span></div>
+          <div class="tl-row tl-current"><span class="tl-date">15–19 Mar</span><div class="tl-bar-wrap"><div class="tl-bar" style="width:90%"></div></div><span class="tl-val">c≈0.90</span><span class="tl-note">India/Pakistan/Turkey deals</span></div>
+        </div>
+      </div>
+      <div class="param-card param-m">
+        <div class="param-header">
+          <div class="param-sym">m</div>
+          <div class="param-title">Geographic multiplier breakdown</div>
+        </div>
+        <div class="m-breakdown">
+          <div class="m-row"><span class="m-label">Crude oil (~20% global)</span><div class="m-bar-wrap"><div class="m-bar" style="width:80%"></div></div><span class="m-contrib">+0.8</span></div>
+          <div class="m-row"><span class="m-label">LNG (35% global Qatari)</span><div class="m-bar-wrap"><div class="m-bar" style="width:60%"></div></div><span class="m-contrib">+0.6</span></div>
+          <div class="m-row"><span class="m-label">Condensate & NGL</span><div class="m-bar-wrap"><div class="m-bar" style="width:30%"></div></div><span class="m-contrib">+0.3</span></div>
+          <div class="m-row"><span class="m-label">War-risk insurance premium</span><div class="m-bar-wrap"><div class="m-bar" style="width:30%"></div></div><span class="m-contrib">+0.3</span></div>
+          <div class="m-row m-minus"><span class="m-label">IEA reserve offset (−ve)</span><div class="m-bar-wrap"><div class="m-bar m-bar-neg" style="width:20%"></div></div><span class="m-contrib">−0.2</span></div>
+          <div class="m-total"><span>Net m ≈ 2.8–3.2</span></div>
+        </div>
+        <div class="bypass-note">Yanbu (7M bpd) + Fujairah (1.8M bpd) = 8.8M bpd bypass vs 21M bpd Hormuz. Only 42% covered. Net irreplaceable: ~58%.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SENSITIVITY TABLE -->
+<section id="sensitivity" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">04 · Full Parameter Space</div>
+    <h2 class="section-title">E*/E Sensitivity Matrix</h2>
+    <p class="section-lead">The ratio E*/E = 1 + c(m−1) across all credibility and multiplier combinations. Current March 2026 position highlighted.</p>
+    <div class="sens-table-wrap">
+      <table class="sens-table" id="sens-table">
+        <thead>
+          <tr>
+            <th>m \ c</th>
+            <th>0.0</th><th>0.2</th><th>0.4</th><th>0.6</th><th>0.8</th><th class="col-current">0.9</th><th>1.0</th>
+          </tr>
+        </thead>
+        <tbody id="sens-body"></tbody>
+      </table>
+    </div>
+    <div class="sens-legend">
+      <span class="leg-item leg-low">1.0–1.9 · low deterrence</span>
+      <span class="leg-item leg-mid">2.0–2.4 · active deterrence</span>
+      <span class="leg-item leg-high">2.5–2.9 · strong deterrence</span>
+      <span class="leg-item leg-max">3.0+ · suicidal escalation</span>
+      <span class="leg-item leg-curr">★ current position</span>
+    </div>
+  </div>
+</section>
+
+<!-- EXAMPLES -->
+<section id="examples" class="section">
+  <div class="section-inner">
+    <div class="section-tag">05 · Historical Cases</div>
+    <h2 class="section-title">Seven Worked Examples</h2>
+    <div class="examples-list" id="examples-list"></div>
+  </div>
+</section>
+
+<!-- SIMULATOR -->
+<section id="simulator" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">06 · Interactive</div>
+    <h2 class="section-title">Live Simulator</h2>
+    <p class="section-lead">Adjust parameters and watch E* update in real time. All payoff columns recalculate instantly.</p>
+    <div class="sim-layout">
+      <div class="sim-controls">
+        <div class="sim-param">
+          <label>E — base escalation cost</label>
+          <input type="range" id="sim-E" min="1" max="15" step="1" value="5">
+          <span class="sim-val" id="sim-Ev">5</span>
+        </div>
+        <div class="sim-param">
+          <label>c — credibility [0–10 → 0.0–1.0]</label>
+          <input type="range" id="sim-c" min="0" max="10" step="1" value="9">
+          <span class="sim-val" id="sim-cv">0.9</span>
+        </div>
+        <div class="sim-param">
+          <label>m — geographic multiplier</label>
+          <input type="range" id="sim-m" min="10" max="50" step="1" value="30">
+          <span class="sim-val" id="sim-mv">3.0</span>
+        </div>
+        <div class="sim-param">
+          <label>H — U.S. hegemony loss</label>
+          <input type="range" id="sim-H" min="1" max="12" step="1" value="7">
+          <span class="sim-val" id="sim-Hv">7</span>
+        </div>
+        <div class="sim-param">
+          <label>G — Iran yuan gain</label>
+          <input type="range" id="sim-G" min="1" max="15" step="1" value="8">
+          <span class="sim-val" id="sim-Gv">8</span>
+        </div>
+        <div class="sim-param">
+          <label>S — Iran sanctions cost</label>
+          <input type="range" id="sim-S" min="1" max="15" step="1" value="10">
+          <span class="sim-val" id="sim-Sv">10</span>
+        </div>
+      </div>
+      <div class="sim-outputs">
+        <div class="sim-eq-display" id="sim-eq">E* = 5 × [1 + 0.9(3.0−1)] = 14.0</div>
+        <div class="sim-metrics">
+          <div class="sim-met"><div class="sm-label">E* (effective)</div><div class="sm-val accent" id="sm-estar">14.0</div></div>
+          <div class="sim-met"><div class="sm-label">E*/E ratio</div><div class="sm-val" id="sm-ratio">2.80×</div></div>
+          <div class="sim-met"><div class="sm-label">U.S. Accommodate</div><div class="sm-val red" id="sm-acc">−7</div></div>
+          <div class="sim-met"><div class="sm-label">U.S. Escalate</div><div class="sm-val red" id="sm-esc">−21</div></div>
+          <div class="sim-met"><div class="sm-label">Deterrence gap</div><div class="sm-val amber" id="sm-gap">14.0</div></div>
+          <div class="sim-met"><div class="sm-label">Iran dominance G+S</div><div class="sm-val green" id="sm-dom">+18</div></div>
+        </div>
+        <div class="sim-matrix">
+          <div class="sim-mat-header">Payoff matrix (Iran, U.S.)</div>
+          <table class="mat-table">
+            <tr><th></th><th>Accommodate</th><th>Escalate</th></tr>
+            <tr>
+              <td class="mat-row-label">Yuan ¥</td>
+              <td class="mat-cell ne" id="mat-ya"></td>
+              <td class="mat-cell trap" id="mat-ye"></td>
+            </tr>
+            <tr>
+              <td class="mat-row-label">Dollar $</td>
+              <td class="mat-cell locked" id="mat-da"></td>
+              <td class="mat-cell locked" id="mat-de"></td>
+            </tr>
+          </table>
+        </div>
+        <div class="sim-verdict" id="sim-verdict"></div>
+      </div>
+    </div>
+    <div class="sim-chart-wrap">
+      <canvas id="sim-chart" height="220"></canvas>
+    </div>
+    <div class="sim-legend">
+      <span><span class="leg-sq" style="background:#4a9eff"></span>U.S. Accommodate −H</span>
+      <span><span class="leg-sq" style="background:#7bbfff;border:2px dashed #7bbfff"></span>U.S. Escalate −H−E*</span>
+      <span><span class="leg-sq" style="background:#6abf69"></span>Iran Yuan +G</span>
+      <span><span class="leg-sq" style="background:#e57373;border:2px dashed #e57373"></span>Iran Dollar −S</span>
+      <span><span class="leg-sq" style="background:#ffb74d;border:2px dashed #ffb74d"></span>Minimax a*</span>
+    </div>
+  </div>
+</section>
+
+<!-- BESSENT TEST -->
+<section id="bessent" class="section bessent-section">
+  <div class="section-inner">
+    <div class="section-tag">07 · Real-World Test · 19 March 2026</div>
+    <h2 class="section-title">The Bessent Offer</h2>
+    <div class="bessent-quote">
+      <blockquote>"In the coming days, we may unsanction the Iranian oil that's on the water — about 140 million barrels. Depending on how you count it, that's 10 days to two weeks of supply."</blockquote>
+      <cite>— Scott Bessent, Fox Business Network, 19 March 2026</cite>
+    </div>
+    <div class="bessent-analysis">
+      <div class="ba-card ba-offer">
+        <div class="ba-label">What was offered</div>
+        <div class="ba-content">140M barrels × $100/bbl = <strong>$14 billion</strong> one-time relief on floating Iranian inventory. Temporary, asset-specific, supply-management framing. Contingent ("may unsanction"). Not coordinated with Tehran.</div>
+      </div>
+      <div class="ba-card ba-math">
+        <div class="ba-label">The arithmetic</div>
+        <div class="ba-content">
+          <div class="ba-eq">Sr = $14B ÷ $18B/yr (G) ≈ <strong>0.78 payoff units</strong></div>
+          <div class="ba-eq">Sr(min) required = G + S = 8 + 10 = <strong>18 units</strong></div>
+          <div class="ba-eq">Coverage = 0.78 ÷ 18 = <strong>4.3%</strong> of threshold</div>
+        </div>
+      </div>
+      <div class="ba-card ba-verdict">
+        <div class="ba-label">Model verdict</div>
+        <div class="ba-content">Dominant strategy: <strong>unchanged</strong>. G+(S−0.78) = 17.22 > 0. E*: <strong>unchanged</strong> at 14.0 (Sr does not affect c, m, or E). The offer achieved 4.3% of the Sr threshold required to break Iran's dominant strategy.</div>
+      </div>
+    </div>
+    <div class="bessent-table-wrap">
+      <table class="bessent-table">
+        <thead><tr><th>Sr instrument</th><th>Payoff value</th><th>Structural?</th><th>Sr/Sr(min)</th></tr></thead>
+        <tbody>
+          <tr class="bt-current"><td>Floating oil waiver (Bessent offer)</td><td>≈0.78</td><td>No — temporary</td><td class="pct-low">4.3%</td></tr>
+          <tr><td>OFAC removal of oil entities</td><td>≈2.5</td><td>Yes — persistent</td><td class="pct-mid">13.9%</td></tr>
+          <tr><td>Partial SWIFT restoration</td><td>≈4.0</td><td>Yes — persistent</td><td class="pct-mid">22.2%</td></tr>
+          <tr><td>Secondary sanctions waiver (yuan clearers)</td><td>≈3.5</td><td>Yes — changes S</td><td class="pct-mid">19.4%</td></tr>
+          <tr><td>Return of frozen assets ($10B)</td><td>≈4.0</td><td>Yes — irreversible</td><td class="pct-mid">22.2%</td></tr>
+          <tr><td>Permanent oil export sanctions lifting</td><td>≈8.0</td><td>Yes — restores dollar access</td><td class="pct-high">44.4%</td></tr>
+          <tr class="bt-full"><td><strong>Full Sr(min) package</strong></td><td><strong>≥18</strong></td><td><strong>Yes — breaks dominance</strong></td><td class="pct-full">100%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- STRATEGIC PARADOX -->
+<section id="paradox" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">08 · The Self-Deterrence Paradox</div>
+    <h2 class="section-title">Iran's Paradox</h2>
+    <p class="section-lead">The commitment device that deters the U.S. also punishes Iran if deterrence fails.</p>
+    <div class="paradox-layout">
+      <div class="paradox-eq">
+        <div class="peq-label">Iran's payoff under U.S. Escalate (Yuan strategy)</div>
+        <div class="peq-formula">U_I(Yuan, Escalate) = G − E* − Hs</div>
+        <div class="peq-calc">= 8 − 14 − 1 = <strong>−7</strong></div>
+        <div class="peq-note">As c rises, E* rises, and Iran's own Escalate payoff falls. The paradox: a more credible Hormuz threat is better for deterrence but worse for Iran if deterrence fails.</div>
+      </div>
+      <div class="paradox-resolution">
+        <div class="pr-title">Why the paradox resolves in Iran's favour</div>
+        <p>The Nash Equilibrium selects (Yuan, Accommodate). As long as E*=14 makes Escalate far worse than Accommodate for the U.S. (−21 vs −7), the U.S. plays Accommodate and Iran collects +8 per round. The −7 tail risk never materialises. The commitment device is a weapon Iran never needs to fire.</p>
+        <div class="pr-condition">Paradox condition: if U.S. escalates irrationally despite E*=14, Iran faces −7 instead of +8 — a 15-unit swing. The further c is pushed toward 1.0, the worse this tail risk.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-eq">E* = E · [1 + c(m−1)]</div>
+    <div class="footer-meta">Geoeconomics Analysis · The Hormuz Gambit Series · March 2026</div>
+    <div class="footer-links">
+      <a href="#hero">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
