@@ -1093,25 +1093,7 @@ footer {
   <span class="section-bar-count" id="brief-ts">—</span>
 </div>
 
-<div class="briefing-wrap">
-
-  <!-- W1: DAILY BRIEFING PANEL -->
-  <div class="brief-panel">
-    <div class="brief-panel-head">
-      <div class="brief-panel-id">Workflow 1</div>
-      <div class="brief-panel-title">Daily strategic briefing</div>
-      <div class="brief-panel-subtitle">auto-generated · updates every 5 min</div>
-      <button class="brief-refresh" id="w1-refresh" onclick="runBriefing()">↻ Refresh</button>
-    </div>
-
-    <div class="brief-rows" id="w1-rows">
-      <!-- injected by JS -->
-    </div>
-
-    <div class="brief-verdict" id="w1-verdict">
-      <!-- injected by JS -->
-    </div>
-  </div>
+<div class="briefing-wrap" style="grid-template-columns:1fr;">
 
   <!-- W2: EVENT CLASSIFIER PANEL -->
   <div class="brief-panel">
@@ -1393,7 +1375,7 @@ function updateDisplay(brent, isLive) {
   // Masthead Sr — uses MODEL.Sr (loaded from params.json)
   const msEl = document.getElementById('ms-sr');
   if (msEl) msEl.textContent = dom + ' vs ' + (MODEL.Sr || 0.78).toFixed(2);
-  if (typeof runBriefing === 'function') setTimeout(runBriefing, 100);
+  // (Workflow 1 removed)
 }
 
 // ── Brent live fetch (oilpriceapi.com public endpoint) ───────────────
@@ -1524,7 +1506,6 @@ async function loadParams() {
       meta: PARAMS_FALLBACK.meta || {},
     });
     updateAllTickers(MODEL, PARAMS_FALLBACK.derived || {}, PARAMS_FALLBACK.meta || {});
-    if (typeof runBriefing === 'function') runBriefing();
   })();
 
   try {
@@ -1561,7 +1542,6 @@ async function loadParams() {
       }
     }
 
-    if (typeof runBriefing === 'function') runBriefing();
   } catch(_) {
     // params.json not found — fallback already applied above
   }
@@ -1571,125 +1551,13 @@ async function loadParams() {
 loadParams();
 setInterval(loadParams, 600000);
 
-// ═══════════════════════════════════════════════════════════════════════
-// WORKFLOW 1 — AUTO DAILY BRIEFING ENGINE
-// ═══════════════════════════════════════════════════════════════════════
+// ── Workflow 1 removed — only Workflow 2 (Event Classifier) retained ─
 
 function getC(brent) {
   return Math.min(0.97, Math.max(0.80, 0.70 + ((brent - 65) / 10) * 0.04));
 }
 function getEstar(c, m, E) {
   return Math.round(E * (1 + c * (m - 1)) * 10) / 10;
-}
-
-function badge(text, type) {
-  return `<span class="br-badge ${type}">${text}</span>`;
-}
-
-function runBriefing() {
-  const b = MODEL.brent;
-  const c = getC(b);
-  const estar = getEstar(c, MODEL.m, MODEL.E);
-  const dom = MODEL.G + MODEL.S - MODEL.Sr;
-  const trapActive = dom > 0;
-  const srCov = Math.round(MODEL.Sr / (MODEL.G + MODEL.S) * 100);
-  const brentChange = b < 100 ? 'below $100 — talks signal priced' : b > 110 ? 'above $110 — crisis premium elevated' : 'elevated above $100 — war premium active';
-  const brentBadge = b < 100 ? 'ok' : b > 110 ? 'alert' : 'warn';
-  const closureDays = Math.floor((new Date() - WAR_START) / 864e5);
-
-  // Build news-with-metrics row from params.json news array
-  const newsItems = (MODEL.meta && MODEL.meta.news) || [];
-  const newsRowLearn = newsItems.length > 0
-    ? newsItems.map((n, i) =>
-        `<span style="color:var(--amber-l);font-weight:600">[${n.id||'N-'+(i+1)}]</span> ${n.date ? '<span style="color:var(--faint)">' + n.date + '</span> — ' : ''}<span style="color:var(--text)">${n.headline}</span> → <span style="color:var(--amber)">${n.eqLabel||n.eq||''}</span>${n.metricsImpact && n.metricsImpact.note ? ' <span style="color:rgba(232,226,212,.45);font-style:italic">' + n.metricsImpact.note + '</span>' : ''}`
-      ).join('<br>')
-    : 'No news items loaded from params.json. Upload news[] array via Admin to populate this row.';
-  const newsRowBadge = newsItems.length > 0
-    ? badge(newsItems.length + ' events', newsItems.some(n => n.severity === 'red') ? 'alert' : 'warn')
-    : badge('No data', 'neu');
-
-  const rows = [
-    {
-      action: 'Portal masthead check',
-      learn: `Dominant strategy broken: ${trapActive ? 'No' : '★ YES'}. Sr offered: ${MODEL.Sr} of ${MODEL.G + MODEL.S} required (${srCov}%). Analyses live: 5.`,
-      badge: trapActive ? badge('Trap active', 'alert') : badge('Broken', 'ok'),
-    },
-    {
-      action: 'Brent crude — live feed',
-      learn: `$${b.toFixed(2)} — ${brentChange}. ${MODEL.isLive ? 'Live data confirmed.' : 'Fallback value — API unavailable.'} Closure day ${closureDays}.`,
-      badge: badge('$' + b.toFixed(2), brentBadge),
-    },
-    {
-      action: 'Eq.5 — Commitment Device (c, E*)',
-      learn: `Inferred credibility c ≈ ${c.toFixed(2)} from Brent. E* = ${MODEL.E} × [1 + ${c.toFixed(2)} × ${(MODEL.m-1).toFixed(1)}] = ${estar}. Deterrence gap: ${estar}. U.S. Escalate payoff: ${-(MODEL.H + estar)}.`,
-      badge: estar > 12 ? badge('E*=' + estar, 'alert') : badge('E*=' + estar, 'warn'),
-    },
-    {
-      action: 'Eq.12 — Sr threshold watch',
-      learn: `Bessent waiver: Sr = ${MODEL.Sr} (${srCov}% of threshold). ${MODEL.talksSig ? 'Trump-Iran talks signal: expected Sr ≈ 2.7–4.6 (probability-weighted). Largest Sr signal of crisis.' : 'No new Sr signals.'} Gap to break: ${Math.max(0, (MODEL.G + MODEL.S) - MODEL.Sr).toFixed(1)} units.`,
-      badge: srCov < 10 ? badge(srCov + '%', 'alert') : srCov < 30 ? badge(srCov + '%', 'warn') : badge(srCov + '%', 'ok'),
-    },
-    {
-      action: 'Eq.7 — Swing cascade (k vs k*)',
-      learn: `Current k ≈ ${MODEL.k} (Iran=1 + India partial=0.3). k* estimated at 3–5 depending on ν and δ. ${MODEL.k < 2 ? 'Cascade has not reached tipping point.' : 'Cascade is approaching tipping zone.'} Saudi signal would push k to ≈2.3.`,
-      badge: MODEL.k >= 3 ? badge('Tipping', 'alert') : MODEL.k >= 2 ? badge('k=' + MODEL.k, 'warn') : badge('k=' + MODEL.k, 'neu'),
-    },
-    {
-      action: 'Eq.8 — Hegemony decay (ρ, H)',
-      learn: `Decay rate ρ_total ≈ ${(0.03 + MODEL.n * 0.005).toFixed(3)}/round. H after ${closureDays} rounds ≈ ${Math.round(MODEL.H * Math.pow(1 - (0.03 + MODEL.n * 0.005), closureDays) * 10) / 10} (${Math.round(Math.pow(1 - (0.03 + MODEL.n * 0.005), closureDays) * 100)}% of H₀). Iran payoff: +${MODEL.G} every round — constant.`,
-      badge: badge('Day ' + closureDays, 'neu'),
-    },
-    {
-      action: 'News feed — all uploaded events with metrics impact',
-      learn: newsRowLearn,
-      badge: newsRowBadge,
-    },
-  ];
-
-  if (MODEL.troops) {
-    rows.push({
-      action: 'Troop deployment — Eq.5 secondary',
-      learn: `2,500 Marines + USS Boxer. ΔE* ≈ −0.45 via m: 3.0 → 2.9. 3.2% reduction. Sr(troops) = 0. Dominant strategy: unchanged. Navy operates on physical plane Φ; yuan settlement on financial plane Ψ. Separability (Eq.9): ΔΨ(escort) = 0.`,
-      badge: badge('Sr=0', 'alert'),
-    });
-  }
-
-  const container = document.getElementById('w1-rows');
-  if (!container) return;
-  container.innerHTML = rows.map((row, i) => `
-    <div class="brief-row">
-      <div class="br-num">${String(i + 1).padStart(2, '0')}</div>
-      <div class="br-body">
-        <div class="br-action">${row.action}</div>
-        <div class="br-learn">${row.learn}</div>
-      </div>
-      ${row.badge}
-    </div>
-  `).join('');
-
-  // Overall verdict
-  const verdict = document.getElementById('w1-verdict');
-  if (verdict) {
-    const regime = estar > 14 ? 'suicidal escalation zone' : estar > 10 ? 'active deterrence' : 'moderate deterrence';
-    const srcBadge = MODEL.paramsLoaded
-      ? (MODEL.meta?.aiCalibrated
-          ? '<span style="font-size:9px;background:rgba(167,139,250,.2);color:#a78bfa;padding:2px 7px;border-radius:2px;margin-left:6px">AI-calibrated</span>'
-          : '<span style="font-size:9px;background:rgba(212,135,10,.15);color:var(--amber-l);padding:2px 7px;border-radius:2px;margin-left:6px">params.json</span>')
-      : '<span style="font-size:9px;background:rgba(255,255,255,.07);color:rgba(232,226,212,.35);padding:2px 7px;border-radius:2px;margin-left:6px">heuristic</span>';
-    const aiBlock = (MODEL.meta?.strategicSummary)
-      ? `<div style="margin-top:.5rem;padding:.5rem .75rem;background:rgba(167,139,250,.08);border-left:2px solid #a78bfa;font-size:11px;line-height:1.5;color:rgba(232,226,212,.7)"><span style="font-family:var(--mono);font-size:9px;color:#a78bfa;letter-spacing:.1em;text-transform:uppercase">AI read · ${new Date(MODEL.meta.published||Date.now()).toLocaleDateString('en-GB')}</span><br>${MODEL.meta.strategicSummary}${MODEL.meta.mostSignificantEvent?'<div style=\'margin-top:.35rem;font-family:var(--mono);font-size:10px;color:var(--amber-l)\'>\u2605 '+MODEL.meta.mostSignificantEvent+'</div>':''}</div>`
-      : '';
-    verdict.innerHTML = `
-      <strong>Strategic read — ${new Date().toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'})} UTC</strong>${srcBadge}<br>
-      Trap <strong>${trapActive ? 'active' : '\u2605 BROKEN'}</strong>. E* = <strong>${estar}</strong> (${regime}).
-      Sr coverage: <strong>${srCov}%</strong> of ${MODEL.G + MODEL.S} required.
-      Dominant strategy: <strong>${trapActive ? 'Yuan \u227b Dollar. Iran collects +' + MODEL.G + ' per round.' : '\u2605 Dollar may now compete.'}</strong>
-      ${aiBlock}
-    `;
-  }
-
-  const ts = document.getElementById('brief-ts');
-  if (ts) ts.textContent = 'updated ' + new Date().toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
 }
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -1981,10 +1849,6 @@ function classifyPreset(btn) {
   const rule = matchEvent(txt);
   if (rule) renderResult(rule, txt);
 }
-
-// Run briefing on load and after each Brent update
-runBriefing();
-setInterval(runBriefing, 300000);
 
 const vals = document.querySelectorAll('.h-tick-val');
 setInterval(() => {
