@@ -1573,12 +1573,45 @@ function applyBrentToPage(brent, brentChange, brentPct, natGas, natGasChange, na
   updateDisplay(brent, isLive);
 }
 
+// ── Weekend guard — skip oil price fetches on Sat/Sun (markets closed) ────
+function isWeekend() {
+  const d = new Date();
+  return d.getDay() === 0 || d.getDay() === 6; // Sunday=0, Saturday=6
+}
+
 // ── loadPriceWidget — official entry point (matches oilpriceapi.com docs) ─
 // Three-tier strategy:
 //   1. Direct authenticated API call (works when origin is whitelisted on oilpriceapi.com)
 //   2. CORS proxy via corsproxy.io (forwards Auth header — works on any domain)
 //   3. Static fallback (last-known values)
 async function loadPriceWidget() {
+  if (isWeekend()) {
+    console.log('[OilPriceWidget] Weekend — skipping fetch, showing cached prices.');
+    const widget = document.getElementById('oil-price-widget');
+    if (widget) {
+      widget.innerHTML = `
+        <div class="widget-header">
+          <span class="widget-title">Energy Prices</span>
+          <span class="widget-live" style="color:var(--muted)">Weekend</span>
+        </div>
+        <div class="price-item">
+          <span class="commodity">BRENT / USD</span>
+          <span class="price danger">$${BRENT_FALLBACK.toFixed(2)}</span>
+          <span class="change flat">Fri close</span>
+        </div>
+        <div class="price-item">
+          <span class="commodity">NAT. GAS / MMBTU</span>
+          <span class="price" style="font-size:1.3rem">$${NATGAS_FALLBACK.toFixed(2)}</span>
+          <span class="change flat">Fri close</span>
+        </div>
+        <div class="widget-footer">
+          <span>Markets closed Sat/Sun</span>
+          <span>oilpriceapi.com</span>
+        </div>`;
+    }
+    updateDisplay(BRENT_FALLBACK, false);
+    return;
+  }
   const OIL_API_KEY = getOilApiKey();
 
   // ── No key configured — show prompt in widget, use static fallback ────
@@ -1665,9 +1698,9 @@ async function loadPriceWidget() {
   updateDisplay(BRENT_FALLBACK, false);
 }
 
-// Invoke immediately then refresh every 5 minutes (matches oilpriceapi.com docs pattern)
+// Invoke immediately then refresh every 15 minutes on weekdays only (weekend guard inside)
 loadPriceWidget();
-setInterval(loadPriceWidget, 300000); // Refresh every 5 minutes
+setInterval(loadPriceWidget, 900000); // Refresh every 15 minutes
 
 
 // ═══════════════════════════════════════════════════════════════════════

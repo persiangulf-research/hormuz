@@ -354,14 +354,22 @@ function init(){
   document.getElementById('sess-t').textContent=ft(new Date());
   renderPG();upD();upJ();
   
-  // Initial Brent fetch on load
-  setTimeout(fetchBrent, 1000);
+  // Initial Brent fetch on load (skip on weekends)
+  if (new Date().getDay() !== 0 && new Date().getDay() !== 6) {
+    setTimeout(fetchBrent, 1000);
+  }
   
-  // Auto-fetch every 5 minutes (300000ms)
+  // Auto-fetch every 15 minutes on weekdays only (skip Sat/Sun — markets closed)
   setInterval(() => {
-    console.log('[Auto-fetch] 5-minute interval triggered');
+    const today = new Date();
+    const dow = today.getDay();
+    if (dow === 0 || dow === 6) {
+      console.log('[Auto-fetch] Weekend (' + (dow === 0 ? 'Sunday' : 'Saturday') + ') — skipping.');
+      return;
+    }
+    console.log('[Auto-fetch] 15-minute interval triggered');
     fetchBrent();
-  }, 300000);
+  }, 900000);
 }
 
 function cfg(){return JSON.parse(localStorage.getItem('hg_cfg')||'{}');}
