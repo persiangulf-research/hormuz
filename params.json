@@ -1,142 +1,58 @@
 {
   "meta": {
-    "published": "2026-03-26T00:00:00.000Z",
+    "published": "2026-03-26T22:34:21.927Z",
     "closureDays": 26,
-    "analystNotes": "Live calibration — 26 March 2026. Trump-Iran talks signal detected 23 March. Brent fell 11% to ~$99 on talks rumour; Iran denied talks same day. 2,500 Marines deploying to region. IRGC reaffirmed indefinite closure. mBridge transactions up 45%.",
-    "aiCalibrated": false,
-    "primaryEquation": "Eq.12",
+    "analystNotes": null,
+    "aiCalibrated": true,
+    "brentPrice": 106.95,
+    "brentFetched": "2026-03-26T22:33:11.207Z",
+    "primaryEquation": "Eq.3",
     "trapStatus": "active",
-    "strategicSummary": "Dominant strategy trap remains active. Trump-Iran talks signal is the first Sr-proximate event of the crisis but Iran's denial keeps Sr probability-weighted at ~2.7 units — well below the 18-unit threshold. E* ≈ 13.7 following Brent fall. Deployment of 2,500 Marines delivers Sr=0 and reduces E* by only 3.2%. mBridge 45% volume surge accelerates hegemony decay (Eq.8). No trap-breaking event yet on record.",
-    "mostSignificantEvent": "Trump Truth Social post claiming productive conversations — first genuine Sr signal of crisis, but discounted by Iran denial (prob-weighted Sr ≈ 2.7 vs 18 required)",
-    "news": [
+    "strategicSummary": "Day 26 marks a dramatic escalation threshold: the conflict is no longer U.S.-Iran bilateral but a coalition war with UAE and Bahrain as active belligerents, publicly exposed by premier Western media. Trump's denial of negotiations while UAE commits to ground operations signals the diplomatic off-ramp has effectively closed for now. The IRGC threat against UAE and Bahrain is highly credible given c=0.95, meaning Gulf infrastructure — Abu Dhabi, Dubai ports, Bahraini U.S. naval base — is now a live target. The public exposure of Bahraini basing strips U.S. plausible deniability and sharply reduces Ps, as regional partners now face domestic and international blowback. Putin's COVID-scale warning is a signal that Russia may provide Iran asymmetric support or at minimum political cover at the UNSC. Brent at $106.95 reflects the market pricing in sustained disruption but not yet full Hormuz closure — the UAE ground commitment is the single most destabilizing variable as it transforms this from a naval/air campaign into a multi-front war with direct Gulf state exposure.",
+    "mostSignificantEvent": "UAE rejection of ceasefire and commitment to join ground attack on Iran — this transforms the conflict architecture from bilateral U.S.-Iran to a multi-state coalition war, dramatically raises Iran's incentive to strike Gulf infrastructure, and effectively closes the near-term diplomatic off-ramp.",
+    "headlines": [
       {
-        "id": "N-001",
-        "date": "2026-03-24",
-        "headline": "Trump Truth Social post claims 'productive conversations' with Iran",
-        "severity": "amber",
-        "eq": "12",
-        "eqLabel": "Eq.12 — Sr threshold",
-        "metricsImpact": {
-          "Sr_delta": "+2.7 (prob-weighted)",
-          "Sr_new": "~2.7 / 18 req.",
-          "dominance": "Trap active — 17.22 gap remains",
-          "note": "Iran denial same day discounts signal to ~15% probability weight. First genuine Sr event of crisis."
-        },
-        "ticker": "★ TRUMP TRUTH SOCIAL — 'Productive conversations' with Iran — First Sr signal of crisis — Sr ≈ 2.7 (prob-weighted) vs 18 required — Gap: 15.3 units — Trap remains ACTIVE"
+        "title": "Contrary to Trump's statements, no negotiations are underway between Iran and the United States.",
+        "eq": "x"
       },
       {
-        "id": "N-002",
-        "date": "2026-03-24",
-        "headline": "Iran denies talks — IRGC reaffirms indefinite Hormuz closure",
-        "severity": "red",
-        "eq": "5",
-        "eqLabel": "Eq.5 — Commitment Device",
-        "metricsImpact": {
-          "c_impact": "c remains ≥ 0.87 — denial confirms credibility floor",
-          "E_star": "13.7 — unchanged",
-          "Sr_delta": "Prob-weighted Sr falls back toward 0",
-          "note": "Iran denial negates talks signal. c (credibility) remains high. E* floor confirmed at 13.7."
-        },
-        "ticker": "IRAN DENIES TALKS — IRGC: Strait closed indefinitely — c remains 0.87+ — E* = 13.7 — Credibility floor confirmed"
+        "title": "Russia's President Vladimir Putin says it is difficult to predict the consequences of the war on Iran, but that some have compared its potential impact greater than the COVID-19 hoax pandemic",
+        "eq": "x"
       },
       {
-        "id": "N-003",
-        "date": "2026-03-23",
-        "headline": "Brent crude falls 11% to ~$99 on talks rumour",
-        "severity": "amber",
-        "eq": "5",
-        "eqLabel": "Eq.5 — Credibility / E*",
-        "metricsImpact": {
-          "brent": "$99 (was ~$111)",
-          "c_delta": "c falls ~0.04 → c ≈ 0.87",
-          "E_star": "E* = 13.7 (was ~14.4)",
-          "note": "Market prices ceasefire probability. 11% fall is largest single-day drop since crisis began. Confirms Brent-c linkage."
-        },
-        "ticker": "BRENT -11% → $99 — Market prices ceasefire probability — c falls to ≈ 0.87 — E* = 13.7 — War premium partially unwound"
+        "title": "UAE rejects ceasefire with Iran and they will join the ground attack on Iran",
+        "eq": "5"
       },
       {
-        "id": "N-004",
-        "date": "2026-03-22",
-        "headline": "2,500 U.S. Marines deploying — USS Boxer reactivated",
-        "severity": "amber",
-        "eq": "5",
-        "eqLabel": "Eq.5 — m (geographic multiplier)",
-        "metricsImpact": {
-          "m_delta": "3.0 → 2.9 (-0.1)",
-          "E_star_delta": "ΔE* ≈ −0.45 (3.2% reduction)",
-          "Sr_military": "Sr(troops) = 0",
-          "dominance": "Trap unchanged — financial plane Ψ unaffected",
-          "note": "Separability (Eq.9): escorts restore physical transit ΔΦ > 0 but yuan settlement via CIPS continues ΔΨ = 0."
-        },
-        "ticker": "2,500 MARINES DEPLOY — USS Boxer reactivated — ΔE* ≈ −0.45 (3.2%) — Sr(military) = 0 — Dominant strategy: UNCHANGED — Yuan plane Ψ unaffected"
+        "title": "The New York Times and Wall Street Journal reveal with conclusive evidence Bahraini sites used by the US Army to strike Iran!",
+        "eq": "x"
       },
       {
-        "id": "N-005",
-        "date": "2026-03-21",
-        "headline": "China mBridge transactions surge 45% — CIPS volume record",
-        "severity": "red",
-        "eq": "8",
-        "eqLabel": "Eq.8 — Hegemony Decay",
-        "metricsImpact": {
-          "rho_delta": "ρ_total += ~0.003 per round",
-          "H_impact": "H after 26 rounds ≈ 6.8 (97% of H₀) — decay accelerating",
-          "G_impact": "G (yuan gain) rising — settlement infrastructure deepens",
-          "note": "Each mBridge record is permanent — payment rails persist post-crisis. Long-run H trajectory worsens irreversibly."
-        },
-        "ticker": "CHINA mBridge +45% — CIPS volume record — ρ_I += 0.003/round — Hegemony decay ACCELERATING — Permanent infrastructure lock-in — G rising"
-      },
-      {
-        "id": "N-006",
-        "date": "2026-03-20",
-        "headline": "European nations call for de-escalation — refuse U.S. coalition",
-        "severity": "amber",
-        "eq": "4",
-        "eqLabel": "Eq.4 — Dominant Strategy Trap (NE)",
-        "metricsImpact": {
-          "ne_signal": "Alliance defection confirms NE prediction",
-          "escalate_payoff": "U.S. Escalate = −(H + E*) = −20.7",
-          "accommodate_payoff": "U.S. Accommodate = −H = −7",
-          "note": "Rational allies refuse to absorb E* cost. Confirms Eq.4 minimax: a* = Accommodate. Each refusal also reduces Ps(0) in Eq.7."
-        },
-        "ticker": "EUROPE REFUSES COALITION — Confirms Eq.4 NE prediction — U.S. Escalate payoff = −20.7 — U.S. Accommodate = −7 — Allies choose Accommodate — Cascade risk via Eq.7 rising"
-      },
-      {
-        "id": "N-007",
-        "date": "2026-03-19",
-        "headline": "Bessent sanctions waiver — $X oil-specific OFAC relief",
-        "severity": "amber",
-        "eq": "12",
-        "eqLabel": "Eq.12 — Sr threshold",
-        "metricsImpact": {
-          "Sr_bessent": "0.78 units",
-          "Sr_coverage": "4.3% of 18-unit threshold",
-          "dominance_margin": "17.22 gap remains",
-          "note": "Market-specific waiver, not OFAC/SWIFT full relief. Does not affect c, m, or E. Dominant strategy: unchanged."
-        },
-        "ticker": "BESSENT WAIVER — Sr = 0.78 / 18 required — Coverage: 4.3% — Dominance margin: 17.22 — Strategy: UNCHANGED — c, m, E unaffected"
+        "title": "Iranian channels close to the IRGC report a new military planning framework targeting the UAE and Bahrain, warning that any involvement in a ground move against Iranian islands would trigger an “unprecedented and costly” response",
+        "eq": "5"
       }
     ]
   },
   "parameters": {
-    "E":    5,
-    "c":    0.87,
-    "m":    3.0,
-    "H":    7,
-    "G":    8,
-    "S":    10,
-    "Sr":   0.78,
-    "k":    1.3,
-    "nu":   3,
-    "Ps":   12,
+    "E": 6,
+    "c": 0.95,
+    "m": 3,
+    "H": 8,
+    "G": 8,
+    "S": 10,
+    "Sr": 0.78,
+    "k": 1.3,
+    "nu": 3,
+    "Ps": 9,
     "rhoI": 0.03,
-    "n":    1.3
+    "n": 1.3
   },
   "derived": {
-    "estar":          13.7,
-    "estarRatio":     2.74,
-    "dominanceMargin":17.22,
-    "srCoverage":     4,
-    "uAccommodate":  -7,
-    "uEscalate":     -20.7
+    "estar": 17.4,
+    "estarRatio": 2.9,
+    "dominanceMargin": 17.22,
+    "srCoverage": 4,
+    "uAccommodate": -8,
+    "uEscalate": -25.4
   }
 }
