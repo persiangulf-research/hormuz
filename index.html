@@ -1096,7 +1096,24 @@ footer {
   <span class="section-bar-count" id="brief-ts">—</span>
 </div>
 
-<div class="briefing-wrap" style="grid-template-columns:1fr;">
+<div class="briefing-wrap">
+
+  <!-- W1: DAILY STRATEGIC BRIEFING — all news from params.json -->
+  <div class="brief-panel">
+    <div class="brief-panel-head">
+      <div class="brief-panel-id">Workflow 1</div>
+      <div class="brief-panel-title">Daily strategic briefing</div>
+      <div class="brief-panel-subtitle" id="w1-ts">—</div>
+    </div>
+
+    <div id="w1-rows" class="brief-rows">
+      <!-- injected by JS from params.json news[] with metricsImpact -->
+    </div>
+
+    <div class="brief-verdict" id="w1-verdict">
+      Loading strategic briefing…
+    </div>
+  </div>
 
   <!-- W2: EVENT CLASSIFIER PANEL -->
   <div class="brief-panel">
@@ -1181,7 +1198,7 @@ footer {
 <script>
 // ── Constants ────────────────────────────────────────────────────────
 const WAR_START = new Date('2026-02-28T00:00:00Z');
-const G = 8, S = 10, H = 7, E_BASE = 5, C = 0.90, M = 3.0;
+const G = 8, S = 10, H = 8, E_BASE = 6, C = 0.92, M = 3.0;
 
 // ── Closure day counter (auto-updates every minute) ─────────────────
 function updateClosureDays() {
@@ -1218,25 +1235,29 @@ setInterval(updateClosureDays, 60000);
 })();
 
 // ── Banner & Alert Cards — driven from params.json news[] with inline fallback ─
-// INLINE FALLBACK DATA — matches params.json exactly.
+// INLINE FALLBACK DATA — mirrors params.json exactly (updated 27 Mar 2026).
 // Used when fetch() is blocked (file:// protocol) or params.json unavailable.
 const PARAMS_FALLBACK = {
   meta: {
-    closureDays: 26,
+    closureDays: 27,
     trapStatus: 'active',
-    strategicSummary: 'Dominant strategy trap remains active. Trump-Iran talks signal is the first Sr-proximate event of the crisis but Iran\'s denial keeps Sr probability-weighted at ~2.7 units — well below the 18-unit threshold. E* ≈ 13.7 following Brent fall. Deployment of 2,500 Marines delivers Sr=0 and reduces E* by only 3.2%. mBridge 45% volume surge accelerates hegemony decay (Eq.8). No trap-breaking event yet on record.',
-    analystNotes: 'Live calibration — 26 March 2026. Trump-Iran talks signal detected 23 March. Brent fell 11% to ~$99 on talks rumour; Iran denied talks same day. 2,500 Marines deploying to region. IRGC reaffirmed indefinite closure. mBridge transactions up 45%.',
+    strategicSummary: 'Day 27 of Hormuz closure sees a sharp U.S. military escalation signal: the Pentagon is actively planning ground troop deployments of up to 10,000 and has drawn up target seizure scenarios inside Iran. This crosses from deterrence posturing into contingency planning for offensive ground operations. Credibility c = 0.92 — highest of the crisis. E* = 17.04 — suicidal escalation zone. No ceasefire, diplomatic outreach, or Sr event has emerged. Dominant strategy trap fully active. G+S = 18 vs Sr = 0.78 — dominance margin 17.22.',
+    analystNotes: 'Day 27 calibration — 27 March 2026. Pentagon drawing up scenarios for seizing targets within Iran and considering up to 10,000 additional ground troops deployment. Brent at $100.73. Credibility c = 0.92. E* = 17.04 — suicidal escalation zone. No Sr signal. Dominant strategy trap remains fully active.',
+    brentPrice: 100.73,
     news: [
+      { id:'N-008', date:'2026-03-27', headline:'Pentagon drawing up scenarios to seize targets within Iran — CNN', severity:'red', eq:'5', eqLabel:'Eq.5 — Commitment Device / c', metricsImpact:{ c_delta:'c rises to 0.92 — threat credibility materially higher', E_star:'E* = 17.04 (suicidal escalation zone)', m_impact:'Offensive ground ops would raise m above 3.0', Sr_military:'Sr(ground ops) = 0 — no sanctions relief', note:'Crosses from deterrence posturing to contingency planning. Largest single credibility event since closure. E* now above 17 — highest in this crisis.' }, ticker:'PENTAGON SEIZE-IRAN SCENARIOS — c = 0.92 — E* = 17.04 (SUICIDAL ZONE) — U.S. Escalate payoff = −25.04 — Dominant strategy: UNCHANGED — Sr = 0' },
+      { id:'N-009', date:'2026-03-27', headline:'Pentagon considering sending up to 10,000 additional ground troops to Middle East — WSJ', severity:'red', eq:'5', eqLabel:'Eq.5 — m (geographic multiplier) + c', metricsImpact:{ m_delta:'m: 3.0 → potentially 3.1–3.2 if deployed', c_delta:'c += ~0.02–0.05 on deployment confirmation', E_star_delta:'ΔE* = +0.3–0.6 above current 17.04', Sr_military:'Sr(troops) = 0 — no diplomatic component', note:'Ground troop deployment raises m and c simultaneously — double E* amplification. However Eq.9 separability holds: physical Φ restores some transit, financial Ψ unaffected by military presence.' }, ticker:'10,000 GROUND TROOPS PLANNED — m rising above 3.0 — E* above 17 — Double amplification (c × m) — Sr = 0 — Dollar-trap UNCHANGED' },
       { id:'N-001', date:'2026-03-24', headline:"Trump Truth Social post claims 'productive conversations' with Iran", severity:'amber', eq:'12', eqLabel:'Eq.12 — Sr threshold', metricsImpact:{ Sr_delta:'+2.7 (prob-weighted)', Sr_new:'~2.7 / 18 req.', dominance:'Trap active — 17.22 gap remains', note:'Iran denial same day discounts signal to ~15% probability weight. First genuine Sr event of crisis.' }, ticker:"★ TRUMP TRUTH SOCIAL — 'Productive conversations' with Iran — First Sr signal of crisis — Sr ≈ 2.7 (prob-weighted) vs 18 required — Gap: 15.3 units — Trap remains ACTIVE" },
-      { id:'N-002', date:'2026-03-24', headline:'Iran denies talks — IRGC reaffirms indefinite Hormuz closure', severity:'red', eq:'5', eqLabel:'Eq.5 — Commitment Device', metricsImpact:{ c_impact:'c remains ≥ 0.87 — denial confirms credibility floor', E_star:'13.7 — unchanged', Sr_delta:'Prob-weighted Sr falls back toward 0', note:'Iran denial negates talks signal. c (credibility) remains high. E* floor confirmed at 13.7.' }, ticker:'IRAN DENIES TALKS — IRGC: Strait closed indefinitely — c remains 0.87+ — E* = 13.7 — Credibility floor confirmed' },
-      { id:'N-003', date:'2026-03-23', headline:'Brent crude falls 11% to ~$99 on talks rumour', severity:'amber', eq:'5', eqLabel:'Eq.5 — Credibility / E*', metricsImpact:{ brent:'$99 (was ~$111)', c_delta:'c falls ~0.04 → c ≈ 0.87', E_star:'E* = 13.7 (was ~14.4)', note:'Market prices ceasefire probability. 11% fall is largest single-day drop since crisis began. Confirms Brent-c linkage.' }, ticker:'BRENT -11% → $99 — Market prices ceasefire probability — c falls to ≈ 0.87 — E* = 13.7 — War premium partially unwound' },
-      { id:'N-004', date:'2026-03-22', headline:'2,500 U.S. Marines deploying — USS Boxer reactivated', severity:'amber', eq:'5', eqLabel:'Eq.5 — m (geographic multiplier)', metricsImpact:{ m_delta:'3.0 → 2.9 (-0.1)', E_star_delta:'ΔE* ≈ −0.45 (3.2% reduction)', Sr_military:'Sr(troops) = 0', dominance:'Trap unchanged — financial plane Ψ unaffected', note:'Separability (Eq.9): escorts restore physical transit ΔΦ > 0 but yuan settlement via CIPS continues ΔΨ = 0.' }, ticker:'2,500 MARINES DEPLOY — USS Boxer reactivated — ΔE* ≈ −0.45 (3.2%) — Sr(military) = 0 — Dominant strategy: UNCHANGED — Yuan plane Ψ unaffected' },
-      { id:'N-005', date:'2026-03-21', headline:'China mBridge transactions surge 45% — CIPS volume record', severity:'red', eq:'8', eqLabel:'Eq.8 — Hegemony Decay', metricsImpact:{ rho_delta:'ρ_total += ~0.003 per round', H_impact:'H after 26 rounds ≈ 6.8 (97% of H₀) — decay accelerating', G_impact:'G (yuan gain) rising — settlement infrastructure deepens', note:'Each mBridge record is permanent — payment rails persist post-crisis. Long-run H trajectory worsens irreversibly.' }, ticker:'CHINA mBridge +45% — CIPS volume record — ρ_I += 0.003/round — Hegemony decay ACCELERATING — Permanent infrastructure lock-in — G rising' },
-      { id:'N-006', date:'2026-03-20', headline:'European nations call for de-escalation — refuse U.S. coalition', severity:'amber', eq:'4', eqLabel:'Eq.4 — Dominant Strategy Trap (NE)', metricsImpact:{ ne_signal:'Alliance defection confirms NE prediction', escalate_payoff:'U.S. Escalate = −(H + E*) = −20.7', accommodate_payoff:'U.S. Accommodate = −H = −7', note:'Rational allies refuse to absorb E* cost. Confirms Eq.4 minimax: a* = Accommodate. Each refusal also reduces Ps(0) in Eq.7.' }, ticker:'EUROPE REFUSES COALITION — Confirms Eq.4 NE prediction — U.S. Escalate payoff = −20.7 — U.S. Accommodate = −7 — Allies choose Accommodate — Cascade risk via Eq.7 rising' },
-      { id:'N-007', date:'2026-03-19', headline:'Bessent sanctions waiver — oil-specific OFAC relief', severity:'amber', eq:'12', eqLabel:'Eq.12 — Sr threshold', metricsImpact:{ Sr_bessent:'0.78 units', Sr_coverage:'4.3% of 18-unit threshold', dominance_margin:'17.22 gap remains', note:'Market-specific waiver, not OFAC/SWIFT full relief. Does not affect c, m, or E. Dominant strategy: unchanged.' }, ticker:'BESSENT WAIVER — Sr = 0.78 / 18 required — Coverage: 4.3% — Dominance margin: 17.22 — Strategy: UNCHANGED — c, m, E unaffected' }
+      { id:'N-002', date:'2026-03-24', headline:'Iran denies talks — IRGC reaffirms indefinite Hormuz closure', severity:'red', eq:'5', eqLabel:'Eq.5 — Commitment Device', metricsImpact:{ c_impact:'c remains ≥ 0.87 — denial confirms credibility floor', E_star:'13.7 — pre-escalation floor', Sr_delta:'Prob-weighted Sr falls back toward 0', note:'Iran denial negates talks signal. c (credibility) remains high. E* floor confirmed.' }, ticker:'IRAN DENIES TALKS — IRGC: Strait closed indefinitely — c remains 0.87+ — Credibility floor confirmed' },
+      { id:'N-003', date:'2026-03-23', headline:'Brent crude falls 11% to ~$99 on talks rumour', severity:'amber', eq:'5', eqLabel:'Eq.5 — Credibility / E*', metricsImpact:{ brent:'$99 (was ~$111)', c_delta:'c fell ~0.04 → c ≈ 0.87 (now recovered to 0.92 on escalation)', E_star:'E* = 13.7 at dip — now 17.04 on escalation signals', note:'Market prices ceasefire probability. 11% fall was largest single-day drop since crisis began. Now reversed by military escalation signals.' }, ticker:'BRENT -11% → $99 (then recovered) — Market priced ceasefire — c dipped to 0.87 — Now E* = 17.04 on escalation rebound' },
+      { id:'N-004', date:'2026-03-22', headline:'2,500 U.S. Marines deploying — USS Boxer reactivated', severity:'amber', eq:'5', eqLabel:'Eq.5 — m (geographic multiplier)', metricsImpact:{ m_delta:'3.0 → 2.9 (small reduction from escort)', E_star_delta:'ΔE* ≈ −0.45 (3.2% reduction) — since overtaken by 10,000 troops plan', Sr_military:'Sr(troops) = 0', dominance:'Trap unchanged — financial plane Ψ unaffected', note:'Initial Marine deployment now superseded by 10,000-troop planning. Separability (Eq.9) holds.' }, ticker:'2,500 MARINES DEPLOY — Now superseded by 10,000-troop plan — Sr(military) = 0 — Dominant strategy: UNCHANGED' },
+      { id:'N-005', date:'2026-03-21', headline:'China mBridge transactions surge 45% — CIPS volume record', severity:'red', eq:'8', eqLabel:'Eq.8 — Hegemony Decay', metricsImpact:{ rho_delta:'ρ_total += ~0.003 per round', H_impact:'H after 27 rounds ≈ 6.8 (97% of H₀) — decay accelerating', G_impact:'G (yuan gain) rising — settlement infrastructure deepens', note:'Each mBridge record is permanent — payment rails persist post-crisis. Long-run H trajectory worsens irreversibly.' }, ticker:'CHINA mBridge +45% — CIPS volume record — ρ_I += 0.003/round — Hegemony decay ACCELERATING — Permanent infrastructure lock-in — G rising' },
+      { id:'N-006', date:'2026-03-20', headline:'European nations call for de-escalation — refuse U.S. coalition', severity:'amber', eq:'4', eqLabel:'Eq.4 — Dominant Strategy Trap (NE)', metricsImpact:{ ne_signal:'Alliance defection confirms NE prediction', escalate_payoff:'U.S. Escalate = −(H + E*) = −25.04 (updated)', accommodate_payoff:'U.S. Accommodate = −H = −8 (updated)', note:'Rational allies refuse to absorb E* cost — now worse than ever at 17.04. Confirms Eq.4 minimax: a* = Accommodate.' }, ticker:'EUROPE REFUSES COALITION — Confirms Eq.4 NE prediction — U.S. Escalate = −25.04 — U.S. Accommodate = −8 — Allies choose Accommodate' },
+      { id:'N-007', date:'2026-03-19', headline:'Bessent sanctions waiver — oil-specific OFAC relief', severity:'amber', eq:'12', eqLabel:'Eq.12 — Sr threshold', metricsImpact:{ Sr_bessent:'0.78 units', Sr_coverage:'4.3% of 18-unit threshold', dominance_margin:'17.22 gap remains', note:'Market-specific waiver, not OFAC/SWIFT full relief. Does not affect c, m, or E. Dominant strategy: unchanged.' }, ticker:'BESSENT WAIVER — Sr = 0.78 / 18 required — Coverage: 4.3% — Dominance margin: 17.22 — Strategy: UNCHANGED' }
     ]
   },
-  parameters: { E:5, c:0.87, m:3.0, H:7, G:8, S:10, Sr:0.78, k:1.3, nu:3, Ps:12, rhoI:0.03, n:1.3 }
+  parameters: { E:6, c:0.92, m:3.0, H:8, G:8, S:10, Sr:0.78, k:1.3, nu:3, Ps:8, rhoI:0.03, n:1.3 },
+  derived: { estar:17.04, estarRatio:2.84, dominanceMargin:17.22, srCoverage:4, uAccommodate:-8, uEscalate:-25.04 }
 };
 
 (function() {
@@ -1389,7 +1410,7 @@ function updateDisplay(brent, isLive) {
 
 // ── Brent live fetch (oilpriceapi.com public endpoint) ───────────────
 // Falls back to last-known value if fetch fails or is rate-limited
-const BRENT_FALLBACK = 101.10; // as of 23 Mar 2026 ~14:38 NY
+const BRENT_FALLBACK = 100.73; // as of 27 Mar 2026 (admin calibration)
 
 async function fetchBrent() {
   try {
@@ -1433,11 +1454,11 @@ setInterval(fetchBrent, 300000);
 
 // Model state — kept in sync with live Brent updates and params.json
 const MODEL = {
-  brent: 101.10, isLive: false,
-  E: 5, H: 7, G: 8, S: 10, m: 3.0, Sr: 0.78,
+  brent: 100.73, isLive: false,
+  E: 6, H: 8, G: 8, S: 10, m: 3.0, Sr: 0.78,
   n: 1.3, k: 1.3,
-  c: 0.87, nu: 3, Ps: 12, rhoI: 0.03,
-  troops: true, talksSig: true,
+  c: 0.92, nu: 3, Ps: 8, rhoI: 0.03,
+  troops: true, talksSig: false,
   paramsLoaded: false,
   meta: {},
 };
@@ -1515,6 +1536,7 @@ async function loadParams() {
       meta: PARAMS_FALLBACK.meta || {},
     });
     updateAllTickers(MODEL, PARAMS_FALLBACK.derived || {}, PARAMS_FALLBACK.meta || {});
+    runBriefing(PARAMS_FALLBACK);
   })();
 
   try {
@@ -1539,6 +1561,7 @@ async function loadParams() {
       meta: data.meta || {},
     });
     updateAllTickers(MODEL, data.derived || {}, data.meta || {});
+    runBriefing(data);
 
     // Brent price from params.json (if provided by admin)
     if (data.meta?.brentPrice) {
@@ -1560,7 +1583,68 @@ async function loadParams() {
 loadParams();
 setInterval(loadParams, 600000);
 
-// ── Workflow 1 removed — only Workflow 2 (Event Classifier) retained ─
+// ── Workflow 1 — Daily Strategic Briefing (populated from params.json news[]) ─
+
+function runBriefing(data) {
+  const news   = (data && data.meta && data.meta.news)   || PARAMS_FALLBACK.meta.news;
+  const meta   = (data && data.meta)                     || PARAMS_FALLBACK.meta;
+  const params = (data && data.parameters)               || PARAMS_FALLBACK.parameters;
+  const derived = (data && data.derived)                 || PARAMS_FALLBACK.derived || {};
+
+  // Timestamp row
+  const tsEl = document.getElementById('w1-ts');
+  if (tsEl) tsEl.textContent = meta.published
+    ? new Date(meta.published).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}) + ' · AI-calibrated'
+    : 'Inline fallback';
+
+  // Build brief-row entries from news items
+  const rowsEl = document.getElementById('w1-rows');
+  if (rowsEl && news.length) {
+    rowsEl.innerHTML = news.map((item, i) => {
+      const mi = item.metricsImpact || {};
+      // Pick most significant metric key/value pair for the badge
+      const miKeys = Object.keys(mi).filter(k => k !== 'note');
+      const badgeKey = miKeys[0];
+      const badgeVal = badgeKey ? mi[badgeKey] : '';
+      const badgeCls = item.severity === 'red' ? 'alert' : item.severity === 'green' ? 'ok' : 'warn';
+      // Metrics impact compact lines
+      const metricLines = miKeys.map(k => `<span style="color:var(--amber-l);font-weight:600">${k.replace(/_/g,' ')}:</span> ${mi[k]}`).join(' · ');
+      const noteHtml = mi.note
+        ? `<div class="br-learn" style="font-style:italic;margin-top:2px">${mi.note}</div>`
+        : '';
+      return `
+        <div class="brief-row">
+          <div class="br-num">${String(i + 1).padStart(2, '0')}</div>
+          <div class="br-body">
+            <div class="br-action">${item.headline}</div>
+            <div class="br-learn">${item.eqLabel || ('Eq.' + item.eq)} · ${item.date}</div>
+            ${metricLines ? `<div class="br-learn" style="margin-top:2px;font-size:10.5px">${metricLines}</div>` : ''}
+            ${noteHtml}
+          </div>
+          <div class="br-badge ${badgeCls}">${item.severity === 'red' ? 'CRITICAL' : item.severity === 'green' ? 'UPDATE' : 'ALERT'}</div>
+        </div>`;
+    }).join('');
+  }
+
+  // Verdict block
+  const verdictEl = document.getElementById('w1-verdict');
+  if (verdictEl) {
+    const estar  = derived.estar         || (params.E * (1 + params.c * (params.m - 1)));
+    const uEsc   = derived.uEscalate     || -(params.H + estar);
+    const uAcc   = derived.uAccommodate  || -params.H;
+    const domMar = derived.dominanceMargin || (params.G + params.S - params.Sr);
+    const trapBroken = params.Sr >= (params.G + params.S);
+    verdictEl.innerHTML = meta.strategicSummary
+      ? meta.strategicSummary +
+        `<br><br><strong>Model snapshot:</strong> E* = ${estar.toFixed(2)}, U(Esc) = ${uEsc.toFixed(2)}, ` +
+        `U(Acc) = ${uAcc.toFixed(2)}, Dom. margin = ${domMar.toFixed(2)}, ` +
+        `Trap = <strong style="color:${trapBroken?'#27ae60':'#e74c3c'}">${trapBroken ? '★ BROKEN' : 'ACTIVE'}</strong>`
+      : `<strong>E* = ${estar.toFixed(2)}</strong> · U(Esc) = ${uEsc.toFixed(2)} · U(Acc) = ${uAcc.toFixed(2)} · Dom. margin = ${domMar.toFixed(2)} · Trap: ${trapBroken ? '★ BROKEN' : 'ACTIVE'}`;
+  }
+}
+
+// Call runBriefing from seedFromFallback and after live params.json fetch
+// (integrated into loadParams() flow below)
 
 function getC(brent) {
   return Math.min(0.97, Math.max(0.80, 0.70 + ((brent - 65) / 10) * 0.04));

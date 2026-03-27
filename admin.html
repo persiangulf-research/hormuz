@@ -581,7 +581,7 @@ async function runCalib(){
       const changelog = JSON.parse(localStorage.getItem('hg_changelog') || '[]');
       changelog.push({
         timestamp: new Date().toISOString(),
-        headlines: HL.map(h => ({title: h.title, eq: h.eq, src: h.src})),
+        news: HL.map((h,i) => ({id:'N-'+String(i+1).padStart(3,'0'),headline:h.title,eq:h.eq,src:h.src})),
         brentPrice: BRT.p,
         changes: changeDetails,
         strategicSummary: AIR.summary,
@@ -638,7 +638,8 @@ function upD(){
 
 function bldJ(){
   const p=P;const e=rn(p.E*(1+p.c*(p.m-1)));
-  return{meta:{published:new Date().toISOString(),closureDays:Math.floor((new Date()-WAR_START)/864e5),analystNotes:document.getElementById('notes').value.trim()||null,aiCalibrated:AIR!==null,brentPrice:BRT.p||null,brentFetched:BRT.ts?.toISOString()||null,primaryEquation:AIR?.primary_equation||null,trapStatus:AIR?.trap_status||(p.G+p.S-p.Sr>0?'active':'broken'),strategicSummary:AIR?.summary||null,mostSignificantEvent:AIR?.most_significant_event||null,headlines:HL.slice(0,10).map(h=>({title:h.title,eq:h.eq}))},parameters:Object.fromEntries(Object.entries(P).map(([k,v])=>[k,rn(v)])),derived:{estar:e,estarRatio:rn(e/p.E),dominanceMargin:rn(p.G+p.S-p.Sr),srCoverage:Math.round(p.Sr/(p.G+p.S)*100),uAccommodate:rn(-p.H),uEscalate:rn(-(p.H+e))}};
+  const EQL_MAP={'12':'Sr threshold','7':'Cascade','5':'Commitment Device / c','5m':'Commitment Device / m','8':'Hegemony Decay','4':'Dominant Strategy NE'};
+  return{meta:{published:new Date().toISOString(),closureDays:Math.floor((new Date()-WAR_START)/864e5),analystNotes:document.getElementById('notes').value.trim()||null,aiCalibrated:AIR!==null,brentPrice:BRT.p||null,brentFetched:BRT.ts?.toISOString()||null,primaryEquation:AIR?.primary_equation||null,trapStatus:AIR?.trap_status||(p.G+p.S-p.Sr>0?'active':'broken'),strategicSummary:AIR?.summary||null,mostSignificantEvent:AIR?.most_significant_event||null,news:HL.slice(0,10).map((h,i)=>({id:'N-'+String(i+1).padStart(3,'0'),date:h.time?h.time.slice(0,10):new Date().toISOString().slice(0,10),headline:h.title,severity:['5','5m'].includes(String(h.eq))?'red':'amber',eq:String(h.eq).replace('m',''),eqLabel:'Eq.'+h.eq+(EQL_MAP[h.eq]?' — '+EQL_MAP[h.eq]:''),metricsImpact:{note:h.desc||''},ticker:h.title}))},parameters:Object.fromEntries(Object.entries(P).map(([k,v])=>[k,rn(v)])),derived:{estar:e,estarRatio:rn(e/p.E),dominanceMargin:rn(p.G+p.S-p.Sr),srCoverage:Math.round(p.Sr/(p.G+p.S)*100),uAccommodate:rn(-p.H),uEscalate:rn(-(p.H+e))}};
 }
 function upJ(){document.getElementById('jbox').textContent=JSON.stringify(bldJ(),null,2);}
 function publish(){
@@ -704,13 +705,14 @@ function viewChangelog(){
       html += '<div style="font-size:9px;color:var(--fa);margin-top:.3rem">Brent: $'+entry.brentPrice.toFixed(2)+'</div>';
     }
     
-    // Headlines count
-    if(entry.headlines && entry.headlines.length > 0){
+    // News count (supports both legacy headlines[] and new news[] key)
+    const newsArr = entry.news || entry.headlines;
+    if(newsArr && newsArr.length > 0){
       const eqCounts = {};
-      entry.headlines.forEach(h => {
+      newsArr.forEach(h => {
         eqCounts[h.eq] = (eqCounts[h.eq] || 0) + 1;
       });
-      html += '<div style="font-size:9px;color:var(--fa);margin-top:.2rem">Headlines: '+entry.headlines.length+' total (';
+      html += '<div style="font-size:9px;color:var(--fa);margin-top:.2rem">Headlines: '+newsArr.length+' total (';
       html += Object.entries(eqCounts).map(([eq,cnt]) => 'Eq.'+eq+'×'+cnt).join(', ')+')';
       html += '</div>';
     }
