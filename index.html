@@ -960,6 +960,13 @@ footer {
         <span class="brent-source" id="brent-source"></span>
       </span>
     </div>
+    <div class="h-tick">
+      <span class="h-tick-label">NAT. GAS</span>
+      <span class="brent-widget-wrap">
+        <span class="h-tick-val" id="natgas-price">$—</span>
+        <span class="brent-change neu" id="natgas-change">—</span>
+      </span>
+    </div>
     <div class="h-tick"><span class="h-tick-label">CLOSURE</span><span class="h-tick-val" id="closure-days">Day —</span></div>
     <div class="h-tick"><span class="h-tick-label">ρ_I</span><span class="h-tick-val" id="tick-rhoi">0.030</span></div>
     <div class="h-tick"><span class="h-tick-label">ν</span><span class="h-tick-val" id="tick-nu">3</span></div>
@@ -1511,73 +1518,99 @@ function updateDisplay(brent, isLive) {
 // Response: { status, data: { price, formatted, changes:{"24h":{amount,percent}},
 //             updated_at, source, metadata.source_description } }
 // ══════════════════════════════════════════════════════════════════════
-const BRENT_FALLBACK = 110.94; // as of 27 Mar 2026 (live API confirmed)
-const OIL_API_KEY   = '4b2e88a199e7ceaca346f9311532025d7980d50166565e3b413c095adffc6632';
-const OIL_API_URL   = 'https://api.oilpriceapi.com/v1/prices/latest?by_code=BRENT_CRUDE_USD';
+const BRENT_FALLBACK   = 110.94;  // as of 27 Mar 2026 (live API confirmed)
+const NATGAS_FALLBACK  = 3.06;    // as of 27 Mar 2026
+const OIL_API_KEY      = '4b2e88a199e7ceaca346f9311532025d7980d50166565e3b413c095adffc6632';
+// Multi-commodity endpoint — returns data.prices[] array (widget doc format)
+const OIL_API_URL      = 'https://api.oilpriceapi.com/v1/prices/latest?by_code=BRENT_CRUDE_USD,NATURAL_GAS_USD';
 
-// ── Render the official #oil-price-widget div (widget framework) ──────
-// Follows the .price-item / .commodity / .price / .change pattern from docs
-function renderOilPriceWidget(priceData, isLive) {
+// ── Render the official #oil-price-widget div ─────────────────────────
+// Follows .price-item / .commodity / .price / .change pattern from docs
+// Multi-commodity: API returns { data: { prices: [ {code, price, changes, ...} ] } }
+function renderOilPriceWidget(prices, isLive, lastUpdated) {
   const widget = document.getElementById('oil-price-widget');
   if (!widget) return;
 
-  // Normalise fields — API returns data.changes["24h"].amount / .percent
-  const price   = priceData?.price ?? BRENT_FALLBACK;
-  const ch24    = priceData?.changes?.['24h'] ?? {};
-  const change  = ch24.amount  ?? 0;            // matches docs' price.change
-  const changePct = ch24.percent ?? 0;          // matches docs' price.change_percent
-  const updatedAt = priceData?.updated_at
-    ? new Date(priceData.updated_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' UTC'
+  const updatedAt = lastUpdated
+    ? new Date(lastUpdated).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' UTC'
     : '—';
-  const srcDesc = priceData?.metadata?.source_description || priceData?.source || 'oilpriceapi.com';
 
-  // Direction class: 'up' | 'down' | 'flat'  (matches widget CSS)
-  const dir  = change > 0 ? 'up' : change < 0 ? 'down' : 'flat';
-  const sign = change >= 0 ? '+' : '';
-  const chTxt = change !== 0
-    ? `${sign}${change.toFixed(2)} (${sign}${changePct.toFixed(2)}%)`
-    : '0.00 (0.00%)';
+  // Build one .price-item row per commodity — exactly as in widget docs
+  const rows = prices.map(item => {
+    const ch24    = item.changes?.['24h'] ?? {};
+    const change  = ch24.amount  ?? 0;
+    const changePct = ch24.percent ?? 0;
+    const dir     = change > 0 ? 'up' : change < 0 ? 'down' : 'flat';
+    const sign    = change >= 0 ? '+' : '';
+    const chTxt   = change !== 0
+      ? `${sign}${change.toFixed(2)} (${sign}${changePct.toFixed(2)}%)`
+      : '0.00 (0.00%)';
 
-  // Build widget HTML exactly as shown in oilpriceapi widget docs
+    // Label mapping
+    const labels = {
+      'BRENT_CRUDE_USD': 'BRENT / USD',
+      'NATURAL_GAS_USD': 'NAT. GAS / MMBTU',
+    };
+    const label = labels[item.code] || item.code;
+    const isDanger = item.code === 'BRENT_CRUDE_USD' && item.price > 100;
+
+    return `
+      <div class="price-item">
+        <span class="commodity">${label}</span>
+        <span class="price${isDanger ? ' danger' : ''}">$${item.price.toFixed(2)}</span>
+        <span class="change ${dir}">${chTxt}</span>
+      </div>`;
+  }).join('');
+
   widget.innerHTML = `
     <div class="widget-header">
-      <span class="widget-title">Brent Crude Oil</span>
+      <span class="widget-title">Energy Prices · Live</span>
       <span class="widget-live">${isLive ? 'Live' : 'Cached'}</span>
     </div>
-    <div class="price-item">
-      <span class="commodity">BRENT / USD</span>
-      <span class="price${price > 100 ? ' danger' : ''}">$${price.toFixed(2)}</span>
-      <span class="change ${dir}">${chTxt}</span>
-    </div>
+    ${rows}
     <div class="widget-footer">
       <span>Updated ${updatedAt}</span>
-      <span>via ${srcDesc}</span>
+      <span>oilpriceapi.com</span>
     </div>`;
 }
 
-// ── Also update sub-header BRENT ticker & model state ─────────────────
-function applyBrentToPage(price, change, changePct, isLive) {
-  const isPos = change > 0, isNeg = change < 0;
+// ── Update sub-header BRENT ticker + Natural Gas ticker ───────────────
+function applyBrentToPage(brent, brentChange, brentPct, natGas, natGasChange, natGasPct, isLive) {
+  // BRENT sub-header ticker
+  const isPos = brentChange > 0, isNeg = brentChange < 0;
   const clsB  = isPos ? 'pos' : isNeg ? 'neg' : 'neu';
-  const sign  = change >= 0 ? '+' : '';
-  const chTxt = change !== 0 ? `${sign}${change.toFixed(2)} (${sign}${changePct.toFixed(2)}%)` : '—';
+  const sign  = brentChange >= 0 ? '+' : '';
+  const chTxt = brentChange !== 0 ? `${sign}${brentChange.toFixed(2)} (${sign}${brentPct.toFixed(2)}%)` : '—';
 
   const brentEl = document.getElementById('brent-price');
   const chEl    = document.getElementById('brent-change');
   const srcEl   = document.getElementById('brent-source');
 
   if (brentEl) {
-    brentEl.innerHTML = (isLive ? '<span class="brent-live-dot"></span>' : '') + '$' + price.toFixed(2);
-    brentEl.className = 'h-tick-val ' + (price > 100 ? 'red' : price > 90 ? '' : 'green');
+    brentEl.innerHTML = (isLive ? '<span class="brent-live-dot"></span>' : '') + '$' + brent.toFixed(2);
+    brentEl.className = 'h-tick-val ' + (brent > 100 ? 'red' : brent > 90 ? '' : 'green');
   }
   if (chEl) { chEl.textContent = chTxt; chEl.className = 'brent-change ' + clsB; }
   if (srcEl) srcEl.textContent = isLive ? 'oilpriceapi' : '';
+
+  // Natural Gas sub-header ticker
+  const ngEl  = document.getElementById('natgas-price');
+  const ngChEl = document.getElementById('natgas-change');
+  if (ngEl && natGas > 0) {
+    ngEl.innerHTML = (isLive ? '<span class="brent-live-dot"></span>' : '') + '$' + natGas.toFixed(2);
+    ngEl.className = 'h-tick-val';
+  }
+  if (ngChEl && natGasChange !== undefined) {
+    const ngSign = natGasChange >= 0 ? '+' : '';
+    const ngTxt  = natGasChange !== 0 ? `${ngSign}${natGasChange.toFixed(2)} (${ngSign}${natGasPct.toFixed(2)}%)` : '—';
+    ngChEl.textContent = ngTxt;
+    ngChEl.className = 'brent-change ' + (natGasChange > 0 ? 'pos' : natGasChange < 0 ? 'neg' : 'neu');
+  }
 }
 
-// ── loadPriceWidget — official entry point (matches docs naming) ──────
+// ── loadPriceWidget — official entry point (matches oilpriceapi.com docs) ─
 async function loadPriceWidget() {
-  // ── Primary: direct authenticated call to oilpriceapi.com ─────────
-  // CORS is explicitly allowed for persian-gulf.github.io origin
+  // Primary: direct authenticated call — CORS allowed for persian-gulf.github.io
   try {
     const response = await fetch(OIL_API_URL, {
       headers: {
@@ -1587,24 +1620,56 @@ async function loadPriceWidget() {
       signal: AbortSignal.timeout(6000)
     });
     if (!response.ok) throw new Error('HTTP ' + response.status);
-    const { status, data } = await response.json();
-    if (status === 'success' && data?.price > 0) {
-      renderOilPriceWidget(data, true);
-      applyBrentToPage(data.price, data.changes?.['24h']?.amount ?? 0, data.changes?.['24h']?.percent ?? 0, true);
-      updateDisplay(data.price, true);
-      return;
+    const json = await response.json();
+
+    // Handle both single-price (data.price) and multi-price (data.prices[]) responses
+    if (json.status === 'success') {
+      let pricesList = [];
+      let lastUpdated = null;
+
+      if (Array.isArray(json.data?.prices)) {
+        // Multi-commodity response: { data: { prices: [...] } }
+        pricesList  = json.data.prices;
+        lastUpdated = json.data.metadata?.timestamp || pricesList[0]?.updated_at;
+      } else if (json.data?.price > 0) {
+        // Single-commodity response: { data: { price, changes, ... } }
+        pricesList  = [{ code: 'BRENT_CRUDE_USD', price: json.data.price, changes: json.data.changes, updated_at: json.data.updated_at }];
+        lastUpdated = json.data.updated_at;
+      }
+
+      if (pricesList.length > 0) {
+        renderOilPriceWidget(pricesList, true, lastUpdated);
+
+        // Find Brent and Natural Gas entries
+        const brentEntry = pricesList.find(p => p.code === 'BRENT_CRUDE_USD') || pricesList[0];
+        const ngEntry    = pricesList.find(p => p.code === 'NATURAL_GAS_USD');
+
+        const brentCh24  = brentEntry.changes?.['24h'] ?? {};
+        const ngCh24     = ngEntry?.changes?.['24h'] ?? {};
+
+        applyBrentToPage(
+          brentEntry.price, brentCh24.amount ?? 0, brentCh24.percent ?? 0,
+          ngEntry?.price ?? 0, ngCh24.amount ?? 0, ngCh24.percent ?? 0,
+          true
+        );
+        updateDisplay(brentEntry.price, true);
+        return;
+      }
     }
   } catch (e) {
-    console.warn('[OilPriceWidget] Direct API call failed:', e.message);
+    console.warn('[OilPriceWidget] API call failed:', e.message);
   }
 
-  // ── Fallback: static last-known value (renders widget without live badge) ─
-  renderOilPriceWidget({ price: BRENT_FALLBACK, changes: {} }, false);
-  applyBrentToPage(BRENT_FALLBACK, 0, 0, false);
+  // Fallback: static last-known values
+  renderOilPriceWidget([
+    { code: 'BRENT_CRUDE_USD', price: BRENT_FALLBACK, changes: {} },
+    { code: 'NATURAL_GAS_USD', price: NATGAS_FALLBACK, changes: {} },
+  ], false, null);
+  applyBrentToPage(BRENT_FALLBACK, 0, 0, NATGAS_FALLBACK, 0, 0, false);
   updateDisplay(BRENT_FALLBACK, false);
 }
 
-// Invoke immediately then refresh every 5 minutes (matches docs setInterval)
+// Invoke immediately then refresh every 5 minutes (matches docs setInterval pattern)
 loadPriceWidget();
 setInterval(loadPriceWidget, 300000); // Refresh every 5 minutes
 
@@ -1727,8 +1792,10 @@ async function loadParams() {
     // Brent price from params.json (if provided by admin — only used as seed; live API takes priority)
     if (data.meta?.brentPrice && !MODEL.isLive) {
       MODEL.brent = data.meta.brentPrice;
-      renderOilPriceWidget({ price: data.meta.brentPrice, changes: {} }, false);
-      applyBrentToPage(data.meta.brentPrice, 0, 0, false);
+      renderOilPriceWidget([
+        { code: 'BRENT_CRUDE_USD', price: data.meta.brentPrice, changes: {} }
+      ], false, null);
+      applyBrentToPage(data.meta.brentPrice, 0, 0, 0, 0, 0, false);
       updateDisplay(data.meta.brentPrice, false);
     }
 
