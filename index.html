@@ -83,7 +83,7 @@ header {
   border-bottom: 1px solid var(--border2);
   padding: 0 clamp(1.5rem, 4vw, 3rem);
   display: flex; align-items: stretch;
-  height: 72px;   /* taller to accommodate 2-row ticker */
+  height: 56px;
   position: sticky; top: 0; z-index: 50;
   background: rgba(8,12,18,0.95);
   backdrop-filter: blur(12px);
@@ -110,27 +110,11 @@ header {
 .h-center {
   display: flex; align-items: center; flex: 1;
   font-size: 11px; color: var(--faint);
+  gap: 1.5rem;
   min-width: 0; overflow: hidden;
 }
-/* Two-row ticker wrapper */
-.h-ticker-wrap {
-  display: flex; flex-direction: column;
-  justify-content: center; gap: 4px;
-  min-width: 0; flex: 1; overflow: hidden;
-}
 .h-ticker {
-  display: flex; gap: 1.5rem; overflow: hidden;
-}
-/* Second row tickers — slightly smaller and dimmer */
-.h-ticker.row2 {
-  gap: 1.25rem;
-  opacity: 0.72;
-}
-.h-ticker.row2 .h-tick-label {
-  font-size: 9.5px;
-}
-.h-ticker.row2 .h-tick-val {
-  font-size: 10.5px;
+  display: flex; gap: 2rem; overflow: hidden;
 }
 .h-tick {
   display: flex; align-items: center; gap: 0.4rem;
@@ -851,30 +835,24 @@ footer {
     <div class="h-badge">Research Series</div>
   </div>
   <div class="h-center">
-    <div class="h-ticker-wrap">
-      <!-- ROW 1: Live + derived metrics -->
-      <div class="h-ticker">
-        <div class="h-tick"><span class="h-tick-label">BRENT</span><span class="h-tick-val red" id="brent-price">$—</span></div>
-        <div class="h-tick"><span class="h-tick-label">CLOSURE</span><span class="h-tick-val" id="closure-days">Day —</span></div>
-        <div class="h-tick"><span class="h-tick-label">E*</span><span class="h-tick-val" id="tick-estar">≈14.0</span></div>
-        <div class="h-tick"><span class="h-tick-label">E*/E</span><span class="h-tick-val" id="tick-eratio">2.74×</span></div>
-        <div class="h-tick"><span class="h-tick-label">c</span><span class="h-tick-val" id="tick-c">≈0.87</span></div>
-        <div class="h-tick"><span class="h-tick-label">k</span><span class="h-tick-val" id="tick-k">1.3</span></div>
-        <div class="h-tick"><span class="h-tick-label">Sr</span><span class="h-tick-val" id="tick-sr">0.78 / 18 req.</span></div>
-        <div class="h-tick"><span class="h-tick-label">Dom.Margin</span><span class="h-tick-val red" id="tick-dommargin">17.22</span></div>
-        <div class="h-tick"><span class="h-tick-label">U(Esc)</span><span class="h-tick-val red" id="tick-uesc">−20.7</span></div>
-        <div class="h-tick"><span class="h-tick-label">U(Acc)</span><span class="h-tick-val" id="tick-uacc">−7</span></div>
-        <div class="h-tick"><span class="h-tick-label">TRAP</span><span class="h-tick-val red" id="tick-trap">ACTIVE</span></div>
-        <div class="h-tick"><span class="h-tick-label">TROOPS</span><span class="h-tick-val red">5th Fleet</span></div>
-        <div class="h-tick"><span class="h-tick-label">TALKS</span><span class="h-tick-val green" id="tick-talks">Trump-Iran signal</span></div>
-      </div>
-      <!-- ROW 2: Model structural parameters m, H, G, S -->
-      <div class="h-ticker row2">
-        <div class="h-tick"><span class="h-tick-label">m — geo.mult</span><span class="h-tick-val" id="tick-m">3.0</span></div>
-        <div class="h-tick"><span class="h-tick-label">H — hegemony</span><span class="h-tick-val" id="tick-h">7</span></div>
-        <div class="h-tick"><span class="h-tick-label">G — yuan gain</span><span class="h-tick-val" id="tick-g">8</span></div>
-        <div class="h-tick"><span class="h-tick-label">S — sanction burden</span><span class="h-tick-val" id="tick-s">10</span></div>
-      </div>
+    <div class="h-ticker">
+      <div class="h-tick"><span class="h-tick-label">BRENT</span><span class="h-tick-val red" id="brent-price">$—</span></div>
+      <div class="h-tick"><span class="h-tick-label">CLOSURE</span><span class="h-tick-val" id="closure-days">Day —</span></div>
+      <div class="h-tick"><span class="h-tick-label">E*</span><span class="h-tick-val" id="tick-estar">≈14.0</span></div>
+      <div class="h-tick"><span class="h-tick-label">E*/E</span><span class="h-tick-val" id="tick-eratio">2.74×</span></div>
+      <div class="h-tick"><span class="h-tick-label">c</span><span class="h-tick-val" id="tick-c">≈0.87</span></div>
+      <div class="h-tick"><span class="h-tick-label">m</span><span class="h-tick-val" id="tick-m">3.0</span></div>
+      <div class="h-tick"><span class="h-tick-label">H</span><span class="h-tick-val" id="tick-h">7</span></div>
+      <div class="h-tick"><span class="h-tick-label">G</span><span class="h-tick-val" id="tick-g">8</span></div>
+      <div class="h-tick"><span class="h-tick-label">S</span><span class="h-tick-val" id="tick-s">10</span></div>
+      <div class="h-tick"><span class="h-tick-label">k</span><span class="h-tick-val" id="tick-k">1.3</span></div>
+      <div class="h-tick"><span class="h-tick-label">Sr</span><span class="h-tick-val" id="tick-sr">0.78 / 18 req.</span></div>
+      <div class="h-tick"><span class="h-tick-label">Dom.Margin</span><span class="h-tick-val red" id="tick-dommargin">17.22</span></div>
+      <div class="h-tick"><span class="h-tick-label">U(Esc)</span><span class="h-tick-val red" id="tick-uesc">−20.7</span></div>
+      <div class="h-tick"><span class="h-tick-label">U(Acc)</span><span class="h-tick-val" id="tick-uacc">−7</span></div>
+      <div class="h-tick"><span class="h-tick-label">TRAP</span><span class="h-tick-val red" id="tick-trap">ACTIVE</span></div>
+      <div class="h-tick"><span class="h-tick-label">TROOPS</span><span class="h-tick-val red">5th Fleet</span></div>
+      <div class="h-tick"><span class="h-tick-label">TALKS</span><span class="h-tick-val green" id="tick-talks">Trump-Iran signal</span></div>
     </div>
   </div>
   <div class="h-right">
