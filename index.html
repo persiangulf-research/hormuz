@@ -970,12 +970,12 @@ footer {
   <div id="oil-price-widget"></div>
   <div style="font-family:var(--mono);font-size:11px;color:var(--muted);max-width:420px;line-height:1.7;">
     <span style="color:var(--amber);font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:.35rem;">Live price feed · oilpriceapi.com</span>
-    Real-time Brent crude + Natural Gas via <strong style="color:var(--amber-l)">oilpriceapi.com</strong>.
+    Real-time Brent crude + Natural Gas fetched <strong style="color:var(--amber-l)">directly from oilpriceapi.com</strong> by this page.
     Refreshes every <strong style="color:var(--text)">15 min</strong> on weekdays.
     24h Δ reflects Hormuz closure risk premium. Brent feeds directly into
     <strong style="color:var(--amber-l)">E* = E × [1 + c(m−1)]</strong> — Brent ↑ → c ↑ → E* ↑.
     <span style="display:block;margin-top:.35rem;color:var(--faint);font-size:10px;">
-      API key required — set yours in <a href="admin.html" style="color:var(--amber-l);text-decoration:none;">admin panel → Keys &amp; Config</a>.
+      API key required — set once in <a href="admin.html" style="color:var(--amber-l);text-decoration:none;">admin panel → Keys &amp; Config</a> (saved to browser localStorage, never uploaded).
     </span>
   </div>
 </div>
@@ -1818,15 +1818,8 @@ async function loadParams() {
     updateAllTickers(MODEL, data.derived || {}, data.meta || {});
     runBriefing(data);
 
-    // Brent price from params.json (if provided by admin — only used as seed; live API takes priority)
-    if (data.meta?.brentPrice && !MODEL.isLive) {
-      MODEL.brent = data.meta.brentPrice;
-      renderOilPriceWidget([
-        { code: 'BRENT_CRUDE_USD', price: data.meta.brentPrice, changes: {} }
-      ], false, null);
-      applyBrentToPage(data.meta.brentPrice, 0, 0, 0, 0, 0, false);
-      updateDisplay(data.meta.brentPrice, false);
-    }
+    // NOTE: Brent price is fetched directly from OilPrice API by loadPriceWidget() — no params.json dependency.
+    // params.json only carries game-theory parameters (c, m, E, H, G, S, Sr, …) and news[].
 
   } catch(_) {
     // params.json not found — fallback already applied above
