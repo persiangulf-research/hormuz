@@ -131,6 +131,48 @@ header {
 }
 .h-date { font-size: 11px; color: var(--muted); }
 
+/* ── SUB-TICKER (second row, sticky below header) ──────────────────── */
+.sub-ticker {
+  position: sticky; top: 56px; z-index: 49;
+  background: rgba(8,12,18,0.97);
+  border-bottom: 1px solid rgba(212,135,10,0.18);
+  height: 32px;
+  display: flex; align-items: center;
+  padding: 0 clamp(1.5rem, 4vw, 3rem);
+  gap: 1.5rem;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+.sub-ticker-label {
+  font-family: var(--mono); font-size: 8px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--amber); white-space: nowrap;
+  border-right: 1px solid var(--border2);
+  padding-right: 1.2rem;
+  flex-shrink: 0;
+}
+.sub-ticker-scroll {
+  flex: 1; overflow: hidden; display: flex; align-items: center;
+}
+.sub-ticker-inner {
+  display: flex; gap: 2rem;
+  white-space: nowrap;
+  animation: sub-ticker-scroll 60s linear infinite;
+}
+@keyframes sub-ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.sub-tick {
+  display: flex; align-items: center; gap: 0.35rem;
+  white-space: nowrap; font-size: 11px;
+}
+.sub-tick-label { color: var(--faint); }
+.sub-tick-val { color: var(--amber-l); font-weight: 600; }
+.sub-tick-val.red { color: #e74c3c; }
+.sub-tick-val.green { color: #27ae60; }
+.sub-tick-sep { color: var(--border2); margin: 0 0.25rem; }
+
 /* ── HERO MASTHEAD ─────────────────────────────────────────────────── */
 .masthead {
   padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 4vw, 3rem) clamp(2rem, 4vw, 3rem);
@@ -866,6 +908,40 @@ footer {
   </div>
 </header>
 
+<!-- SUB-TICKER — second row of derived/strategic metrics (JS-populated for live values + seamless loop) -->
+<div class="sub-ticker">
+  <span class="sub-ticker-label">Metrics</span>
+  <div class="sub-ticker-scroll">
+    <div class="sub-ticker-inner" id="sub-ticker-inner">
+      <!-- Populated by JS: applyParamsToUI() calls buildSubTicker() -->
+      <span class="sub-tick"><span class="sub-tick-label">Dom.Margin</span><span class="sub-tick-val red" id="sub-dommargin">17.22</span></span>
+      <span class="sub-tick-sep">·</span>
+      <span class="sub-tick"><span class="sub-tick-label">U(Esc)</span><span class="sub-tick-val red" id="sub-uesc">−20.7</span></span>
+      <span class="sub-tick-sep">·</span>
+      <span class="sub-tick"><span class="sub-tick-label">U(Acc)</span><span class="sub-tick-val" id="sub-uacc">−7</span></span>
+      <span class="sub-tick-sep">·</span>
+      <span class="sub-tick"><span class="sub-tick-label">TRAP</span><span class="sub-tick-val red" id="sub-trap">ACTIVE</span></span>
+      <span class="sub-tick-sep">·</span>
+      <span class="sub-tick"><span class="sub-tick-label">Sr Coverage</span><span class="sub-tick-val red" id="sub-srcov">4%</span></span>
+      <span class="sub-tick-sep">·</span>
+      <span class="sub-tick"><span class="sub-tick-label">ρ(decay)</span><span class="sub-tick-val" id="sub-rho">0.030</span></span>
+      <span class="sub-tick-sep">·</span>
+      <span class="sub-tick"><span class="sub-tick-label">H(t)</span><span class="sub-tick-val" id="sub-ht">97%</span></span>
+      <span class="sub-tick-sep">·</span>
+      <span class="sub-tick"><span class="sub-tick-label">k (cascade)</span><span class="sub-tick-val" id="sub-k2">1.3</span></span>
+      <span class="sub-tick-sep">·</span>
+      <span class="sub-tick"><span class="sub-tick-label">k* (tipping)</span><span class="sub-tick-val">≈3.2</span></span>
+      <span class="sub-tick-sep">·</span>
+      <span class="sub-tick"><span class="sub-tick-label">TROOPS</span><span class="sub-tick-val red">2,500 Marines · USS Boxer</span></span>
+      <span class="sub-tick-sep">·</span>
+      <span class="sub-tick"><span class="sub-tick-label">TALKS</span><span class="sub-tick-val green" id="sub-talks">Trump-Iran signal (denied)</span></span>
+      <span class="sub-tick-sep">·</span>
+      <span class="sub-tick"><span class="sub-tick-label">mBridge</span><span class="sub-tick-val red">+45% vol.</span></span>
+      <span class="sub-tick-sep">·</span>
+    </div>
+  </div>
+</div>
+
 <!-- MASTHEAD -->
 <section class="masthead">
   <div class="masthead-left">
@@ -1432,10 +1508,31 @@ const MODEL = {
   meta: {},
 };
 
+// ── Sub-ticker seamless loop builder ────────────────────────────────
+// Clones the sub-ticker inner once so the CSS -50% translateX creates
+// a seamless infinite scroll without visible jump.
+let _subTickerBuilt = false;
+function rebuildSubTickerLoop() {
+  const inner = document.getElementById('sub-ticker-inner');
+  if (!inner) return;
+  // Remove any previously appended clone (class sub-ticker-clone)
+  const prev = inner.querySelector('.sub-ticker-clone');
+  if (prev) inner.removeChild(prev);
+  // Build a clone of the current live HTML
+  const clone = document.createElement('span');
+  clone.className = 'sub-ticker-clone';
+  clone.style.cssText = 'display:contents';
+  clone.innerHTML = inner.innerHTML;
+  // Clone should not carry duplicate ids — strip them
+  clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+  inner.appendChild(clone);
+  _subTickerBuilt = true;
+}
+
 // ── Shared ticker + masthead update from any parameter + derived set ─
 function applyParamsToUI(p, derived, meta) {
   const _t = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-  // Parameter tickers
+  // Parameter tickers (header row 1)
   _t('tick-sr',  p.Sr.toFixed(2) + ' / ' + (p.G + p.S) + ' req.');
   _t('tick-m',   p.m.toFixed(1));
   _t('tick-h',   p.H);
@@ -1443,11 +1540,11 @@ function applyParamsToUI(p, derived, meta) {
   _t('tick-s',   p.S);
   _t('tick-k',   p.k.toFixed(1));
   // E* and c tickers
-  const cValue    = p.c;
+  const cValue     = p.c;
   const estarValue = Math.round(p.E * (1 + cValue * (p.m - 1)) * 10) / 10;
   _t('tick-c',     '≈' + cValue.toFixed(2));
   _t('tick-estar', '≈' + estarValue.toFixed(1));
-  // Derived tickers
+  // Derived values
   const d = derived || {};
   const domMargin = d.dominanceMargin   ?? (p.G + p.S - p.Sr).toFixed(2);
   const uEsc      = d.uEscalate        ?? (-(p.H + p.E * (1 + cValue * (p.m - 1)))).toFixed(1);
@@ -1462,6 +1559,25 @@ function applyParamsToUI(p, derived, meta) {
   _t('tick-trap', trapBroken ? '★ BROKEN' : 'ACTIVE');
   const trapEl = document.getElementById('tick-trap');
   if (trapEl) trapEl.className = 'h-tick-val ' + (trapBroken ? 'green' : 'red');
+  // ── Sub-ticker row 2 — derived/strategic metrics ─────────────────────
+  const closureDaysSub = Math.floor((Date.now() - WAR_START.getTime()) / 864e5);
+  const rhoTotal  = (p.rhoI || 0.03) + (p.n || 1.3) * 0.005;
+  const hRatio    = Math.round(Math.pow(1 - rhoTotal, closureDaysSub) * 100);
+  const srCovPct  = Math.round(p.Sr / (p.G + p.S) * 100);
+  _t('sub-dommargin', domMargin);
+  _t('sub-uesc',      uEsc);
+  _t('sub-uacc',      uAcc);
+  _t('sub-srcov',     srCovPct + '%');
+  _t('sub-rho',       rhoTotal.toFixed(3));
+  _t('sub-ht',        hRatio + '%');
+  _t('sub-k2',        p.k.toFixed(1));
+  const subTrap = document.getElementById('sub-trap');
+  if (subTrap) {
+    subTrap.textContent = trapBroken ? '★ BROKEN' : 'ACTIVE';
+    subTrap.className   = 'sub-tick-val ' + (trapBroken ? 'green' : 'red');
+  }
+  // Clone the sub-ticker inner content for seamless CSS loop (first time only)
+  rebuildSubTickerLoop();
   // Masthead stats
   const msSrEl  = document.getElementById('ms-sr');
   if (msSrEl) msSrEl.textContent = (p.G + p.S) + ' vs ' + p.Sr.toFixed(2);
