@@ -1,27 +1,30 @@
 {
   "meta": {
-    "published": "2026-03-27T17:24:51.086Z",
+    "published": "2026-03-27T17:52:18.238Z",
     "closureDays": 27,
     "analystNotes": null,
     "aiCalibrated": true,
-    "brentPrice": 111.59,
-    "brentFetched": "2026-03-27T17:12:26.760Z",
+    "brentPrice": 111.72,
+    "brentFetched": "2026-03-27T17:50:32.673Z",
     "primaryEquation": "Eq.3",
     "trapStatus": "active",
-    "strategicSummary": "Day 27 marks a decisive escalation: Israeli strikes on Khuzestan Steel, Mobarakeh Steel, and the Arak heavy water facility transform this from a Hormuz closure standoff into a full-spectrum military confrontation with Iran's industrial and nuclear-adjacent infrastructure. Russian drone supply to Iran confirms great-power counter-alignment, reducing U.S. coalition cohesion (Ps -1) and raising the specter of a prolonged, multi-front war. Credibility jumps sharply as the bluff interpretation collapses — Iran now faces existential economic damage beyond oil revenues. Escalation cost rises materially as the conflict perimeter expands. The trap remains active but the equilibrium is shifting: Iran's incentive to pursue yuan/CIPS alternatives intensifies under physical infrastructure destruction, while the probability of formal sanctions relief recedes further as kinetic conflict deepens.",
-    "mostSignificantEvent": "Israeli strikes on Arak heavy water facility — this crosses a nuclear red line and risks triggering Iranian retaliation that could pull U.S. forces directly into kinetic exchange, fundamentally altering the game from economic coercion to potential nuclear-threshold conflict.",
+    "strategicSummary": "Day 27 of Hormuz closure has crossed a qualitative threshold: direct US-Israeli kinetic strikes on Iran's Arak heavy water facility and two flagship steel plants represent a dramatic broadening of the conflict from a maritime chokepoint dispute into a full-spectrum military-economic campaign against Iranian strategic infrastructure. Credibility of Iran's closure posture is now near-maximum (0.97) — the regime has existential domestic political reasons to hold the strait closed and escalate asymmetrically. Escalation cost E surges to 9.5 as conflict scope expands beyond any plausible 'limited strike' narrative. Brent at $111.72 reflects market pricing of sustained disruption but likely underestimates tail risk if Iran retaliates against Gulf energy infrastructure. The Ps (US guarantee) erosion continues as Gulf partners face uncomfortable alignment with nuclear-site strikes. The dollar trap remains fully active: Iran's industrial destruction paradoxically accelerates its yuan-settlement trajectory as the dollar system is perceived as the weapon being wielded against it.",
+    "mostSignificantEvent": "US-Israel strike on Arak heavy water facility (headlines 0 and 2) — this is the most significant event because targeting a nuclear-adjacent site crosses an internationally recognized threshold, transforms the conflict from conventional military into potential WMD-escalation territory, maximally hardens Iranian closure commitment, and risks drawing in Russian and Chinese diplomatic-military responses in defense of their JCPOA stakeholder positions.",
     "news": [
       {
         "id": "N-001",
         "date": "2026-03-27",
-        "headline": "European intelligence agencies believe Russia is supplying drones to Iran, says official",
-        "severity": "red",
-        "eq": "5",
-        "eqLabel": "Eq.5 — Commitment Device / c",
+        "headline": "US-Israel bombed the heavy water facility in the \"Khondab\" area near the Iranian city of \"Arak\"",
+        "severity": "amber",
+        "eq": "x",
+        "eqLabel": "Eq.x",
         "metricsImpact": {
-          "note": ""
+          "c_delta": "+0.05 — Arak heavy water strike is a red line crossing; Iran closure commitment becomes near-certain, credibility surges",
+          "E_delta": "+1.5 — nuclear-adjacent target dramatically broadens conflict scope",
+          "Ps_delta": "-0.5 — Gulf partners alarmed by nuclear site targeting, coalition stress rises",
+          "note": "Arak heavy water reactor is a NPT-sensitive dual-use site; striking it signals willingness to cross internationally recognized thresholds"
         },
-        "ticker": "European intelligence agencies believe Russia is supplying drones to Iran, says official"
+        "ticker": "US-Israel bombed the heavy water facility in the \"Khondab\" area near the Iranian city of \"Arak\""
       },
       {
         "id": "N-002",
@@ -31,7 +34,11 @@
         "eq": "x",
         "eqLabel": "Eq.x",
         "metricsImpact": {
-          "note": ""
+          "c_delta": "+0.02 — industrial targeting reinforces Iranian resolve to maintain closure as economic destruction mounts",
+          "E_delta": "+0.5 — strikes on civilian-adjacent steel infrastructure broaden conflict into economic warfare domain",
+          "G_delta": "+0.5 — destruction of domestic industry increases Iran's motivation to deepen yuan trade as dollar system provides cover for attacks",
+          "rhoI_delta": "+0.005 — loss of steel export capacity pushes Iran faster toward alternative settlement systems",
+          "note": "Khuzestan Steel and Mobarakeh Steel are among Iran's largest foreign-exchange earners; their destruction is economically devastating and politically radicalizing"
         },
         "ticker": "Israeli Air Force strikes hit two of Iran’s largest steel plants — Khuzestan Steel near Ahvaz and Mobarakeh Steel in Isfahan"
       },
@@ -43,32 +50,34 @@
         "eq": "x",
         "eqLabel": "Eq.x",
         "metricsImpact": {
-          "note": ""
+          "c_delta": "+0.01 — duplicate confirmation of Arak strike; second source hardens credibility assessment but marginal incremental impact",
+          "E_delta": "+0.0 — no new escalation information beyond headline 0 confirmation",
+          "note": "Duplicate headline treated as confirmation signal only; parameters already adjusted in headline 0, minimal additional delta applied to avoid double-counting"
         },
         "ticker": "US-Israel bombed the heavy water facility in the \"Khondab\" area near the Iranian city of \"Arak\""
       }
     ]
   },
   "parameters": {
-    "E": 7,
-    "c": 0.93,
+    "E": 9.5,
+    "c": 0.97,
     "m": 3,
-    "H": 8,
-    "G": 8,
+    "H": 7.5,
+    "G": 6.5,
     "S": 10,
     "Sr": 0.78,
     "k": 1.3,
     "nu": 3,
-    "Ps": 7,
-    "rhoI": 0.03,
+    "Ps": 3.5,
+    "rhoI": 0.045,
     "n": 1.3
   },
   "derived": {
-    "estar": 20.02,
-    "estarRatio": 2.86,
-    "dominanceMargin": 17.22,
-    "srCoverage": 4,
-    "uAccommodate": -8,
-    "uEscalate": -28.02
+    "estar": 27.93,
+    "estarRatio": 2.94,
+    "dominanceMargin": 15.72,
+    "srCoverage": 5,
+    "uAccommodate": -7.5,
+    "uEscalate": -35.43
   }
 }
