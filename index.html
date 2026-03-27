@@ -131,6 +131,30 @@ header {
 }
 .h-date { font-size: 11px; color: var(--muted); }
 
+/* ── SUB-HEADER — live/geopolitical metrics below main header ──────── */
+.sub-header {
+  border-bottom: 1px solid var(--border);
+  padding: 0 clamp(1.5rem, 4vw, 3rem);
+  display: flex; align-items: center;
+  height: 36px;
+  position: sticky; top: 56px; z-index: 49;
+  background: rgba(8,12,18,0.92);
+  backdrop-filter: blur(8px);
+  gap: 2rem;
+  overflow: hidden;
+}
+.sub-header-label {
+  font-size: 8px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--faint); white-space: nowrap;
+  border-right: 1px solid var(--border);
+  padding-right: 1rem; margin-right: 0;
+  flex-shrink: 0;
+}
+.sub-ticker {
+  display: flex; gap: 1.75rem; overflow: hidden; flex: 1;
+}
+
 /* ── HERO MASTHEAD ─────────────────────────────────────────────────── */
 .masthead {
   padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 4vw, 3rem) clamp(2rem, 4vw, 3rem);
@@ -806,7 +830,7 @@ footer {
   <!-- injected by JS from params.json news[] -->
 </div>
 
-<!-- HEADER -->
+<!-- HEADER — params.json metrics only -->
 <header>
   <div class="h-left">
     <div class="h-logo">HORMUZ GAMBIT</div>
@@ -814,13 +838,20 @@ footer {
   </div>
   <div class="h-center">
     <div class="h-ticker">
-      <div class="h-tick"><span class="h-tick-label">BRENT</span><span class="h-tick-val red" id="brent-price">$—</span></div>
-      <div class="h-tick"><span class="h-tick-label">CLOSURE</span><span class="h-tick-val" id="closure-days">Day —</span></div>
-      <div class="h-tick"><span class="h-tick-label">E*</span><span class="h-tick-val" id="tick-estar">≈14.0</span></div>
-      <div class="h-tick"><span class="h-tick-label">c</span><span class="h-tick-val" id="tick-c">≈0.90</span></div>
-      <div class="h-tick"><span class="h-tick-label">TROOPS</span><span class="h-tick-val red">5th Fleet</span></div>
-      <div class="h-tick"><span class="h-tick-label">TALKS</span><span class="h-tick-val green" id="tick-talks">Trump-Iran signal</span></div>
+      <div class="h-tick"><span class="h-tick-label">E*</span><span class="h-tick-val" id="tick-estar">≈13.7</span></div>
+      <div class="h-tick"><span class="h-tick-label">E*/E</span><span class="h-tick-val" id="tick-eratio">2.74×</span></div>
+      <div class="h-tick"><span class="h-tick-label">c</span><span class="h-tick-val" id="tick-c">≈0.87</span></div>
+      <div class="h-tick"><span class="h-tick-label">m</span><span class="h-tick-val" id="tick-m">3.0</span></div>
+      <div class="h-tick"><span class="h-tick-label">E</span><span class="h-tick-val" id="tick-e">5</span></div>
+      <div class="h-tick"><span class="h-tick-label">H</span><span class="h-tick-val" id="tick-h">7</span></div>
+      <div class="h-tick"><span class="h-tick-label">G</span><span class="h-tick-val" id="tick-g">8</span></div>
+      <div class="h-tick"><span class="h-tick-label">S</span><span class="h-tick-val" id="tick-s">10</span></div>
+      <div class="h-tick"><span class="h-tick-label">k</span><span class="h-tick-val" id="tick-k">1.3</span></div>
       <div class="h-tick"><span class="h-tick-label">Sr</span><span class="h-tick-val" id="tick-sr">0.78 / 18 req.</span></div>
+      <div class="h-tick"><span class="h-tick-label">Dom.Margin</span><span class="h-tick-val red" id="tick-dommargin">17.22</span></div>
+      <div class="h-tick"><span class="h-tick-label">U(Esc)</span><span class="h-tick-val red" id="tick-uesc">−20.7</span></div>
+      <div class="h-tick"><span class="h-tick-label">U(Acc)</span><span class="h-tick-val" id="tick-uacc">−7</span></div>
+      <div class="h-tick"><span class="h-tick-label">TRAP</span><span class="h-tick-val red" id="tick-trap">ACTIVE</span></div>
     </div>
   </div>
   <div class="h-right">
@@ -833,6 +864,22 @@ footer {
     <div class="h-date" id="live-date">21 March 2026</div>
   </div>
 </header>
+
+<!-- SUB-HEADER — live / geopolitical metrics (not from params.json) -->
+<div class="sub-header">
+  <span class="sub-header-label">Live</span>
+  <div class="sub-ticker">
+    <div class="h-tick"><span class="h-tick-label">BRENT</span><span class="h-tick-val red" id="brent-price">$—</span></div>
+    <div class="h-tick"><span class="h-tick-label">CLOSURE</span><span class="h-tick-val" id="closure-days">Day —</span></div>
+    <div class="h-tick"><span class="h-tick-label">ρ_I</span><span class="h-tick-val" id="tick-rhoi">0.030</span></div>
+    <div class="h-tick"><span class="h-tick-label">ν</span><span class="h-tick-val" id="tick-nu">3</span></div>
+    <div class="h-tick"><span class="h-tick-label">Ps</span><span class="h-tick-val" id="tick-ps">12</span></div>
+    <div class="h-tick"><span class="h-tick-label">n</span><span class="h-tick-val" id="tick-n">1.3</span></div>
+    <div class="h-tick"><span class="h-tick-label">Sr Cov.</span><span class="h-tick-val" id="tick-srcov">4%</span></div>
+    <div class="h-tick"><span class="h-tick-label">TROOPS</span><span class="h-tick-val red">5th Fleet</span></div>
+    <div class="h-tick"><span class="h-tick-label">TALKS</span><span class="h-tick-val green" id="tick-talks">Trump-Iran signal</span></div>
+  </div>
+</div>
 
 <!-- MASTHEAD -->
 <section class="masthead">
@@ -1404,6 +1451,58 @@ const MODEL = {
   meta: {},
 };
 
+// ── Shared helper — update ALL ticker elements from any p+derived set ─
+function updateAllTickers(p, derived, meta) {
+  const _t = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  // Main header — params.json-sourced metrics
+  const cVal    = p.c;
+  const estarVal = Math.round(p.E * (1 + cVal * (p.m - 1)) * 10) / 10;
+  _t('tick-estar',  '≈' + estarVal.toFixed(1));
+  _t('tick-c',      '≈' + cVal.toFixed(2));
+  _t('tick-m',      p.m.toFixed(1));
+  _t('tick-e',      p.E);
+  _t('tick-h',      p.H);
+  _t('tick-g',      p.G);
+  _t('tick-s',      p.S);
+  _t('tick-k',      p.k.toFixed(1));
+  _t('tick-sr',     p.Sr.toFixed(2) + ' / ' + (p.G + p.S) + ' req.');
+  // Derived
+  const d = derived || {};
+  const eRatio    = d.estarRatio      ?? (1 + cVal * (p.m - 1)).toFixed(2);
+  const domMargin = d.dominanceMargin ?? (p.G + p.S - p.Sr).toFixed(2);
+  const uEsc      = d.uEscalate       ?? (-(p.H + p.E * (1 + cVal * (p.m - 1)))).toFixed(1);
+  const uAcc      = d.uAccommodate    ?? (-p.H);
+  const srCovPct  = d.srCoverage      ?? Math.round(p.Sr / (p.G + p.S) * 100);
+  _t('tick-eratio',    parseFloat(eRatio).toFixed(2) + '×');
+  _t('tick-dommargin', domMargin);
+  _t('tick-uesc',      uEsc);
+  _t('tick-uacc',      uAcc);
+  // Trap status
+  const trapBroken = (p.Sr >= p.G + p.S);
+  _t('tick-trap', trapBroken ? '★ BROKEN' : 'ACTIVE');
+  const trapEl = document.getElementById('tick-trap');
+  if (trapEl) trapEl.className = 'h-tick-val ' + (trapBroken ? 'green' : 'red');
+  // Sub-header params (remaining from params.json)
+  _t('tick-rhoi',  p.rhoI.toFixed(3));
+  _t('tick-nu',    p.nu);
+  _t('tick-ps',    p.Ps);
+  _t('tick-n',     p.n.toFixed(1));
+  _t('tick-srcov', srCovPct + '%');
+  // Masthead stats
+  const msSrEl  = document.getElementById('ms-sr');
+  if (msSrEl) msSrEl.textContent = (p.G + p.S) + ' vs ' + p.Sr.toFixed(2);
+  const msDomEl = document.getElementById('ms-dom-broken');
+  if (msDomEl) {
+    msDomEl.textContent = trapBroken ? '★ YES' : 'No';
+    msDomEl.className   = 'mast-stat-val ' + (trapBroken ? '' : 'danger');
+  }
+  // AI badge (optional)
+  if (meta && meta.aiCalibrated) {
+    const ts = document.getElementById('brief-ts');
+    if (ts) ts.textContent = 'AI-calibrated · ' + new Date(meta.published).toLocaleDateString('en-GB');
+  }
+}
+
 async function loadParams() {
   // Always seed MODEL from inline fallback first (works on file://)
   (function seedFromFallback() {
@@ -1424,16 +1523,7 @@ async function loadParams() {
       paramsLoaded: true,
       meta: PARAMS_FALLBACK.meta || {},
     });
-    const srEl2 = document.getElementById('tick-sr');
-    if (srEl2) srEl2.textContent = MODEL.Sr.toFixed(2) + ' / ' + (MODEL.G + MODEL.S) + ' req.';
-    const msSrEl2 = document.getElementById('ms-sr');
-    if (msSrEl2) msSrEl2.textContent = (MODEL.G + MODEL.S) + ' vs ' + MODEL.Sr.toFixed(2);
-    const msDomEl2 = document.getElementById('ms-dom-broken');
-    if (msDomEl2) {
-      const broken = MODEL.Sr >= (MODEL.G + MODEL.S);
-      msDomEl2.textContent = broken ? '★ YES' : 'No';
-      msDomEl2.className = 'mast-stat-val ' + (broken ? '' : 'danger');
-    }
+    updateAllTickers(MODEL, PARAMS_FALLBACK.derived || {}, PARAMS_FALLBACK.meta || {});
     if (typeof runBriefing === 'function') runBriefing();
   })();
 
@@ -1458,21 +1548,9 @@ async function loadParams() {
       paramsLoaded: true,
       meta: data.meta || {},
     });
-    // Update Sr ticker immediately
-    const srEl = document.getElementById('tick-sr');
-    if (srEl) srEl.textContent = MODEL.Sr.toFixed(2) + ' / ' + (MODEL.G + MODEL.S) + ' req.';
-    // Update masthead Sr stat
-    const msSrEl = document.getElementById('ms-sr');
-    if (msSrEl) msSrEl.textContent = (MODEL.G + MODEL.S) + ' vs ' + MODEL.Sr.toFixed(2);
-    // Update masthead dominant strategy broken
-    const msDomEl = document.getElementById('ms-dom-broken');
-    if (msDomEl) {
-      const trapBroken = (MODEL.Sr >= MODEL.G + MODEL.S);
-      msDomEl.textContent = trapBroken ? '★ YES' : 'No';
-      msDomEl.className = 'mast-stat-val ' + (trapBroken ? '' : 'danger');
-    }
-    
-    // Update Brent price ticker if available in params.json
+    updateAllTickers(MODEL, data.derived || {}, data.meta || {});
+
+    // Brent price from params.json (if provided by admin)
     if (data.meta?.brentPrice) {
       MODEL.brent = data.meta.brentPrice;
       MODEL.isLive = true;
@@ -1482,23 +1560,10 @@ async function loadParams() {
         brentEl.className = 'h-tick-val ' + (data.meta.brentPrice > 100 ? 'red' : 'amber');
       }
     }
-    
-    // Update E* and c values based on loaded parameters
-    const cValue = MODEL.c;
-    const estarValue = Math.round(MODEL.E * (1 + cValue * (MODEL.m - 1)) * 10) / 10;
-    const cEl = document.getElementById('tick-c');
-    if (cEl) cEl.textContent = '≈' + cValue.toFixed(2);
-    const estarEl = document.getElementById('tick-estar');
-    if (estarEl) estarEl.textContent = '≈' + estarValue.toFixed(1);
-    
-    // Show AI badge if calibrated
-    if (data.meta?.aiCalibrated) {
-      const ts = document.getElementById('brief-ts');
-      if (ts) ts.textContent = 'AI-calibrated · ' + new Date(data.meta.published).toLocaleDateString('en-GB');
-    }
+
     if (typeof runBriefing === 'function') runBriefing();
   } catch(_) {
-    // params.json not found — use defaults
+    // params.json not found — fallback already applied above
   }
 }
 
