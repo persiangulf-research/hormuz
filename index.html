@@ -448,8 +448,8 @@ footer {
   background: linear-gradient(90deg, #7f1d1d 0%, #991b1b 50%, #7f1d1d 100%);
   border-bottom: 1px solid rgba(239,68,68,0.5);
   padding: 0 clamp(1.5rem, 4vw, 3rem);
-  display: flex; align-items: center; gap: 1.5rem;
-  height: 64px; position: relative; z-index: 101;
+  display: flex; align-items: stretch; gap: 1.5rem;
+  height: 88px; position: relative; z-index: 101;
 }
 .bb-badge {
   font-family: var(--mono); font-size: 13px; font-weight: 700;
@@ -458,23 +458,38 @@ footer {
   padding: 7px 16px; border-radius: 3px; white-space: nowrap;
   animation: bb-pulse 2.5s ease-in-out infinite;
   box-shadow: 0 0 14px rgba(239,68,68,0.6);
+  align-self: center;
 }
 @keyframes bb-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.85;transform:scale(1.02)} }
+/* Two-line scroll container */
 .bb-scroll {
   flex: 1; overflow: hidden; position: relative;
-  height: 100%;
+  display: flex; flex-direction: column;
+  justify-content: center; gap: 4px;
+  padding: 8px 0;
+}
+.bb-line {
+  overflow: hidden;
+  height: 28px;
   display: flex;
   align-items: center;
 }
 .bb-text {
-  font-family: var(--mono); font-size: 19px; font-weight: 700;
+  font-family: var(--mono); font-size: 16px; font-weight: 700;
   color: #fca5a5;
   white-space: nowrap;
-  animation: bb-scroll 200s linear infinite;
+  animation: bb-scroll 180s linear infinite;
   display: inline-block;
   padding-left: 100%;
   text-shadow: 0 1px 4px rgba(0,0,0,0.6);
   letter-spacing: 0.03em;
+}
+/* Second line scrolls slightly offset so lines don't sync */
+.bb-line:nth-child(2) .bb-text {
+  font-size: 14px; font-weight: 600;
+  color: rgba(252,165,165,0.75);
+  animation-duration: 240s;
+  animation-delay: -45s;
 }
 @keyframes bb-scroll {
   0%   { transform: translateX(0); }
@@ -486,9 +501,11 @@ footer {
   font-size: 16px;
 }
 .bb-time {
-  font-family: var(--mono); font-size: 12px; color: rgba(252,165,165,0.7);
+  font-family: var(--mono); font-size: 11px; color: rgba(252,165,165,0.7);
   white-space: nowrap;
   font-weight: 600;
+  align-self: center;
+  writing-mode: horizontal-tb;
 }
 
 /* ── ALERT CARD — news with metrics impact ─────────────────────────── */
@@ -787,9 +804,14 @@ footer {
 <div class="breaking-banner">
   <span class="bb-badge">Breaking</span>
   <div class="bb-scroll">
-    <span class="bb-text" id="bb-text">
-      Loading latest intelligence… Day <span id="bb-days">—</span>
-    </span>
+    <!-- Line 1: Strategic summary + trap status -->
+    <div class="bb-line">
+      <span class="bb-text" id="bb-text-line1">Loading strategic summary…</span>
+    </div>
+    <!-- Line 2: All news tickers + analyst notes -->
+    <div class="bb-line">
+      <span class="bb-text" id="bb-text-line2">Loading news feed…</span>
+    </div>
   </div>
   <span class="bb-time" id="bb-time">—</span>
 </div>
@@ -1165,11 +1187,8 @@ const G = 8, S = 10, H = 7, E_BASE = 5, C = 0.90, M = 3.0;
 function updateClosureDays() {
   const now = new Date();
   const days = Math.floor((now - WAR_START) / (1000 * 60 * 60 * 24));
-  const txt = 'Day ' + days;
   const el = document.getElementById('closure-days');
-  const bbEl = document.getElementById('bb-days');
-  if (el) el.textContent = txt;
-  if (bbEl) bbEl.textContent = days;
+  if (el) el.textContent = 'Day ' + days;
 }
 updateClosureDays();
 setInterval(updateClosureDays, 60000);
@@ -1218,7 +1237,8 @@ const PARAMS_FALLBACK = {
 };
 
 (function() {
-  const bbText = document.getElementById('bb-text');
+  const bbLine1 = document.getElementById('bb-text-line1');
+  const bbLine2 = document.getElementById('bb-text-line2');
   const alertContainer = document.getElementById('alert-card-container');
   const alertCount = document.getElementById('alert-count');
 
@@ -1266,34 +1286,32 @@ const PARAMS_FALLBACK = {
   }
 
   function buildBannerText(data) {
-    if (!bbText) return;
     const news = (data.meta && data.meta.news) || [];
-    const closureDays = data.meta && data.meta.closureDays ? data.meta.closureDays : '';
-    let parts = [];
+    const closureDays = (data.meta && data.meta.closureDays) ? data.meta.closureDays : '';
+    const sep = '   ◆   ';
 
-    // Lead: closure day + strategic summary
-    if (closureDays) parts.push('▶ HORMUZ CLOSURE — DAY ' + closureDays);
-    if (data.meta && data.meta.strategicSummary) parts.push(data.meta.strategicSummary);
-
-    // Each news item ticker
-    news.forEach(item => {
-      if (item.ticker) parts.push(item.ticker);
-    });
-
-    // Trap status tail
-    if (data.meta && data.meta.trapStatus) {
-      parts.push('DOMINANT STRATEGY TRAP: ' + data.meta.trapStatus.toUpperCase() + ' — Sr offered = ' +
-        ((data.parameters && data.parameters.Sr) || '0.78') + ' / ' +
-        ((data.parameters && (data.parameters.G + data.parameters.S)) || 18) + ' required');
+    // ── LINE 1: Strategic context (summary + trap status) ────────────────
+    if (bbLine1) {
+      const line1Parts = [];
+      if (closureDays) line1Parts.push('▶ HORMUZ CLOSURE — DAY ' + closureDays);
+      if (data.meta && data.meta.strategicSummary) line1Parts.push(data.meta.strategicSummary);
+      if (data.meta && data.meta.trapStatus) {
+        line1Parts.push('TRAP: ' + data.meta.trapStatus.toUpperCase()
+          + ' — Sr = ' + ((data.parameters && data.parameters.Sr) || '0.78')
+          + ' / ' + ((data.parameters && (data.parameters.G + data.parameters.S)) || 18) + ' required');
+      }
+      const line1Full = line1Parts.join(sep) + sep + line1Parts.join(sep);
+      bbLine1.textContent = line1Full;
     }
 
-    // Analyst notes tail
-    if (data.meta && data.meta.analystNotes) parts.push('ANALYST: ' + data.meta.analystNotes);
-
-    const sep = '   ◆   ';
-    // Duplicate content for seamless loop (content must be wider than viewport)
-    const full = parts.join(sep) + sep + parts.join(sep);
-    bbText.textContent = full;
+    // ── LINE 2: All news item tickers + analyst notes ────────────────────
+    if (bbLine2) {
+      const line2Parts = [];
+      news.forEach(item => { if (item.ticker) line2Parts.push(item.ticker); });
+      if (data.meta && data.meta.analystNotes) line2Parts.push('ANALYST: ' + data.meta.analystNotes);
+      const line2Full = line2Parts.join(sep) + sep + line2Parts.join(sep);
+      bbLine2.textContent = line2Full;
+    }
   }
 
   // Render immediately from inline fallback — guarantees content even on file://
