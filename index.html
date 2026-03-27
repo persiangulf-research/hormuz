@@ -1318,22 +1318,28 @@ const PARAMS_FALLBACK = {
     bbText.textContent = full;
   }
 
-  // Render immediately from inline fallback — guarantees content even on file://
-  buildBannerText(PARAMS_FALLBACK);
-  renderAlertCards(PARAMS_FALLBACK.meta.news);
-
-  // Then try to refresh from the live params.json (works on HTTP/HTTPS servers)
-  fetch('params.json?v=' + Date.now(), { cache: 'no-store' })
-    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .then(data => {
-      // Override fallback with live data if available
-      buildBannerText(data);
-      renderAlertCards((data.meta && data.meta.news) || PARAMS_FALLBACK.meta.news);
-    })
-    .catch(err => {
-      console.log('[Banner] Fetch unavailable (file:// or offline) — using inline fallback data:', err.message);
-      // Already rendered from fallback above — nothing more to do
-    });
+  // On HTTP/HTTPS: always fetch live params.json first (never show stale inline fallback)
+  // On file://: fetch() is blocked, so fall back to inline PARAMS_FALLBACK immediately
+  if (location.protocol === 'file:') {
+    // file:// protocol — can't fetch, use inline fallback
+    buildBannerText(PARAMS_FALLBACK);
+    renderAlertCards(PARAMS_FALLBACK.meta.news);
+  } else {
+    // HTTP/HTTPS: show loading state, then render from live params.json
+    if (alertContainer) alertContainer.innerHTML = '<div class="ac-item" style="grid-column:1/-1;opacity:.4"><div class="ac-body">Loading intelligence data…</div></div>';
+    fetch('params.json?v=' + Date.now(), { cache: 'no-store' })
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(data => {
+        buildBannerText(data);
+        renderAlertCards((data.meta && data.meta.news) || PARAMS_FALLBACK.meta.news);
+      })
+      .catch(err => {
+        // Fetch failed on HTTP — fall back to inline data
+        console.warn('[Banner] params.json fetch failed, using inline fallback:', err.message);
+        buildBannerText(PARAMS_FALLBACK);
+        renderAlertCards(PARAMS_FALLBACK.meta.news);
+      });
+  }
 })();
 
 // ── Model calculations ───────────────────────────────────────────────
