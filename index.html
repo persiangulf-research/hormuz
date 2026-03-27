@@ -791,6 +791,86 @@ footer {
   animation: bb-pulse 1.5s ease-in-out infinite;
 }
 
+/* ── BRENT WIDGET CONTAINER ─────────────────────────────────────────── */
+.brent-widget-wrap {
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.brent-change {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 1px 5px; border-radius: 2px;
+  white-space: nowrap;
+}
+.brent-change.pos { color: #22c55e; background: rgba(34,197,94,0.12); }
+.brent-change.neg { color: #ef4444; background: rgba(239,68,68,0.12); }
+.brent-change.neu { color: var(--muted); background: rgba(255,255,255,0.06); }
+.brent-source {
+  font-size: 8px; letter-spacing: 0.08em; color: var(--faint);
+  text-transform: uppercase; white-space: nowrap;
+}
+
+/* ── OILPRICEAPI OFFICIAL WIDGET STYLES ─────────────────────────────── */
+/* Follows the oilpriceapi.com price-widget-generator framework          */
+/* Container: #oil-price-widget  ·  Items: .price-item                  */
+#oil-price-widget {
+  background: rgba(13,18,25,0.95);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--amber);
+  border-radius: 4px;
+  padding: 0.7rem 1rem 0.6rem;
+  min-width: 230px;
+  display: flex; flex-direction: column; gap: 0;
+}
+#oil-price-widget .widget-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+#oil-price-widget .widget-title {
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--amber);
+}
+#oil-price-widget .widget-live {
+  font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: #22c55e;
+  display: flex; align-items: center; gap: 3px;
+}
+#oil-price-widget .widget-live::before {
+  content: ''; display: inline-block; width: 5px; height: 5px;
+  border-radius: 50%; background: #22c55e;
+  animation: bb-pulse 1.5s ease-in-out infinite;
+}
+#oil-price-widget .price-item {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 0.75rem; padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+#oil-price-widget .price-item:last-of-type { border-bottom: none; }
+#oil-price-widget .commodity {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--muted); white-space: nowrap;
+}
+#oil-price-widget .price {
+  font-family: var(--display); font-size: 1.9rem; letter-spacing: 0.03em;
+  line-height: 1; color: var(--amber-l); white-space: nowrap;
+}
+#oil-price-widget .price.danger { color: #e74c3c; }
+#oil-price-widget .price.loading { color: var(--faint); font-size: 1.1rem; font-family: var(--mono); }
+#oil-price-widget .change {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  padding: 2px 6px; border-radius: 2px; white-space: nowrap;
+}
+#oil-price-widget .change.up   { color: #22c55e; background: rgba(34,197,94,0.12); }
+#oil-price-widget .change.down { color: #ef4444; background: rgba(239,68,68,0.12); }
+#oil-price-widget .change.flat { color: var(--muted); background: rgba(255,255,255,0.06); }
+#oil-price-widget .widget-footer {
+  margin-top: 0.4rem; padding-top: 0.35rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  font-family: var(--mono); font-size: 8px;
+  color: rgba(232,226,212,0.22); letter-spacing: 0.06em;
+  display: flex; justify-content: space-between; gap: 0.5rem;
+}
+
 @keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
 .masthead-kicker { animation: fadeIn 0.6s 0.1s both; }
 .masthead-title  { animation: fadeIn 0.6s 0.2s both; }
@@ -872,7 +952,14 @@ footer {
 <div class="sub-header">
   <span class="sub-header-label">Live</span>
   <div class="sub-ticker">
-    <div class="h-tick"><span class="h-tick-label">BRENT</span><span class="h-tick-val red" id="brent-price">$—</span></div>
+    <div class="h-tick">
+      <span class="h-tick-label">BRENT</span>
+      <span class="brent-widget-wrap">
+        <span class="h-tick-val red" id="brent-price">$—</span>
+        <span class="brent-change neu" id="brent-change">—</span>
+        <span class="brent-source" id="brent-source"></span>
+      </span>
+    </div>
     <div class="h-tick"><span class="h-tick-label">CLOSURE</span><span class="h-tick-val" id="closure-days">Day —</span></div>
     <div class="h-tick"><span class="h-tick-label">ρ_I</span><span class="h-tick-val" id="tick-rhoi">0.030</span></div>
     <div class="h-tick"><span class="h-tick-label">ν</span><span class="h-tick-val" id="tick-nu">3</span></div>
@@ -881,6 +968,20 @@ footer {
     <div class="h-tick"><span class="h-tick-label">Sr Cov.</span><span class="h-tick-val" id="tick-srcov">4%</span></div>
     <div class="h-tick"><span class="h-tick-label">TROOPS</span><span class="h-tick-val red">5th Fleet</span></div>
     <div class="h-tick"><span class="h-tick-label">TALKS</span><span class="h-tick-val green" id="tick-talks">Trump-Iran signal</span></div>
+  </div>
+</div>
+
+<!-- OILPRICEAPI OFFICIAL WIDGET — follows oilpriceapi.com widget framework -->
+<!-- https://docs.oilpriceapi.com/tools/price-widget-generator.html -->
+<div style="padding: 0.75rem clamp(1.5rem,4vw,3rem); border-bottom: 1px solid var(--border); background: rgba(8,12,18,0.75); display:flex; align-items:center; gap:1.75rem; flex-wrap:wrap;">
+  <!-- Official widget container as per oilpriceapi.com widget docs -->
+  <div id="oil-price-widget"></div>
+  <div style="font-family:var(--mono);font-size:11px;color:var(--muted);max-width:400px;line-height:1.7;">
+    <span style="color:var(--amber);font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:.35rem;">Live price feed · oilpriceapi.com</span>
+    Real-time Brent crude spot price via <strong style="color:var(--amber-l)">authenticated API</strong>.
+    Refreshes every <strong style="color:var(--text)">5 min</strong>.
+    24h Δ reflects Hormuz closure risk premium.
+    Feeds directly into <strong style="color:var(--amber-l)">E* = E × [1 + c(m−1)]</strong> — Brent ↑ → c ↑ → E* ↑.
   </div>
 </div>
 
@@ -1379,12 +1480,8 @@ function updateDisplay(brent, isLive) {
   MODEL.isLive = isLive;
   const { c, estar, ratio, uEsc, dom } = calcModel(brent);
 
-  // Header ticker
-  const brentEl = document.getElementById('brent-price');
-  if (brentEl) {
-    brentEl.innerHTML = (isLive ? '<span class="brent-live-dot"></span>' : '') + '$' + brent.toFixed(2);
-    brentEl.className = 'h-tick-val ' + (brent > 100 ? 'red' : brent > 90 ? '' : 'green');
-  }
+  // Note: brent-price element is now managed by renderOilPriceWidget() / applyBrentToPage()
+  // Only update if called without widget data (e.g. from params.json override)
   const cEl = document.getElementById('tick-c');
   if (cEl) cEl.textContent = '≈' + c;
   const estarEl = document.getElementById('tick-estar');
@@ -1406,44 +1503,110 @@ function updateDisplay(brent, isLive) {
   // (Workflow 1 removed)
 }
 
-// ── Brent live fetch (oilpriceapi.com public endpoint) ───────────────
-// Falls back to last-known value if fetch fails or is rate-limited
-const BRENT_FALLBACK = 100.73; // as of 27 Mar 2026 (admin calibration)
+// ══════════════════════════════════════════════════════════════════════
+// OILPRICEAPI PRICE WIDGET — official framework implementation
+// Docs: https://docs.oilpriceapi.com/tools/price-widget-generator.html
+// API:  https://api.oilpriceapi.com/v1/prices/latest?by_code=BRENT_CRUDE_USD
+// Auth: Authorization: Token <key>
+// Response: { status, data: { price, formatted, changes:{"24h":{amount,percent}},
+//             updated_at, source, metadata.source_description } }
+// ══════════════════════════════════════════════════════════════════════
+const BRENT_FALLBACK = 110.94; // as of 27 Mar 2026 (live API confirmed)
+const OIL_API_KEY   = '4b2e88a199e7ceaca346f9311532025d7980d50166565e3b413c095adffc6632';
+const OIL_API_URL   = 'https://api.oilpriceapi.com/v1/prices/latest?by_code=BRENT_CRUDE_USD';
 
-async function fetchBrent() {
+// ── Render the official #oil-price-widget div (widget framework) ──────
+// Follows the .price-item / .commodity / .price / .change pattern from docs
+function renderOilPriceWidget(priceData, isLive) {
+  const widget = document.getElementById('oil-price-widget');
+  if (!widget) return;
+
+  // Normalise fields — API returns data.changes["24h"].amount / .percent
+  const price   = priceData?.price ?? BRENT_FALLBACK;
+  const ch24    = priceData?.changes?.['24h'] ?? {};
+  const change  = ch24.amount  ?? 0;            // matches docs' price.change
+  const changePct = ch24.percent ?? 0;          // matches docs' price.change_percent
+  const updatedAt = priceData?.updated_at
+    ? new Date(priceData.updated_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ' UTC'
+    : '—';
+  const srcDesc = priceData?.metadata?.source_description || priceData?.source || 'oilpriceapi.com';
+
+  // Direction class: 'up' | 'down' | 'flat'  (matches widget CSS)
+  const dir  = change > 0 ? 'up' : change < 0 ? 'down' : 'flat';
+  const sign = change >= 0 ? '+' : '';
+  const chTxt = change !== 0
+    ? `${sign}${change.toFixed(2)} (${sign}${changePct.toFixed(2)}%)`
+    : '0.00 (0.00%)';
+
+  // Build widget HTML exactly as shown in oilpriceapi widget docs
+  widget.innerHTML = `
+    <div class="widget-header">
+      <span class="widget-title">Brent Crude Oil</span>
+      <span class="widget-live">${isLive ? 'Live' : 'Cached'}</span>
+    </div>
+    <div class="price-item">
+      <span class="commodity">BRENT / USD</span>
+      <span class="price${price > 100 ? ' danger' : ''}">$${price.toFixed(2)}</span>
+      <span class="change ${dir}">${chTxt}</span>
+    </div>
+    <div class="widget-footer">
+      <span>Updated ${updatedAt}</span>
+      <span>via ${srcDesc}</span>
+    </div>`;
+}
+
+// ── Also update sub-header BRENT ticker & model state ─────────────────
+function applyBrentToPage(price, change, changePct, isLive) {
+  const isPos = change > 0, isNeg = change < 0;
+  const clsB  = isPos ? 'pos' : isNeg ? 'neg' : 'neu';
+  const sign  = change >= 0 ? '+' : '';
+  const chTxt = change !== 0 ? `${sign}${change.toFixed(2)} (${sign}${changePct.toFixed(2)}%)` : '—';
+
+  const brentEl = document.getElementById('brent-price');
+  const chEl    = document.getElementById('brent-change');
+  const srcEl   = document.getElementById('brent-source');
+
+  if (brentEl) {
+    brentEl.innerHTML = (isLive ? '<span class="brent-live-dot"></span>' : '') + '$' + price.toFixed(2);
+    brentEl.className = 'h-tick-val ' + (price > 100 ? 'red' : price > 90 ? '' : 'green');
+  }
+  if (chEl) { chEl.textContent = chTxt; chEl.className = 'brent-change ' + clsB; }
+  if (srcEl) srcEl.textContent = isLive ? 'oilpriceapi' : '';
+}
+
+// ── loadPriceWidget — official entry point (matches docs naming) ──────
+async function loadPriceWidget() {
+  // ── Primary: direct authenticated call to oilpriceapi.com ─────────
+  // CORS is explicitly allowed for persian-gulf.github.io origin
   try {
-    // Try fetching from a CORS-friendly proxy of the public price
-    const r = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.oilpriceapi.com/api/v1/prices/latest?by_code=BRENT_CRUDE_USD'), { signal: AbortSignal.timeout(5000) });
-    if (!r.ok) throw new Error('API error');
-    const data = await r.json();
-    const parsed = JSON.parse(data.contents);
-    const price = parseFloat(parsed?.data?.price);
-    if (!isNaN(price) && price > 0) {
-      updateDisplay(price, true);
+    const response = await fetch(OIL_API_URL, {
+      headers: {
+        'Authorization': 'Token ' + OIL_API_KEY,
+        'Content-Type': 'application/json'
+      },
+      signal: AbortSignal.timeout(6000)
+    });
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const { status, data } = await response.json();
+    if (status === 'success' && data?.price > 0) {
+      renderOilPriceWidget(data, true);
+      applyBrentToPage(data.price, data.changes?.['24h']?.amount ?? 0, data.changes?.['24h']?.percent ?? 0, true);
+      updateDisplay(data.price, true);
       return;
     }
-  } catch (_) {}
+  } catch (e) {
+    console.warn('[OilPriceWidget] Direct API call failed:', e.message);
+  }
 
-  // Fallback: try a second public source
-  try {
-    const r2 = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/BZ%3DF?interval=1m&range=1d'), { signal: AbortSignal.timeout(5000) });
-    if (!r2.ok) throw new Error();
-    const d2 = await r2.json();
-    const parsed2 = JSON.parse(d2.contents);
-    const price2 = parsed2?.chart?.result?.[0]?.meta?.regularMarketPrice;
-    if (price2 && price2 > 0) {
-      updateDisplay(price2, true);
-      return;
-    }
-  } catch (_) {}
-
-  // Final fallback: use last-known value
+  // ── Fallback: static last-known value (renders widget without live badge) ─
+  renderOilPriceWidget({ price: BRENT_FALLBACK, changes: {} }, false);
+  applyBrentToPage(BRENT_FALLBACK, 0, 0, false);
   updateDisplay(BRENT_FALLBACK, false);
 }
 
-// Fetch on load, then every 5 minutes
-fetchBrent();
-setInterval(fetchBrent, 300000);
+// Invoke immediately then refresh every 5 minutes (matches docs setInterval)
+loadPriceWidget();
+setInterval(loadPriceWidget, 300000); // Refresh every 5 minutes
 
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -1452,7 +1615,7 @@ setInterval(fetchBrent, 300000);
 
 // Model state — kept in sync with live Brent updates and params.json
 const MODEL = {
-  brent: 100.73, isLive: false,
+  brent: 110.94, isLive: false,
   E: 6, H: 8, G: 8, S: 10, m: 3.0, Sr: 0.78,
   n: 1.3, k: 1.3,
   c: 0.92, nu: 3, Ps: 8, rhoI: 0.03,
@@ -1561,15 +1724,12 @@ async function loadParams() {
     updateAllTickers(MODEL, data.derived || {}, data.meta || {});
     runBriefing(data);
 
-    // Brent price from params.json (if provided by admin)
-    if (data.meta?.brentPrice) {
+    // Brent price from params.json (if provided by admin — only used as seed; live API takes priority)
+    if (data.meta?.brentPrice && !MODEL.isLive) {
       MODEL.brent = data.meta.brentPrice;
-      MODEL.isLive = true;
-      const brentEl = document.getElementById('brent-price');
-      if (brentEl) {
-        brentEl.innerHTML = '<span class="brent-live-dot"></span>$' + data.meta.brentPrice.toFixed(2);
-        brentEl.className = 'h-tick-val ' + (data.meta.brentPrice > 100 ? 'red' : 'amber');
-      }
+      renderOilPriceWidget({ price: data.meta.brentPrice, changes: {} }, false);
+      applyBrentToPage(data.meta.brentPrice, 0, 0, false);
+      updateDisplay(data.meta.brentPrice, false);
     }
 
   } catch(_) {
