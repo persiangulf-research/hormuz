@@ -1,41 +1,29 @@
 {
   "meta": {
-    "published": "2026-03-27T00:12:37.750Z",
+    "published": "2026-03-27T03:03:49.578Z",
     "closureDays": 27,
     "analystNotes": null,
     "aiCalibrated": true,
-    "brentPrice": 100.75,
-    "brentFetched": "2026-03-27T00:09:11.231Z",
+    "brentPrice": 100.73,
+    "brentFetched": "2026-03-27T03:01:12.380Z",
     "primaryEquation": "Eq.3",
     "trapStatus": "active",
-    "strategicSummary": "Day 27 marks a dangerous inflection: Iran's public rejection of Trump's pause narrative eliminates the soft off-ramp and forces both sides into a credibility-or-capitulate dynamic. The Pentagon's ground force contingency planning, combined with Israel's thousand-target campaign, signals the U.S.-Israeli axis is preparing for escalation dominance rather than negotiated settlement. Most critically, Pakistan's intervention introduces a nuclear-armed third party with direct skin in the game — its 'brutal response' warning is not rhetoric from a peripheral actor but from a 240-million-person state with nuclear capability bordering Iran. Iran's 'unprecedented measures' threat against UAE and Bahrain directly targets the U.S. Fifth Fleet basing infrastructure, meaning any Israeli or U.S. ground operation risks triggering a Persian Gulf-wide conflict that could render Ps collapse self-fulfilling. The trap remains fully active and is tightening.",
-    "mostSignificantEvent": "Iran publicly contradicting Trump's ceasefire/pause claim (Headline 1) combined with Pentagon ground force planning (Headline 3) — this pairing eliminates the diplomatic ambiguity that typically allows face-saving exits, locking both sides into a binary escalate-or-capitulate dynamic with no negotiated middle ground visible.",
+    "strategicSummary": "Day 27 of Hormuz closure sees a sharp U.S. military escalation signal: the Pentagon is actively planning ground troop deployments of up to 10,000 and has drawn up target seizure scenarios inside Iran. This is a qualitative step beyond carrier strike group presence — it signals Trump is seriously entertaining kinetic regime-pressure operations, not merely naval deterrence. Credibility jumps materially. The U.S. guarantee (Ps) recovers modestly as allies observe genuine military commitment. However, no ceasefire, diplomatic outreach, or sanctions relief has emerged, meaning Iran's incentive structure (G, S, Sr) is unchanged — the dollar-trap remains fully active. At $100.73 Brent on day 27, markets are pricing sustained disruption but not yet a ground war premium; that changes if troop orders are actually cut.",
+    "mostSignificantEvent": "Pentagon drawing up scenarios to seize targets within Iran — this crosses from deterrence posturing into actual contingency planning for offensive ground operations, fundamentally altering the escalation ladder and Iran's calculus about whether U.S. threats are bluffs.",
     "headlines": [
       {
-        "title": "Iran contradicts Trump and says it did not ask for a pause in strikes, according to WSJ report",
-        "eq": "x"
-      },
-      {
-        "title": "Israeli military says it has struck over a thousand military industrial targets in Iran",
+        "title": "The Pentagon is considering 'sending up to 10,000 additional ground troops to the Middle East' to give Trump 'more military options', according to Wall Street Journal report.",
         "eq": "5m"
       },
       {
-        "title": "The Pentagon is 'developing military options for a \"final blow\" in Iran that could include the use of ground forces and a massive bombing campaign', according to Axios report.",
-        "eq": "5m"
-      },
-      {
-        "title": "Pakistan has strongly warned Israel after attacks near Pakistan’s embassy in Tehran, saying Pakistan is not Qatar and that any harm to its diplomats anywhere in the world will be met with a BRUTAL response",
-        "eq": "5"
-      },
-      {
-        "title": "Tehran has prepared “special and unprecedented” measures against the UAE and Bahrain in the event of any ground attack on Iranian islands in the Persian Gulf",
+        "title": "Pentagon has 'drawn up scenarios for deploying troops to seize various targets within Iran', according to CNN report.",
         "eq": "5"
       }
     ]
   },
   "parameters": {
     "E": 6,
-    "c": 0.95,
+    "c": 0.92,
     "m": 3,
     "H": 8,
     "G": 8,
@@ -43,16 +31,16 @@
     "Sr": 0.78,
     "k": 1.3,
     "nu": 3,
-    "Ps": 7,
+    "Ps": 8,
     "rhoI": 0.03,
     "n": 1.3
   },
   "derived": {
-    "estar": 17.4,
-    "estarRatio": 2.9,
+    "estar": 17.04,
+    "estarRatio": 2.84,
     "dominanceMargin": 17.22,
     "srCoverage": 4,
     "uAccommodate": -8,
-    "uEscalate": -25.4
+    "uEscalate": -25.04
   }
 }
