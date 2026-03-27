@@ -971,7 +971,7 @@ footer {
   <div style="font-family:var(--mono);font-size:11px;color:var(--muted);max-width:420px;line-height:1.7;">
     <span style="color:var(--amber);font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:.35rem;">Live price feed · oilpriceapi.com</span>
     Real-time Brent crude + Natural Gas via <strong style="color:var(--amber-l)">oilpriceapi.com</strong>.
-    Refreshes every <strong style="color:var(--text)">5 min</strong>.
+    Refreshes every <strong style="color:var(--text)">15 min</strong> on weekdays.
     24h Δ reflects Hormuz closure risk premium. Brent feeds directly into
     <strong style="color:var(--amber-l)">E* = E × [1 + c(m−1)]</strong> — Brent ↑ → c ↑ → E* ↑.
     <span style="display:block;margin-top:.35rem;color:var(--faint);font-size:10px;">
@@ -2125,7 +2125,7 @@ const EVENT_RULES = [
           { name: 'c change', val: cOld.toFixed(2) + ' → ' + cNew.toFixed(2), note: 'inferred credibility' },
           { name: 'E* change', val: eOld + ' → ' + eNew, note: 'effective escalation cost' },
         ],
-        analysis: `Brent at $${newB.toFixed(2)} implies c ≈ ${cNew.toFixed(2)} and E* = ${eNew}. ${newB < 100 ? 'Below $100 suggests market is pricing ceasefire/talks probability. Check Eq.12 for Sr signal.' : newB > 110 ? 'Above $110: elevated crisis premium. War scenario being priced as persistent.' : 'Between $90–110: moderate war premium. Active deterrence regime.'} The live Brent feed will update the featured card E* automatically within 5 minutes.`,
+        analysis: `Brent at $${newB.toFixed(2)} implies c ≈ ${cNew.toFixed(2)} and E* = ${eNew}. ${newB < 100 ? 'Below $100 suggests market is pricing ceasefire/talks probability. Check Eq.12 for Sr signal.' : newB > 110 ? 'Above $110: elevated crisis premium. War scenario being priced as persistent.' : 'Between $90–110: moderate war premium. Active deterrence regime.'} The live Brent feed will update the featured card E* automatically within 15 minutes on weekdays.`,
         urgent: newB < 95,
       };
     },
