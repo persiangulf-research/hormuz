@@ -1,37 +1,146 @@
 {
   "meta": {
-    "published": "2026-03-27T15:11:37.447Z",
+    "published": "2026-03-27T03:03:49.578Z",
     "closureDays": 27,
-    "analystNotes": null,
-    "aiCalibrated": false,
-    "brentPrice": 110.94,
-    "brentFetched": "2026-03-27T15:10:28.223Z",
-    "primaryEquation": null,
+    "analystNotes": "Day 27 calibration — 27 March 2026. Pentagon drawing up scenarios for seizing targets within Iran and considering up to 10,000 additional ground troops deployment. Brent at $100.73. Credibility c rises to 0.92. E* reaches 17.04 — suicidal escalation zone. No Sr signal. Dominant strategy trap remains fully active.",
+    "aiCalibrated": true,
+    "brentPrice": 110.73,
+    "brentFetched": "2026-03-27T03:01:12.380Z",
+    "primaryEquation": "Eq.5",
     "trapStatus": "active",
-    "strategicSummary": null,
-    "mostSignificantEvent": null,
-    "news": []
+    "strategicSummary": "Day 27 of Hormuz closure sees a sharp U.S. military escalation signal: the Pentagon is actively planning ground troop deployments of up to 10,000 and has drawn up target seizure scenarios inside Iran. This is a qualitative step beyond carrier strike group presence — it signals Trump is seriously entertaining kinetic regime-pressure operations, not merely naval deterrence. Credibility jumps materially. The U.S. guarantee (Ps) recovers modestly as allies observe genuine military commitment. However, no ceasefire, diplomatic outreach, or sanctions relief has emerged, meaning Iran's incentive structure (G, S, Sr) is unchanged — the dollar-trap remains fully active. At $100.73 Brent on day 27, markets are pricing sustained disruption but not yet a ground war premium; that changes if troop orders are actually cut.",
+    "mostSignificantEvent": "Pentagon drawing up scenarios to seize targets within Iran — this crosses from deterrence posturing into actual contingency planning for offensive ground operations, fundamentally altering the escalation ladder and Iran's calculus about whether U.S. threats are bluffs.",
+    "news": [
+      {
+        "id": "N-008",
+        "date": "2026-03-27",
+        "headline": "Pentagon drawing up scenarios to seize targets within Iran — CNN",
+        "severity": "red",
+        "eq": "5",
+        "eqLabel": "Eq.5 — Commitment Device / c",
+        "metricsImpact": {
+          "c_delta": "c rises to 0.92 — threat credibility materially higher",
+          "E_star": "E* = 17.04 (suicidal escalation zone)",
+          "m_impact": "Offensive ground ops would raise m above 3.0",
+          "Sr_military": "Sr(ground ops) = 0 — no sanctions relief",
+          "note": "Crosses from deterrence posturing to contingency planning. Largest single credibility event since closure. E* now above 17 — the highest in this crisis."
+        },
+        "ticker": "PENTAGON SEIZE-IRAN SCENARIOS — c = 0.92 — E* = 17.04 (SUICIDAL ZONE) — U.S. Escalate payoff = −25.04 — Dominant strategy: UNCHANGED — Sr = 0"
+      },
+      {
+        "id": "N-009",
+        "date": "2026-03-27",
+        "headline": "Pentagon considering sending up to 10,000 additional ground troops to Middle East — WSJ",
+        "severity": "red",
+        "eq": "5",
+        "eqLabel": "Eq.5 — m (geographic multiplier) + c",
+        "metricsImpact": {
+          "m_delta": "m: 3.0 → potentially 3.1–3.2 if deployed",
+          "c_delta": "c += ~0.02–0.05 on deployment confirmation",
+          "E_star_delta": "ΔE* = +0.3–0.6 above current 17.04",
+          "Sr_military": "Sr(troops) = 0 — no diplomatic component",
+          "note": "Ground troop deployment raises m and c simultaneously — double E* amplification. However Eq.9 separability holds: physical Φ restores some transit, financial Ψ unaffected by military presence."
+        },
+        "ticker": "10,000 GROUND TROOPS PLANNED — m rising above 3.0 — E* above 17 — Double amplification (c × m) — Sr = 0 — Dollar-trap UNCHANGED"
+      },
+      {
+        "id": "N-001",
+        "date": "2026-03-24",
+        "headline": "Trump Truth Social post claims 'productive conversations' with Iran",
+        "severity": "amber",
+        "eq": "12",
+        "eqLabel": "Eq.12 — Sr threshold",
+        "metricsImpact": {
+          "Sr_delta": "+2.7 (prob-weighted)",
+          "Sr_new": "~2.7 / 18 req.",
+          "dominance": "Trap active — 17.22 gap remains",
+          "note": "Iran denial same day discounts signal to ~15% probability weight. First genuine Sr event of crisis."
+        },
+        "ticker": "★ TRUMP TRUTH SOCIAL — 'Productive conversations' with Iran — First Sr signal of crisis — Sr ≈ 2.7 (prob-weighted) vs 18 required — Gap: 15.3 units — Trap remains ACTIVE"
+      },
+      {
+        "id": "N-002",
+        "date": "2026-03-24",
+        "headline": "Iran denies talks — IRGC reaffirms indefinite Hormuz closure",
+        "severity": "red",
+        "eq": "5",
+        "eqLabel": "Eq.5 — Commitment Device",
+        "metricsImpact": {
+          "c_impact": "c remains ≥ 0.87 — denial confirms credibility floor",
+          "E_star": "13.7 — pre-escalation floor",
+          "Sr_delta": "Prob-weighted Sr falls back toward 0",
+          "note": "Iran denial negates talks signal. c (credibility) remains high. E* floor confirmed."
+        },
+        "ticker": "IRAN DENIES TALKS — IRGC: Strait closed indefinitely — c remains 0.87+ — Credibility floor confirmed"
+      },
+      {
+        "id": "N-003",
+        "date": "2026-03-23",
+        "headline": "Brent crude falls 11% to ~$99 on talks rumour",
+        "severity": "amber",
+        "eq": "5",
+        "eqLabel": "Eq.5 — Credibility / E*",
+        "metricsImpact": {
+          "brent": "$99 (was ~$111)",
+          "c_delta": "c fell ~0.04 → c ≈ 0.87 (now recovered to 0.92 on escalation)",
+          "E_star": "E* = 13.7 at dip — now 17.04 on escalation signals",
+          "note": "Market prices ceasefire probability. 11% fall was largest single-day drop since crisis began. Now reversed by military escalation signals."
+        },
+        "ticker": "BRENT -11% → $99 (then recovered) — Market priced ceasefire — c dipped to 0.87 — Now E* = 17.04 on escalation rebound"
+      },
+      {
+        "id": "N-004",
+        "date": "2026-03-22",
+        "headline": "2,500 U.S. Marines deploying — USS Boxer reactivated",
+        "severity": "amber",
+        "eq": "5",
+        "eqLabel": "Eq.5 — m (geographic multiplier)",
+        "metricsImpact": {
+          "m_delta": "3.0 → 2.9 (small reduction from escort)",
+          "E_star_delta": "ΔE* ≈ −0.45 (3.2% reduction) — since overtaken by 10,000 troops plan",
+          "Sr_military": "Sr(troops) = 0",
+          "dominance": "Trap unchanged — financial plane Ψ unaffected",
+          "note": "Initial Marine deployment now superseded by 10,000-troop planning. Separability (Eq.9) holds."
+        },
+        "ticker": "2,500 MARINES DEPLOY — Now superseded by 10,000-troop plan — Sr(military) = 0 — Dominant strategy: UNCHANGED"
+      },
+      {
+        "id": "N-005",
+        "date": "2026-03-21",
+        "headline": "China mBridge transactions surge 45% — CIPS volume record",
+        "severity": "red",
+        "eq": "8",
+        "eqLabel": "Eq.8 — Hegemony Decay",
+        "metricsImpact": {
+          "rho_delta": "ρ_total += ~0.003 per round",
+          "H_impact": "H after 27 rounds ≈ 6.8 (97% of H₀) — decay accelerating",
+          "G_impact": "G (yuan gain) rising — settlement infrastructure deepens",
+          "note": "Each mBridge record is permanent — payment rails persist post-crisis. Long-run H trajectory worsens irreversibly."
+        },
+        "ticker": "CHINA mBridge +45% — CIPS volume record — ρ_I += 0.003/round — Hegemony decay ACCELERATING — Permanent infrastructure lock-in — G rising"
+      }
+    ]
   },
   "parameters": {
-    "E": 5,
-    "c": 0.8838,
-    "m": 3,
-    "H": 7,
-    "G": 8,
-    "S": 10,
-    "Sr": 0.78,
-    "k": 1.3,
-    "nu": 3,
-    "Ps": 12,
+    "E":    6,
+    "c":    0.92,
+    "m":    3.0,
+    "H":    8,
+    "G":    8,
+    "S":    10,
+    "Sr":   0.78,
+    "k":    1.3,
+    "nu":   3,
+    "Ps":   8,
     "rhoI": 0.03,
-    "n": 1.3
+    "n":    1.3
   },
   "derived": {
-    "estar": 13.8376,
-    "estarRatio": 2.7675,
+    "estar":           17.04,
+    "estarRatio":      2.84,
     "dominanceMargin": 17.22,
-    "srCoverage": 4,
-    "uAccommodate": -7,
-    "uEscalate": -20.8376
+    "srCoverage":      4,
+    "uAccommodate":   -8,
+    "uEscalate":      -25.04
   }
 }
