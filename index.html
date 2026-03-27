@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Hormuz Gambit — Geoeconomics Research</title>
+<title>Hormuz Gambit — Geoeconomics Research · v2026.03.27</title>
 <meta name="description" content="Strategic game-theoretic analysis of the 2026 Hormuz crisis, Iran's de-dollarisation, and the collapse of petrodollar hegemony.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -952,21 +952,6 @@ footer {
 <div class="sub-header">
   <span class="sub-header-label">Live</span>
   <div class="sub-ticker">
-    <div class="h-tick">
-      <span class="h-tick-label">BRENT</span>
-      <span class="brent-widget-wrap">
-        <span class="h-tick-val red" id="brent-price">$—</span>
-        <span class="brent-change neu" id="brent-change">—</span>
-        <span class="brent-source" id="brent-source"></span>
-      </span>
-    </div>
-    <div class="h-tick">
-      <span class="h-tick-label">NAT. GAS</span>
-      <span class="brent-widget-wrap">
-        <span class="h-tick-val" id="natgas-price">$—</span>
-        <span class="brent-change neu" id="natgas-change">—</span>
-      </span>
-    </div>
     <div class="h-tick"><span class="h-tick-label">CLOSURE</span><span class="h-tick-val" id="closure-days">Day —</span></div>
     <div class="h-tick"><span class="h-tick-label">ρ_I</span><span class="h-tick-val" id="tick-rhoi">0.030</span></div>
     <div class="h-tick"><span class="h-tick-label">ν</span><span class="h-tick-val" id="tick-nu">3</span></div>
@@ -983,12 +968,15 @@ footer {
 <div style="padding: 0.75rem clamp(1.5rem,4vw,3rem); border-bottom: 1px solid var(--border); background: rgba(8,12,18,0.75); display:flex; align-items:center; gap:1.75rem; flex-wrap:wrap;">
   <!-- Official widget container as per oilpriceapi.com widget docs -->
   <div id="oil-price-widget"></div>
-  <div style="font-family:var(--mono);font-size:11px;color:var(--muted);max-width:400px;line-height:1.7;">
+  <div style="font-family:var(--mono);font-size:11px;color:var(--muted);max-width:420px;line-height:1.7;">
     <span style="color:var(--amber);font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:.35rem;">Live price feed · oilpriceapi.com</span>
-    Real-time Brent crude spot price via <strong style="color:var(--amber-l)">authenticated API</strong>.
+    Real-time Brent crude + Natural Gas via <strong style="color:var(--amber-l)">oilpriceapi.com</strong>.
     Refreshes every <strong style="color:var(--text)">5 min</strong>.
-    24h Δ reflects Hormuz closure risk premium.
-    Feeds directly into <strong style="color:var(--amber-l)">E* = E × [1 + c(m−1)]</strong> — Brent ↑ → c ↑ → E* ↑.
+    24h Δ reflects Hormuz closure risk premium. Brent feeds directly into
+    <strong style="color:var(--amber-l)">E* = E × [1 + c(m−1)]</strong> — Brent ↑ → c ↑ → E* ↑.
+    <span style="display:block;margin-top:.35rem;color:var(--faint);font-size:10px;">
+      API key required — set yours in <a href="admin.html" style="color:var(--amber-l);text-decoration:none;">admin panel → Keys &amp; Config</a>.
+    </span>
   </div>
 </div>
 
@@ -1298,7 +1286,7 @@ footer {
 <footer>
   <div class="footer-logo">HORMUZ GAMBIT</div>
   <div class="footer-meta">Geoeconomics Analysis Series · March 2026</div>
-  <div class="footer-right">13 equations · 1 active module · 4 in preparation</div>
+  <div class="footer-right">13 equations · 5 active modules · v2026.03.27 · <span style="color:var(--amber-l)">oilpriceapi.com</span></div>
 </footer>
 
 </div><!-- /wrap -->
@@ -1520,7 +1508,11 @@ function updateDisplay(brent, isLive) {
 // ══════════════════════════════════════════════════════════════════════
 const BRENT_FALLBACK   = 110.94;  // as of 27 Mar 2026 (live API confirmed)
 const NATGAS_FALLBACK  = 3.06;    // as of 27 Mar 2026
-const OIL_API_KEY      = '4b2e88a199e7ceaca346f9311532025d7980d50166565e3b413c095adffc6632';
+// API key is set via the admin panel (Keys & Config → OilPrice API key) and stored in localStorage
+function getOilApiKey() {
+  try { return JSON.parse(localStorage.getItem('hg_cfg') || '{}').oilkey || ''; }
+  catch(e) { return ''; }
+}
 // Multi-commodity endpoint — returns data.prices[] array (widget doc format)
 const OIL_API_URL      = 'https://api.oilpriceapi.com/v1/prices/latest?by_code=BRENT_CRUDE_USD,NATURAL_GAS_USD';
 
@@ -1574,102 +1566,106 @@ function renderOilPriceWidget(prices, isLive, lastUpdated) {
     </div>`;
 }
 
-// ── Update sub-header BRENT ticker + Natural Gas ticker ───────────────
+// applyBrentToPage — kept for backward-compatibility with loadParams() calls
+// Sub-header BRENT/NAT.GAS tickers have been removed (prices shown in #oil-price-widget only).
 function applyBrentToPage(brent, brentChange, brentPct, natGas, natGasChange, natGasPct, isLive) {
-  // BRENT sub-header ticker
-  const isPos = brentChange > 0, isNeg = brentChange < 0;
-  const clsB  = isPos ? 'pos' : isNeg ? 'neg' : 'neu';
-  const sign  = brentChange >= 0 ? '+' : '';
-  const chTxt = brentChange !== 0 ? `${sign}${brentChange.toFixed(2)} (${sign}${brentPct.toFixed(2)}%)` : '—';
-
-  const brentEl = document.getElementById('brent-price');
-  const chEl    = document.getElementById('brent-change');
-  const srcEl   = document.getElementById('brent-source');
-
-  if (brentEl) {
-    brentEl.innerHTML = (isLive ? '<span class="brent-live-dot"></span>' : '') + '$' + brent.toFixed(2);
-    brentEl.className = 'h-tick-val ' + (brent > 100 ? 'red' : brent > 90 ? '' : 'green');
-  }
-  if (chEl) { chEl.textContent = chTxt; chEl.className = 'brent-change ' + clsB; }
-  if (srcEl) srcEl.textContent = isLive ? 'oilpriceapi' : '';
-
-  // Natural Gas sub-header ticker
-  const ngEl  = document.getElementById('natgas-price');
-  const ngChEl = document.getElementById('natgas-change');
-  if (ngEl && natGas > 0) {
-    ngEl.innerHTML = (isLive ? '<span class="brent-live-dot"></span>' : '') + '$' + natGas.toFixed(2);
-    ngEl.className = 'h-tick-val';
-  }
-  if (ngChEl && natGasChange !== undefined) {
-    const ngSign = natGasChange >= 0 ? '+' : '';
-    const ngTxt  = natGasChange !== 0 ? `${ngSign}${natGasChange.toFixed(2)} (${ngSign}${natGasPct.toFixed(2)}%)` : '—';
-    ngChEl.textContent = ngTxt;
-    ngChEl.className = 'brent-change ' + (natGasChange > 0 ? 'pos' : natGasChange < 0 ? 'neg' : 'neu');
-  }
+  // Only pass the Brent price into the model display; widget handles the rest.
+  updateDisplay(brent, isLive);
 }
 
 // ── loadPriceWidget — official entry point (matches oilpriceapi.com docs) ─
+// Three-tier strategy:
+//   1. Direct authenticated API call (works when origin is whitelisted on oilpriceapi.com)
+//   2. CORS proxy via corsproxy.io (forwards Auth header — works on any domain)
+//   3. Static fallback (last-known values)
 async function loadPriceWidget() {
-  // Primary: direct authenticated call — CORS allowed for persian-gulf.github.io
-  try {
-    const response = await fetch(OIL_API_URL, {
-      headers: {
-        'Authorization': 'Token ' + OIL_API_KEY,
-        'Content-Type': 'application/json'
-      },
-      signal: AbortSignal.timeout(6000)
-    });
-    if (!response.ok) throw new Error('HTTP ' + response.status);
-    const json = await response.json();
+  const OIL_API_KEY = getOilApiKey();
 
-    // Handle both single-price (data.price) and multi-price (data.prices[]) responses
-    if (json.status === 'success') {
-      let pricesList = [];
-      let lastUpdated = null;
-
-      if (Array.isArray(json.data?.prices)) {
-        // Multi-commodity response: { data: { prices: [...] } }
-        pricesList  = json.data.prices;
-        lastUpdated = json.data.metadata?.timestamp || pricesList[0]?.updated_at;
-      } else if (json.data?.price > 0) {
-        // Single-commodity response: { data: { price, changes, ... } }
-        pricesList  = [{ code: 'BRENT_CRUDE_USD', price: json.data.price, changes: json.data.changes, updated_at: json.data.updated_at }];
-        lastUpdated = json.data.updated_at;
-      }
-
-      if (pricesList.length > 0) {
-        renderOilPriceWidget(pricesList, true, lastUpdated);
-
-        // Find Brent and Natural Gas entries
-        const brentEntry = pricesList.find(p => p.code === 'BRENT_CRUDE_USD') || pricesList[0];
-        const ngEntry    = pricesList.find(p => p.code === 'NATURAL_GAS_USD');
-
-        const brentCh24  = brentEntry.changes?.['24h'] ?? {};
-        const ngCh24     = ngEntry?.changes?.['24h'] ?? {};
-
-        applyBrentToPage(
-          brentEntry.price, brentCh24.amount ?? 0, brentCh24.percent ?? 0,
-          ngEntry?.price ?? 0, ngCh24.amount ?? 0, ngCh24.percent ?? 0,
-          true
-        );
-        updateDisplay(brentEntry.price, true);
-        return;
-      }
+  // ── No key configured — show prompt in widget, use static fallback ────
+  if (!OIL_API_KEY) {
+    const widget = document.getElementById('oil-price-widget');
+    if (widget) {
+      widget.innerHTML = `
+        <div class="widget-header">
+          <span class="widget-title">Energy Prices</span>
+          <span class="widget-live" style="color:var(--muted)">No Key</span>
+        </div>
+        <div class="price-item">
+          <span class="commodity">BRENT / USD</span>
+          <span class="price">$${BRENT_FALLBACK.toFixed(2)}</span>
+          <span class="change flat">cached</span>
+        </div>
+        <div class="price-item">
+          <span class="commodity">NAT. GAS / MMBTU</span>
+          <span class="price" style="font-size:1.3rem">$${NATGAS_FALLBACK.toFixed(2)}</span>
+          <span class="change flat">cached</span>
+        </div>
+        <div class="widget-footer">
+          <span>Set API key in admin panel</span>
+          <span>oilpriceapi.com</span>
+        </div>`;
     }
-  } catch (e) {
-    console.warn('[OilPriceWidget] API call failed:', e.message);
+    updateDisplay(BRENT_FALLBACK, false);
+    return;
   }
 
-  // Fallback: static last-known values
+  // ── Helper: parse and apply any successful API response ─────────────
+  function applyApiResponse(json) {
+    if (json.status !== 'success') return false;
+    let pricesList = [], lastUpdated = null;
+
+    if (Array.isArray(json.data?.prices)) {
+      pricesList  = json.data.prices;
+      lastUpdated = json.data.metadata?.timestamp || pricesList[0]?.updated_at;
+    } else if (json.data?.price > 0) {
+      pricesList  = [{ code: 'BRENT_CRUDE_USD', price: json.data.price, changes: json.data.changes, updated_at: json.data.updated_at }];
+      lastUpdated = json.data.updated_at;
+    }
+    if (!pricesList.length) return false;
+
+    renderOilPriceWidget(pricesList, true, lastUpdated);
+    const brentEntry = pricesList.find(p => p.code === 'BRENT_CRUDE_USD') || pricesList[0];
+    updateDisplay(brentEntry.price, true);
+    return true;
+  }
+
+  // ── Tier 1: Direct authenticated call to oilpriceapi.com ─────────────
+  try {
+    const r = await fetch(OIL_API_URL, {
+      headers: { 'Authorization': 'Token ' + OIL_API_KEY, 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(6000)
+    });
+    if (r.ok) {
+      const json = await r.json();
+      if (applyApiResponse(json)) return;
+    }
+  } catch (e) {
+    console.warn('[OilPriceWidget] Direct API failed (' + e.message + '), trying CORS proxy…');
+  }
+
+  // ── Tier 2: corsproxy.io — forwards ALL request headers (Auth header included) ─
+  try {
+    const r2 = await fetch('https://corsproxy.io/?' + encodeURIComponent(OIL_API_URL), {
+      headers: { 'Authorization': 'Token ' + OIL_API_KEY, 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(8000)
+    });
+    if (r2.ok) {
+      const json = await r2.json();
+      if (applyApiResponse(json)) return;
+    }
+  } catch (e) {
+    console.warn('[OilPriceWidget] corsproxy.io failed (' + e.message + '), using static fallback');
+  }
+
+  // ── Tier 3: Static fallback (last-known values, no live badge) ────────
   renderOilPriceWidget([
     { code: 'BRENT_CRUDE_USD', price: BRENT_FALLBACK, changes: {} },
     { code: 'NATURAL_GAS_USD', price: NATGAS_FALLBACK, changes: {} },
   ], false, null);
-  applyBrentToPage(BRENT_FALLBACK, 0, 0, NATGAS_FALLBACK, 0, 0, false);
   updateDisplay(BRENT_FALLBACK, false);
 }
 
-// Invoke immediately then refresh every 5 minutes (matches docs setInterval pattern)
+// Invoke immediately then refresh every 5 minutes (matches oilpriceapi.com docs pattern)
 loadPriceWidget();
 setInterval(loadPriceWidget, 300000); // Refresh every 5 minutes
 

@@ -171,9 +171,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;heigh
     </div>
 
     <div class="f">
-      <label>Financial Modeling Prep key (optional) &#x2014; <a href="https://site.financialmodelingprep.com/developer/docs" target="_blank" style="color:var(--al);font-size:10px;font-weight:400;text-transform:none;letter-spacing:0">get free key &#x2197;</a></label>
-      <input type="password" id="k-brent" placeholder="fmp-api-key&#x2026;" autocomplete="off">
-      <div class="hint"><strong style="color:var(--al)">Optional.</strong> If omitted, automatically uses Yahoo Finance fallback (free, no API key).</div>
+      <label>OilPrice API key &#x2014; <a href="https://www.oilpriceapi.com/auth/signup" target="_blank" style="color:var(--al);font-size:10px;font-weight:400;text-transform:none;letter-spacing:0">get free key &#x2197;</a></label>
+      <input type="password" id="k-oilprice" placeholder="oilpriceapi-key&#x2026;" autocomplete="off">
+      <div class="hint"><strong style="color:var(--al)">Required</strong> for live Brent + Natural Gas prices on the portal. Free tier: 1,000 req/month. Key is read by index.html at runtime via localStorage.</div>
     </div>
 
     <div class="f">
@@ -341,7 +341,7 @@ function init(){
   const c=cfg();
   if(c.ant) document.getElementById('k-ant').value=c.ant;
   if(c.news) document.getElementById('k-news').value=c.news;
-  if(c.bkey) document.getElementById('k-brent').value=c.bkey;
+  if(c.oilkey) document.getElementById('k-oilprice').value=c.oilkey;
   if(c.model) document.getElementById('k-model').value=c.model;
   if(c.hours) document.getElementById('k-hours').value=c.hours;
   if(c.maxh) document.getElementById('k-maxh').value=c.maxh;
@@ -365,9 +365,9 @@ function init(){
 }
 
 function cfg(){return JSON.parse(localStorage.getItem('hg_cfg')||'{}');}
-function saveKeys(){const c=cfg();c.ant=document.getElementById('k-ant').value.trim();c.news=document.getElementById('k-news').value.trim();c.bkey=document.getElementById('k-brent').value.trim();c.model=document.getElementById('k-model').value;localStorage.setItem('hg_cfg',JSON.stringify(c));sal('keys-ale','Keys saved.','ok');if(c.bkey)fetchBrent(true);}
+function saveKeys(){const c=cfg();c.ant=document.getElementById('k-ant').value.trim();c.news=document.getElementById('k-news').value.trim();c.oilkey=document.getElementById('k-oilprice').value.trim();c.model=document.getElementById('k-model').value;localStorage.setItem('hg_cfg',JSON.stringify(c));sal('keys-ale','Keys saved.','ok');if(c.oilkey)fetchBrent(true);}
 function saveCfg(){const c=cfg();c.sys=document.getElementById('k-sys').value;c.hours=document.getElementById('k-hours').value;c.maxh=document.getElementById('k-maxh').value;localStorage.setItem('hg_cfg',JSON.stringify(c));localStorage.setItem('hg_kws',JSON.stringify(getKws()));sal('cfg-ale','Config saved.','ok');}
-function clearKeys(){localStorage.removeItem('hg_cfg');['k-ant','k-news','k-brent'].forEach(id=>document.getElementById(id).value='');sal('keys-ale','Keys cleared.','ok');}
+function clearKeys(){localStorage.removeItem('hg_cfg');['k-ant','k-news','k-oilprice'].forEach(id=>document.getElementById(id).value='');sal('keys-ale','Keys cleared.','ok');}
 
 function getKws(){return Array.from(document.querySelectorAll('.kwchip')).map(c=>c.dataset.kw);}
 function addKwChip(kw){const w=document.getElementById('kwrap');const d=document.createElement('div');d.className='kwchip';d.dataset.kw=kw;d.innerHTML=`${kw}<button onclick="this.parentElement.remove()">x</button>`;w.appendChild(d);}
@@ -378,89 +378,69 @@ async function fetchBrent(){
   document.getElementById('brent-btn').disabled=true;
   document.getElementById('brent-res').textContent='Fetching...';
   sal('brent-ale','','');
-  
-  let price=null;
-  let source='';
-  
-  // Try oilprice.com scraping via AllOrigins
+
+  const key = cfg().oilkey;
+  if (!key) {
+    document.getElementById('brent-res').textContent='No key';
+    sal('brent-ale','Enter your OilPrice API key in Keys & Config above, then save.','er');
+    document.getElementById('brent-btn').disabled=false;
+    return;
+  }
+
+  const API_URL = 'https://api.oilpriceapi.com/v1/prices/latest?by_code=BRENT_CRUDE_USD';
+  let price=null, source='';
+
+  // Tier 1 — direct call (works when oilpriceapi.com has whitelisted this origin)
   try {
-    console.log('[Brent] Attempting oilprice.com scrape...');
-    const targetUrl = 'https://oilprice.com/';
-    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl);
-    
-    const response = await fetch(proxyUrl);
-    if (response.ok) {
-      const data = await response.json();
-      const html = data.contents;
-      console.log('[Brent] HTML received, length:', html.length);
-      
-      // Try multiple regex patterns for Brent crude price
-      const patterns = [
-        /Brent[^$]*\$\s*([\d,]+\.?\d*)/i,
-        /<[^>]*>Brent[^<]*<[^>]*>\s*\$?\s*([\d,]+\.?\d*)/i,
-        /Brent\s+Crude[^$]*\$\s*([\d,]+\.?\d*)/i,
-        /"Brent"[^$]*\$\s*([\d,]+\.?\d*)/i
-      ];
-      
-      for (const pattern of patterns) {
-        const match = html.match(pattern);
-        if (match && match[1]) {
-          const priceStr = match[1].replace(/,/g, '');
-          const parsedPrice = parseFloat(priceStr);
-          if (parsedPrice > 30 && parsedPrice < 200) { // Sanity check
-            price = parsedPrice;
-            source = 'oilprice.com';
-            console.log('[Brent] Price found via pattern:', pattern, '=', price);
-            break;
-          }
-        }
+    console.log('[Brent] oilpriceapi.com direct call…');
+    const r = await fetch(API_URL, {
+      headers: { 'Authorization': 'Token ' + key, 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(7000)
+    });
+    if (r.ok) {
+      const json = await r.json();
+      if (json.status === 'success' && json.data?.price > 0) {
+        price = parseFloat(json.data.price);
+        source = 'oilpriceapi.com';
+        console.log('[Brent] Direct price:', price);
       }
     }
-  } catch (err) {
-    console.log('[Brent] oilprice.com error:', err.message);
-  }
-  
-  // Fallback: Try Yahoo Finance
+  } catch (err) { console.log('[Brent] Direct call failed:', err.message); }
+
+  // Tier 2 — corsproxy.io (forwards Auth header — works on any domain)
   if (!price) {
     try {
-      console.log('[Brent] Attempting Yahoo Finance fallback...');
-      const yahooUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/BZ=F?interval=1d';
-      const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(yahooUrl);
-      
-      const response = await fetch(proxyUrl);
-      if (response.ok) {
-        const data = await response.json();
-        const content = JSON.parse(data.contents);
-        const priceData = content?.chart?.result?.[0]?.meta?.regularMarketPrice;
-        if (priceData && !isNaN(priceData) && priceData > 30 && priceData < 200) {
-          price = parseFloat(priceData);
-          source = 'Yahoo Finance';
-          console.log('[Brent] Yahoo price:', price);
+      console.log('[Brent] Trying corsproxy.io…');
+      const r2 = await fetch('https://corsproxy.io/?' + encodeURIComponent(API_URL), {
+        headers: { 'Authorization': 'Token ' + key, 'Content-Type': 'application/json' },
+        signal: AbortSignal.timeout(10000)
+      });
+      if (r2.ok) {
+        const json = await r2.json();
+        if (json.status === 'success' && json.data?.price > 0) {
+          price = parseFloat(json.data.price);
+          source = 'oilpriceapi.com (proxy)';
+          console.log('[Brent] Proxy price:', price);
         }
       }
-    } catch (err) {
-      console.log('[Brent] Yahoo Finance error:', err.message);
-    }
+    } catch (err) { console.log('[Brent] corsproxy.io failed:', err.message); }
   }
-  
-  // Update if price found
+
   if (price) {
     BRT = {p: price, ts: new Date(), live: true};
     updBrentBar();
     P.c = Math.min(0.98, Math.max(0.80, 0.70 + ((price - 65) / 10) * 0.04));
     SR.c = 'auto';
-    renderPG();
-    upD();
-    upJ();
+    renderPG(); upD(); upJ();
     document.getElementById('brent-res').textContent = '$' + price.toFixed(2) + ' via ' + source;
-    sal('brent-ale', 'Brent $' + price.toFixed(2) + ' via ' + source + ' - c auto-updated to ' + P.c.toFixed(2), 'ok');
-    addLog('m', 'Brent $' + price.toFixed(2) + ' (' + source + ') -> c=' + P.c.toFixed(2));
+    sal('brent-ale', 'Brent $' + price.toFixed(2) + ' via ' + source + ' — c auto-updated to ' + P.c.toFixed(2), 'ok');
+    addLog('m', 'Brent $' + price.toFixed(2) + ' (' + source + ') → c=' + P.c.toFixed(2));
   } else {
     document.getElementById('brent-res').textContent = 'Failed';
-    sal('brent-ale', 'Auto-fetch failed. Use manual override below.', 'er');
+    sal('brent-ale', 'API fetch failed. Check your OilPrice API key or use manual override below.', 'er');
     console.log('[Brent] All fetch attempts failed');
   }
-  
+
   document.getElementById('brent-btn').disabled = false;
 }
 
