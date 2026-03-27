@@ -470,7 +470,7 @@ footer {
   font-family: var(--mono); font-size: 19px; font-weight: 700;
   color: #fca5a5;
   white-space: nowrap;
-  animation: bb-scroll 130s linear infinite;
+  animation: bb-scroll 200s linear infinite;
   display: inline-block;
   padding-left: 100%;
   text-shadow: 0 1px 4px rgba(0,0,0,0.6);
@@ -1148,7 +1148,28 @@ setInterval(updateClosureDays, 60000);
   setInterval(tick, 30000);
 })();
 
-// ── Banner & Alert Cards — driven purely from params.json news[] ─────
+// ── Banner & Alert Cards — driven from params.json news[] with inline fallback ─
+// INLINE FALLBACK DATA — matches params.json exactly.
+// Used when fetch() is blocked (file:// protocol) or params.json unavailable.
+const PARAMS_FALLBACK = {
+  meta: {
+    closureDays: 26,
+    trapStatus: 'active',
+    strategicSummary: 'Dominant strategy trap remains active. Trump-Iran talks signal is the first Sr-proximate event of the crisis but Iran\'s denial keeps Sr probability-weighted at ~2.7 units — well below the 18-unit threshold. E* ≈ 13.7 following Brent fall. Deployment of 2,500 Marines delivers Sr=0 and reduces E* by only 3.2%. mBridge 45% volume surge accelerates hegemony decay (Eq.8). No trap-breaking event yet on record.',
+    analystNotes: 'Live calibration — 26 March 2026. Trump-Iran talks signal detected 23 March. Brent fell 11% to ~$99 on talks rumour; Iran denied talks same day. 2,500 Marines deploying to region. IRGC reaffirmed indefinite closure. mBridge transactions up 45%.',
+    news: [
+      { id:'N-001', date:'2026-03-24', headline:"Trump Truth Social post claims 'productive conversations' with Iran", severity:'amber', eq:'12', eqLabel:'Eq.12 — Sr threshold', metricsImpact:{ Sr_delta:'+2.7 (prob-weighted)', Sr_new:'~2.7 / 18 req.', dominance:'Trap active — 17.22 gap remains', note:'Iran denial same day discounts signal to ~15% probability weight. First genuine Sr event of crisis.' }, ticker:"★ TRUMP TRUTH SOCIAL — 'Productive conversations' with Iran — First Sr signal of crisis — Sr ≈ 2.7 (prob-weighted) vs 18 required — Gap: 15.3 units — Trap remains ACTIVE" },
+      { id:'N-002', date:'2026-03-24', headline:'Iran denies talks — IRGC reaffirms indefinite Hormuz closure', severity:'red', eq:'5', eqLabel:'Eq.5 — Commitment Device', metricsImpact:{ c_impact:'c remains ≥ 0.87 — denial confirms credibility floor', E_star:'13.7 — unchanged', Sr_delta:'Prob-weighted Sr falls back toward 0', note:'Iran denial negates talks signal. c (credibility) remains high. E* floor confirmed at 13.7.' }, ticker:'IRAN DENIES TALKS — IRGC: Strait closed indefinitely — c remains 0.87+ — E* = 13.7 — Credibility floor confirmed' },
+      { id:'N-003', date:'2026-03-23', headline:'Brent crude falls 11% to ~$99 on talks rumour', severity:'amber', eq:'5', eqLabel:'Eq.5 — Credibility / E*', metricsImpact:{ brent:'$99 (was ~$111)', c_delta:'c falls ~0.04 → c ≈ 0.87', E_star:'E* = 13.7 (was ~14.4)', note:'Market prices ceasefire probability. 11% fall is largest single-day drop since crisis began. Confirms Brent-c linkage.' }, ticker:'BRENT -11% → $99 — Market prices ceasefire probability — c falls to ≈ 0.87 — E* = 13.7 — War premium partially unwound' },
+      { id:'N-004', date:'2026-03-22', headline:'2,500 U.S. Marines deploying — USS Boxer reactivated', severity:'amber', eq:'5', eqLabel:'Eq.5 — m (geographic multiplier)', metricsImpact:{ m_delta:'3.0 → 2.9 (-0.1)', E_star_delta:'ΔE* ≈ −0.45 (3.2% reduction)', Sr_military:'Sr(troops) = 0', dominance:'Trap unchanged — financial plane Ψ unaffected', note:'Separability (Eq.9): escorts restore physical transit ΔΦ > 0 but yuan settlement via CIPS continues ΔΨ = 0.' }, ticker:'2,500 MARINES DEPLOY — USS Boxer reactivated — ΔE* ≈ −0.45 (3.2%) — Sr(military) = 0 — Dominant strategy: UNCHANGED — Yuan plane Ψ unaffected' },
+      { id:'N-005', date:'2026-03-21', headline:'China mBridge transactions surge 45% — CIPS volume record', severity:'red', eq:'8', eqLabel:'Eq.8 — Hegemony Decay', metricsImpact:{ rho_delta:'ρ_total += ~0.003 per round', H_impact:'H after 26 rounds ≈ 6.8 (97% of H₀) — decay accelerating', G_impact:'G (yuan gain) rising — settlement infrastructure deepens', note:'Each mBridge record is permanent — payment rails persist post-crisis. Long-run H trajectory worsens irreversibly.' }, ticker:'CHINA mBridge +45% — CIPS volume record — ρ_I += 0.003/round — Hegemony decay ACCELERATING — Permanent infrastructure lock-in — G rising' },
+      { id:'N-006', date:'2026-03-20', headline:'European nations call for de-escalation — refuse U.S. coalition', severity:'amber', eq:'4', eqLabel:'Eq.4 — Dominant Strategy Trap (NE)', metricsImpact:{ ne_signal:'Alliance defection confirms NE prediction', escalate_payoff:'U.S. Escalate = −(H + E*) = −20.7', accommodate_payoff:'U.S. Accommodate = −H = −7', note:'Rational allies refuse to absorb E* cost. Confirms Eq.4 minimax: a* = Accommodate. Each refusal also reduces Ps(0) in Eq.7.' }, ticker:'EUROPE REFUSES COALITION — Confirms Eq.4 NE prediction — U.S. Escalate payoff = −20.7 — U.S. Accommodate = −7 — Allies choose Accommodate — Cascade risk via Eq.7 rising' },
+      { id:'N-007', date:'2026-03-19', headline:'Bessent sanctions waiver — oil-specific OFAC relief', severity:'amber', eq:'12', eqLabel:'Eq.12 — Sr threshold', metricsImpact:{ Sr_bessent:'0.78 units', Sr_coverage:'4.3% of 18-unit threshold', dominance_margin:'17.22 gap remains', note:'Market-specific waiver, not OFAC/SWIFT full relief. Does not affect c, m, or E. Dominant strategy: unchanged.' }, ticker:'BESSENT WAIVER — Sr = 0.78 / 18 required — Coverage: 4.3% — Dominance margin: 17.22 — Strategy: UNCHANGED — c, m, E unaffected' }
+    ]
+  },
+  parameters: { E:5, c:0.87, m:3.0, H:7, G:8, S:10, Sr:0.78, k:1.3, nu:3, Ps:12, rhoI:0.03, n:1.3 }
+};
+
 (function() {
   const bbText = document.getElementById('bb-text');
   const alertContainer = document.getElementById('alert-card-container');
@@ -1222,16 +1243,21 @@ setInterval(updateClosureDays, 60000);
     bbText.textContent = full;
   }
 
+  // Render immediately from inline fallback — guarantees content even on file://
+  buildBannerText(PARAMS_FALLBACK);
+  renderAlertCards(PARAMS_FALLBACK.meta.news);
+
+  // Then try to refresh from the live params.json (works on HTTP/HTTPS servers)
   fetch('params.json?v=' + Date.now(), { cache: 'no-store' })
-    .then(r => r.json())
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(data => {
+      // Override fallback with live data if available
       buildBannerText(data);
-      renderAlertCards((data.meta && data.meta.news) || []);
+      renderAlertCards((data.meta && data.meta.news) || PARAMS_FALLBACK.meta.news);
     })
     .catch(err => {
-      console.log('[Banner] Could not fetch params.json:', err.message);
-      if (bbText) bbText.textContent = '★ HORMUZ GAMBIT — Live geoeconomic analysis — Strategic dominance trap active — Sr = 0.78 / 18 required — Day ' + Math.floor((new Date() - new Date('2026-02-28T00:00:00Z')) / 864e5);
-      if (alertCount) alertCount.textContent = 'params.json unavailable';
+      console.log('[Banner] Fetch unavailable (file:// or offline) — using inline fallback data:', err.message);
+      // Already rendered from fallback above — nothing more to do
     });
 })();
 
@@ -1336,6 +1362,38 @@ const MODEL = {
 };
 
 async function loadParams() {
+  // Always seed MODEL from inline fallback first (works on file://)
+  (function seedFromFallback() {
+    const p = PARAMS_FALLBACK.parameters || {};
+    Object.assign(MODEL, {
+      E:    p.E    ?? MODEL.E,
+      c:    p.c    ?? MODEL.c,
+      m:    p.m    ?? MODEL.m,
+      H:    p.H    ?? MODEL.H,
+      G:    p.G    ?? MODEL.G,
+      S:    p.S    ?? MODEL.S,
+      Sr:   p.Sr   ?? MODEL.Sr,
+      k:    p.k    ?? MODEL.k,
+      nu:   p.nu   ?? MODEL.nu,
+      Ps:   p.Ps   ?? MODEL.Ps,
+      rhoI: p.rhoI ?? MODEL.rhoI,
+      n:    p.n    ?? MODEL.n,
+      paramsLoaded: true,
+      meta: PARAMS_FALLBACK.meta || {},
+    });
+    const srEl2 = document.getElementById('tick-sr');
+    if (srEl2) srEl2.textContent = MODEL.Sr.toFixed(2) + ' / ' + (MODEL.G + MODEL.S) + ' req.';
+    const msSrEl2 = document.getElementById('ms-sr');
+    if (msSrEl2) msSrEl2.textContent = (MODEL.G + MODEL.S) + ' vs ' + MODEL.Sr.toFixed(2);
+    const msDomEl2 = document.getElementById('ms-dom-broken');
+    if (msDomEl2) {
+      const broken = MODEL.Sr >= (MODEL.G + MODEL.S);
+      msDomEl2.textContent = broken ? '★ YES' : 'No';
+      msDomEl2.className = 'mast-stat-val ' + (broken ? '' : 'danger');
+    }
+    if (typeof runBriefing === 'function') runBriefing();
+  })();
+
   try {
     const r = await fetch('params.json?v=' + Date.now(), { cache: 'no-store' });
     if (!r.ok) return;
