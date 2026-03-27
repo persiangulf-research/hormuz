@@ -493,67 +493,104 @@ footer {
 
 /* ── ALERT CARD — news with metrics impact ─────────────────────────── */
 .alert-card {
-  margin: 0; padding: 1.75rem clamp(1.5rem,4vw,3rem);
+  margin: 0; padding: 1.25rem clamp(1.5rem,4vw,3rem);
   background: linear-gradient(135deg, #1c0a0a 0%, #0d1219 100%);
   border-bottom: 1px solid rgba(239,68,68,0.25);
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  align-items: start;  /* cards align to top, no stretching between rows */
 }
 @media (max-width:768px){ .alert-card { grid-template-columns: 1fr; } }
-.ac-item { display: flex; flex-direction: column; gap: .4rem; }
+
+.ac-item {
+  display: flex; flex-direction: column; gap: .35rem;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(239,68,68,.15);
+  border-radius: 4px;
+  padding: .9rem 1rem;
+  overflow: hidden;     /* clips any overflow */
+  min-width: 0;         /* allows flex children to shrink below content size */
+}
 .ac-tag {
   font-family: var(--mono); font-size: 9px; font-weight: 700;
-  letter-spacing: .18em; text-transform: uppercase;
-  display: flex; align-items: center; gap: .5rem;
+  letter-spacing: .15em; text-transform: uppercase;
+  display: flex; align-items: center; gap: .45rem;
+  flex-shrink: 0;
 }
 .ac-tag::before {
-  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  content: ''; width: 5px; height: 5px; border-radius: 50%;
   background: currentColor; flex-shrink: 0;
 }
 .ac-tag.red { color: #ef4444; }
 .ac-tag.amber { color: var(--amber-l); }
 .ac-tag.green { color: #22c55e; }
+.ac-date {
+  font-family: var(--mono); font-size: 9px; color: rgba(255,255,255,.25);
+  letter-spacing: .06em; flex-shrink: 0;
+}
 .ac-title {
-  font-family: var(--display); font-size: 1.05rem; letter-spacing: .03em;
-  color: #fff; line-height: 1.2;
+  font-family: var(--display); font-size: 1rem; letter-spacing: .02em;
+  color: #fff; line-height: 1.25;
+  word-break: break-word; overflow-wrap: break-word;
 }
 .ac-body {
-  font-family: var(--serif); font-size: .8rem; color: rgba(255,255,255,.55);
-  line-height: 1.6;
+  font-family: var(--serif); font-size: .78rem; color: rgba(255,255,255,.5);
+  line-height: 1.55; word-break: break-word;
 }
 .ac-eq {
-  font-family: var(--mono); font-size: 10.5px; font-weight: 600;
-  color: var(--amber-l); margin-top: .25rem;
-}
-.ac-date {
-  font-family: var(--mono); font-size: 9px; color: rgba(255,255,255,.3);
-  margin-top: .1rem; letter-spacing: .06em;
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  color: var(--amber-l);
+  word-break: break-word; overflow-wrap: break-word;
 }
 .ac-metrics {
-  margin-top: .5rem; padding: .5rem .65rem;
-  background: rgba(255,255,255,.04); border-left: 2px solid rgba(212,135,10,.4);
-  display: flex; flex-direction: column; gap: 3px;
+  margin-top: .35rem; padding: .45rem .6rem;
+  background: rgba(255,255,255,.04);
+  border-left: 2px solid rgba(212,135,10,.4);
+  border-radius: 0 2px 2px 0;
+  display: flex; flex-direction: column; gap: 4px;
+  overflow: hidden; min-width: 0;
 }
 .ac-metric-row {
-  font-family: var(--mono); font-size: 10px;
-  display: flex; gap: .5rem; align-items: baseline;
+  font-family: var(--mono); font-size: 9.5px;
+  display: flex; gap: .4rem; align-items: baseline;
+  min-width: 0;
 }
-.ac-metric-key { color: rgba(232,226,212,.35); min-width: 80px; flex-shrink: 0; }
-.ac-metric-val { color: var(--amber-l); font-weight: 600; flex: 1; }
-.ac-metric-note { color: rgba(232,226,212,.35); font-size: 9px; font-style: italic; }
+.ac-metric-key {
+  color: rgba(232,226,212,.32);
+  min-width: 72px; max-width: 90px;
+  flex-shrink: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ac-metric-val {
+  color: var(--amber-l); font-weight: 600;
+  flex: 1; min-width: 0;
+  word-break: break-word; overflow-wrap: break-word;
+  white-space: normal;
+}
+.ac-metric-note-row {
+  font-family: var(--serif); font-size: 9.5px;
+  color: rgba(232,226,212,.42); font-style: italic;
+  line-height: 1.45;
+  word-break: break-word; overflow-wrap: break-word;
+  padding-top: 2px;
+  border-top: 1px solid rgba(255,255,255,.04);
+}
 /* alert section header bar */
 .alert-section-bar {
   padding: 0 clamp(1.5rem,4vw,3rem);
-  height: 36px; display: flex; align-items: center; gap: 1rem;
-  background: rgba(127,29,29,.35);
-  border-bottom: 1px solid rgba(239,68,68,.2);
+  height: 34px; display: flex; align-items: center; gap: 1rem;
+  background: rgba(127,29,29,.3);
+  border-bottom: 1px solid rgba(239,68,68,.18);
 }
 .alert-section-label {
   font-family: var(--mono); font-size: 9px; font-weight: 700;
-  letter-spacing: .2em; text-transform: uppercase; color: #ef4444;
+  letter-spacing: .18em; text-transform: uppercase; color: #ef4444;
+  white-space: nowrap;
 }
 .alert-section-count {
-  font-family: var(--mono); font-size: 10px; color: rgba(252,165,165,.55);
+  font-family: var(--mono); font-size: 10px; color: rgba(252,165,165,.5);
+  white-space: nowrap;
 }
 
 /* ── AUTOMATED BRIEFING ────────────────────────────────────────────── */
@@ -1190,17 +1227,23 @@ const PARAMS_FALLBACK = {
     alertContainer.innerHTML = newsItems.map(item => {
       const cls = severityTagClass(item.severity);
       const mi = item.metricsImpact || {};
-      // Build metrics rows from all keys except 'note'
+      const severityLabel = item.severity === 'red' ? 'CRITICAL' : item.severity === 'green' ? 'UPDATE' : 'ALERT';
+      // Build metric rows (exclude 'note' key — rendered separately)
       const metricRows = Object.entries(mi)
         .filter(([k]) => k !== 'note')
-        .map(([k, v]) => `<div class="ac-metric-row"><span class="ac-metric-key">${k.replace(/_/g,' ')}</span><span class="ac-metric-val">${v}</span></div>`)
+        .map(([k, v]) => `
+          <div class="ac-metric-row">
+            <span class="ac-metric-key">${k.replace(/_/g,' ')}</span>
+            <span class="ac-metric-val">${v}</span>
+          </div>`)
         .join('');
+      // Note rendered as its own row with serif italic styling
       const noteRow = mi.note
-        ? `<div class="ac-metric-row"><span class="ac-metric-key" style="min-width:unset;color:rgba(232,226,212,.5);font-style:italic;font-size:9.5px">${mi.note}</span></div>`
+        ? `<div class="ac-metric-note-row">${mi.note}</div>`
         : '';
       return `
         <div class="ac-item">
-          <div class="ac-tag ${cls}">${item.severity === 'red' ? 'CRITICAL' : item.severity === 'green' ? 'UPDATE' : 'ALERT'} · ${item.eqLabel || item.eq}</div>
+          <div class="ac-tag ${cls}">${severityLabel} · ${item.eqLabel || item.eq || ''}</div>
           <div class="ac-date">${item.date || ''} · ${item.id || ''}</div>
           <div class="ac-title">${item.headline}</div>
           <div class="ac-metrics">
