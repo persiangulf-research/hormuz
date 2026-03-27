@@ -118,36 +118,6 @@
           "note": "Each mBridge record is permanent — payment rails persist post-crisis. Long-run H trajectory worsens irreversibly."
         },
         "ticker": "CHINA mBridge +45% — CIPS volume record — ρ_I += 0.003/round — Hegemony decay ACCELERATING — Permanent infrastructure lock-in — G rising"
-      },
-      {
-        "id": "N-006",
-        "date": "2026-03-20",
-        "headline": "European nations call for de-escalation — refuse U.S. coalition",
-        "severity": "amber",
-        "eq": "4",
-        "eqLabel": "Eq.4 — Dominant Strategy Trap (NE)",
-        "metricsImpact": {
-          "ne_signal": "Alliance defection confirms NE prediction",
-          "escalate_payoff": "U.S. Escalate = −(H + E*) = −25.04 (updated)",
-          "accommodate_payoff": "U.S. Accommodate = −H = −8 (updated)",
-          "note": "Rational allies refuse to absorb E* cost — now worse than ever at 17.04. Confirms Eq.4 minimax: a* = Accommodate."
-        },
-        "ticker": "EUROPE REFUSES COALITION — Confirms Eq.4 NE prediction — U.S. Escalate = −25.04 — U.S. Accommodate = −8 — Allies choose Accommodate"
-      },
-      {
-        "id": "N-007",
-        "date": "2026-03-19",
-        "headline": "Bessent sanctions waiver — oil-specific OFAC relief",
-        "severity": "amber",
-        "eq": "12",
-        "eqLabel": "Eq.12 — Sr threshold",
-        "metricsImpact": {
-          "Sr_bessent": "0.78 units",
-          "Sr_coverage": "4.3% of 18-unit threshold",
-          "dominance_margin": "17.22 gap remains",
-          "note": "Market-specific waiver, not OFAC/SWIFT full relief. Does not affect c, m, or E. Dominant strategy: unchanged."
-        },
-        "ticker": "BESSENT WAIVER — Sr = 0.78 / 18 required — Coverage: 4.3% — Dominance margin: 17.22 — Strategy: UNCHANGED"
       }
     ]
   },
