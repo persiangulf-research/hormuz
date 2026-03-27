@@ -1,34 +1,34 @@
 {
   "meta": {
-    "published": "2026-03-26T22:34:21.927Z",
-    "closureDays": 26,
+    "published": "2026-03-27T00:12:37.750Z",
+    "closureDays": 27,
     "analystNotes": null,
     "aiCalibrated": true,
-    "brentPrice": 106.95,
-    "brentFetched": "2026-03-26T22:33:11.207Z",
+    "brentPrice": 100.75,
+    "brentFetched": "2026-03-27T00:09:11.231Z",
     "primaryEquation": "Eq.3",
     "trapStatus": "active",
-    "strategicSummary": "Day 26 marks a dramatic escalation threshold: the conflict is no longer U.S.-Iran bilateral but a coalition war with UAE and Bahrain as active belligerents, publicly exposed by premier Western media. Trump's denial of negotiations while UAE commits to ground operations signals the diplomatic off-ramp has effectively closed for now. The IRGC threat against UAE and Bahrain is highly credible given c=0.95, meaning Gulf infrastructure — Abu Dhabi, Dubai ports, Bahraini U.S. naval base — is now a live target. The public exposure of Bahraini basing strips U.S. plausible deniability and sharply reduces Ps, as regional partners now face domestic and international blowback. Putin's COVID-scale warning is a signal that Russia may provide Iran asymmetric support or at minimum political cover at the UNSC. Brent at $106.95 reflects the market pricing in sustained disruption but not yet full Hormuz closure — the UAE ground commitment is the single most destabilizing variable as it transforms this from a naval/air campaign into a multi-front war with direct Gulf state exposure.",
-    "mostSignificantEvent": "UAE rejection of ceasefire and commitment to join ground attack on Iran — this transforms the conflict architecture from bilateral U.S.-Iran to a multi-state coalition war, dramatically raises Iran's incentive to strike Gulf infrastructure, and effectively closes the near-term diplomatic off-ramp.",
+    "strategicSummary": "Day 27 marks a dangerous inflection: Iran's public rejection of Trump's pause narrative eliminates the soft off-ramp and forces both sides into a credibility-or-capitulate dynamic. The Pentagon's ground force contingency planning, combined with Israel's thousand-target campaign, signals the U.S.-Israeli axis is preparing for escalation dominance rather than negotiated settlement. Most critically, Pakistan's intervention introduces a nuclear-armed third party with direct skin in the game — its 'brutal response' warning is not rhetoric from a peripheral actor but from a 240-million-person state with nuclear capability bordering Iran. Iran's 'unprecedented measures' threat against UAE and Bahrain directly targets the U.S. Fifth Fleet basing infrastructure, meaning any Israeli or U.S. ground operation risks triggering a Persian Gulf-wide conflict that could render Ps collapse self-fulfilling. The trap remains fully active and is tightening.",
+    "mostSignificantEvent": "Iran publicly contradicting Trump's ceasefire/pause claim (Headline 1) combined with Pentagon ground force planning (Headline 3) — this pairing eliminates the diplomatic ambiguity that typically allows face-saving exits, locking both sides into a binary escalate-or-capitulate dynamic with no negotiated middle ground visible.",
     "headlines": [
       {
-        "title": "Contrary to Trump's statements, no negotiations are underway between Iran and the United States.",
+        "title": "Iran contradicts Trump and says it did not ask for a pause in strikes, according to WSJ report",
         "eq": "x"
       },
       {
-        "title": "Russia's President Vladimir Putin says it is difficult to predict the consequences of the war on Iran, but that some have compared its potential impact greater than the COVID-19 hoax pandemic",
-        "eq": "x"
+        "title": "Israeli military says it has struck over a thousand military industrial targets in Iran",
+        "eq": "5m"
       },
       {
-        "title": "UAE rejects ceasefire with Iran and they will join the ground attack on Iran",
+        "title": "The Pentagon is 'developing military options for a \"final blow\" in Iran that could include the use of ground forces and a massive bombing campaign', according to Axios report.",
+        "eq": "5m"
+      },
+      {
+        "title": "Pakistan has strongly warned Israel after attacks near Pakistan’s embassy in Tehran, saying Pakistan is not Qatar and that any harm to its diplomats anywhere in the world will be met with a BRUTAL response",
         "eq": "5"
       },
       {
-        "title": "The New York Times and Wall Street Journal reveal with conclusive evidence Bahraini sites used by the US Army to strike Iran!",
-        "eq": "x"
-      },
-      {
-        "title": "Iranian channels close to the IRGC report a new military planning framework targeting the UAE and Bahrain, warning that any involvement in a ground move against Iranian islands would trigger an “unprecedented and costly” response",
+        "title": "Tehran has prepared “special and unprecedented” measures against the UAE and Bahrain in the event of any ground attack on Iranian islands in the Persian Gulf",
         "eq": "5"
       }
     ]
@@ -43,7 +43,7 @@
     "Sr": 0.78,
     "k": 1.3,
     "nu": 3,
-    "Ps": 9,
+    "Ps": 7,
     "rhoI": 0.03,
     "n": 1.3
   },
