@@ -73,8 +73,8 @@
         </div>
         <div class="term" data-term="m">
           <div class="term-sym">m</div>
-          <div class="term-name">Geographic multiplier</div>
-          <div class="term-desc">m ≥ 1. Hormuz carries ~20% of global crude oil and ~35% of global LNG. Bypass covers only ~42% of pre-war volume. Net irreplaceable fraction ~58%. Calibrated m ≈ 2.8–3.2.</div>
+          <div class="term-name">Geographic multiplier <span style="font-size:0.75em;font-weight:400;color:#fbbf24;">(conditional)</span></div>
+          <div class="term-desc">m ≥ 1. <strong>m_base = 3.0</strong>: Hormuz-only scenario — ~20% of global crude oil and ~35% of global LNG, bypass covers ~42% of pre-war volume, net irreplaceable fraction ~58%. <strong>m_activated = 4.5–5.0</strong>: Dual-strait scenario — Houthi activation of Bab-el-Mandeb adds a second simultaneous chokepoint, blocking Red Sea routing (~12% global trade) and eliminating the Suez bypass alternative. The two-chokepoint system is structurally non-additive: m rises to 4.5–5.0 because bypass options collapse entirely.</div>
         </div>
         <div class="term" data-term="Estar">
           <div class="term-sym">E*</div>
@@ -157,9 +157,14 @@
         <div class="bc-note">Even perfect credibility adds nothing. Hormuz's m≈3 is its strategic core advantage.</div>
       </div>
       <div class="boundary bc-current">
-        <div class="bc-label">Current · c=0.90, m=3.0</div>
+        <div class="bc-label">Current · c=0.90, m=3.0 (Hormuz-only)</div>
         <div class="bc-eq">E* = 5 × 2.80 = 14.0</div>
         <div class="bc-note">March 2026. Active deterrence zone. Escalation gap = 14 units.</div>
+      </div>
+      <div class="boundary bc-dual" style="border-color:#f97316;background:rgba(249,115,22,0.07);">
+        <div class="bc-label" style="color:#f97316;">Dual-strait · c=0.90, m=4.75</div>
+        <div class="bc-eq">E* = 5 × 4.375 = 21.9</div>
+        <div class="bc-note">Houthi activation of Bab-el-Mandeb. Suez bypass eliminated. Escalation becomes structurally infeasible.</div>
       </div>
     </div>
   </div>
@@ -198,6 +203,29 @@
           <div class="m-total"><span>Net m ≈ 2.8–3.2</span></div>
         </div>
         <div class="bypass-note">Yanbu (7M bpd) + Fujairah (1.8M bpd) = 8.8M bpd bypass vs 21M bpd Hormuz. Only 42% covered. Net irreplaceable: ~58%.</div>
+      </div>
+      <div class="param-card param-dual" style="border-top:2px solid #f97316;grid-column:1/-1;margin-top:1rem;">
+        <div class="param-header">
+          <div class="param-sym" style="color:#f97316;">m*</div>
+          <div class="param-title">Dual-strait scenario — Houthi activation of Bab-el-Mandeb</div>
+        </div>
+        <div style="font-size:0.88rem;color:#9ca3af;line-height:1.8;margin-top:0.75rem;">
+          <p style="margin:0 0 0.6rem;">When Houthi forces activate Bab-el-Mandeb simultaneously with Hormuz closure, the Suez Canal routing — the primary alternative for European and U.S. East Coast buyers — is eliminated. The two-chokepoint system is <em>structurally non-additive</em>: the bypass option that reduces Hormuz's m to ~3.0 ceases to exist, pushing m into the 4.5–5.0 range.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.75rem;margin-top:0.8rem;">
+            <div style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.25);border-radius:6px;padding:0.75rem;">
+              <div style="color:#f97316;font-family:monospace;font-size:0.95rem;font-weight:600;">m_base = 3.0</div>
+              <div style="color:#9ca3af;font-size:0.8rem;margin-top:0.3rem;">Hormuz-only. Suez bypass available (~58% irreplaceable).</div>
+            </div>
+            <div style="background:rgba(249,115,22,0.14);border:1px solid rgba(249,115,22,0.45);border-radius:6px;padding:0.75rem;">
+              <div style="color:#f97316;font-family:monospace;font-size:0.95rem;font-weight:600;">m_activated = 4.5–5.0</div>
+              <div style="color:#9ca3af;font-size:0.8rem;margin-top:0.3rem;">Dual-strait. Suez blocked. Red Sea routing (~12% global trade) also severed. Near-total irreplaceability.</div>
+            </div>
+            <div style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.25);border-radius:6px;padding:0.75rem;">
+              <div style="color:#f97316;font-family:monospace;font-size:0.95rem;font-weight:600;">E*(activated) ≈ 21.9</div>
+              <div style="color:#9ca3af;font-size:0.8rem;margin-top:0.3rem;">At c=0.90, m=4.75: E*=5×[1+0.90×3.75]=5×4.375=21.9. Escalation structurally infeasible.</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -245,8 +273,25 @@
     <div class="section-tag">06 · Interactive</div>
     <h2 class="section-title">Live Simulator</h2>
     <p class="section-lead">Adjust parameters and watch E* update in real time. All payoff columns recalculate instantly.</p>
+    <!-- Dual-strait scenario toggle -->
+    <div id="dual-strait-banner" style="display:none;background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.45);border-radius:8px;padding:0.85rem 1.2rem;margin-bottom:1.25rem;font-size:0.88rem;color:#fed7aa;line-height:1.6;">
+      <strong style="color:#f97316;">⚡ Dual-strait scenario active</strong> — Houthi forces have activated Bab-el-Mandeb. Suez Canal routing is eliminated. m has been elevated from m_base = 3.0 to m_activated = 4.75. The m slider is overridden; all bypass alternatives have collapsed.
+    </div>
     <div class="sim-layout">
       <div class="sim-controls">
+        <!-- Dual-strait toggle -->
+        <div class="sim-param" style="padding:0.85rem 1rem;background:rgba(249,115,22,0.07);border:1px solid rgba(249,115,22,0.3);border-radius:8px;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.75rem;">
+          <label style="cursor:pointer;display:flex;align-items:center;gap:0.6rem;margin:0;font-size:0.88rem;color:#fed7aa;font-weight:600;flex:1;" for="sim-dual">
+            <span style="font-size:1.1em;">⚡</span>
+            Dual-strait scenario
+            <span style="font-size:0.78rem;font-weight:400;color:#9ca3af;">(Houthi activation of Bab-el-Mandeb)</span>
+          </label>
+          <div style="position:relative;width:44px;height:24px;flex-shrink:0;">
+            <input type="checkbox" id="sim-dual" style="opacity:0;width:0;height:0;position:absolute;">
+            <span id="dual-toggle-track" onclick="document.getElementById('sim-dual').click()" style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#374151;border-radius:24px;transition:.25s;"></span>
+            <span id="dual-toggle-thumb" style="position:absolute;content:'';height:18px;width:18px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.25s;pointer-events:none;"></span>
+          </div>
+        </div>
         <div class="sim-param">
           <label>E — base escalation cost</label>
           <input type="range" id="sim-E" min="1" max="15" step="1" value="5">
@@ -257,10 +302,13 @@
           <input type="range" id="sim-c" min="0" max="10" step="1" value="9">
           <span class="sim-val" id="sim-cv">0.9</span>
         </div>
-        <div class="sim-param">
+        <div class="sim-param" id="sim-m-param">
           <label>m — geographic multiplier</label>
-          <input type="range" id="sim-m" min="10" max="50" step="1" value="30">
+          <input type="range" id="sim-m" min="10" max="60" step="1" value="30">
           <span class="sim-val" id="sim-mv">3.0</span>
+        </div>
+        <div id="sim-m-dual-display" style="display:none;padding:0.6rem 0.75rem;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.3);border-radius:6px;font-size:0.85rem;color:#fed7aa;">
+          m = <strong id="sim-mv-dual">4.75</strong> <span style="color:#9ca3af;font-size:0.78rem;">(dual-strait override — m_base overridden by Houthi activation)</span>
         </div>
         <div class="sim-param">
           <label>H — U.S. hegemony loss</label>
