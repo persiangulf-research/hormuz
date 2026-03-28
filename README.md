@@ -2,13 +2,12 @@
 
 Game-theoretic analysis of the 2026 Hormuz crisis and Iran's de-dollarisation strategy.
 
-**Current Scenario (26 MAR 2026):** IRGC declares Hormuz closure indefinite. 5th Fleet maintains presence. China increases mBridge transactions 45%. Brent remains elevated above $85.
 
 ## 🚀 Deploy to GitHub Pages
 
 1. Push this entire folder to a GitHub repository
 2. Go to **Settings → Pages → Source: Deploy from branch → main → / (root)**
-3. Live at `https://yourusername.github.io/hormuz-gambit/`
+3. Live at `https://yourusername.github.io/hormuz/index.html`
 
 ---
 
@@ -108,37 +107,6 @@ Enter keys in admin panel → Click "Save keys" (stored in browser localStorage 
 └─────────────────────────────────────────────────┘
 ```
 
----
-
-## 📰 Breaking News Banner (index.html)
-
-The public portal features a dynamic breaking news banner:
-
-### **Features:**
-- **Slower scroll:** 60 seconds per cycle (improved readability)
-- **Bigger font:** 15px bold (36% larger)
-- **Dynamic content:** Fetches AI analysis from params.json
-- **Real-time updates:** Auto-refreshes with new calibrations
-
-### **What Shows:**
-- Static scenario (current crisis developments)
-- Dynamic AI analysis from admin panel:
-  - Strategic summary
-  - Most significant event
-  - Trap status (active/weakening/broken)
-  - Primary equation affected
-  - Analyst notes
-  - Brent price
-
-### **Current Scenario:**
-```
-26 MAR 2026 — U.S. FORCES INVADE KHARGH ISLAND — 
-Iranian territory breached — 5th Fleet Marines secure 
-airfield — Houthi forces leverage Bab al-Mandan — 
-Red Sea closure escalates — Brent surges 18% to $89+
-```
-
----
 
 ## 📊 Model Parameters (12 total)
 
@@ -162,18 +130,6 @@ Red Sea closure escalates — Brent surges 18% to $89+
 - **Dominance margin**: `G + S - Sr` (positive = trap active)
 - **Sr coverage**: `Sr/(G+S) × 100%`
 
----
-
-## 🧠 Changelog Learning System
-
-Admin panel automatically tracks:
-- **What headlines** drove which parameter changes
-- **AI justifications** for each change
-- **Confidence levels** (high/medium/low)
-- **Brent price context** at calibration time
-- **Equation distribution** of headlines
-
-**View history** button shows recent calibrations with pattern analysis.
 
 ### **Learning Workflow:**
 
