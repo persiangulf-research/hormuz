@@ -74,12 +74,12 @@
     <div class="section-tag">01 · The Function</div>
     <h2 class="section-title">Equation 12</h2>
     <div class="eq-display">
-      <div class="eq-main">Dominance breaks when: G + (S − S_r) ≤ 0  ⟺  S_r ≥ G + S</div>
+      <div class="eq-main">Dominance breaks when: G + (S − S_r) ≤ 0  ⟺  S_r ≥ G + S  [if mediator_status = 1]</div>
       <div class="eq-terms">
         <div class="term">
           <div class="term-sym">S_r</div>
           <div class="term-name">Sanctions relief</div>
-          <div class="term-desc">The reduction in Iran's ongoing cost of operating under the sanctions regime. S_r must be structural (persistent) to break dominance — a temporary waiver only reduces S for the duration, not permanently. Must be ≥ G+S = 18 to flip the dominance condition.</div>
+          <div class="term-desc">The reduction in Iran's ongoing cost of operating under the sanctions regime. S_r must be structural (persistent) to break dominance — a temporary waiver only reduces S for the duration, not permanently. Must be ≥ G+S = 18 to flip the dominance condition. <strong>Gated by mediator_status: if mediator_status = 0, Sr cannot rise at all — the pathway is physically closed.</strong></div>
         </div>
         <div class="term">
           <div class="term-sym">G</div>
@@ -96,6 +96,16 @@
           <div class="term-name">The threshold = 18</div>
           <div class="term-desc">The minimum sanctions relief required to break Iran's dominant strategy. At G=8, S=10: threshold = 18. This is the payoff-scale equivalent of near-total sanctions removal — the policy goal Iran has sought since 2018.</div>
         </div>
+        <div class="term" style="border-top:2px solid #22c55e;background:rgba(34,197,94,0.04);">
+          <div class="term-sym" style="color:#22c55e;">μ</div>
+          <div class="term-name">mediator_status <span style="font-size:0.75em;font-weight:400;color:#22c55e;">binary flag</span></div>
+          <div class="term-desc">
+            <strong>μ ∈ {0, 1}</strong>. Gates whether the Sr pathway is open at all. <br><br>
+            <strong style="color:#86efac;">μ = 1 · Qatar/Oman operative</strong>: diplomatic back-channel is active; Sr can rise through structured negotiation. Current status: 1, but fragile. Primary indicator: Iranian strike activity on Qatari/Omani assets or personnel. Any strike signals μ → 0.<br><br>
+            <strong style="color:#f87171;">μ = 0 · pathway closed</strong>: Qatar and Oman are no longer available as intermediaries (either due to Iranian strikes, political withdrawal, or U.S. refusal). Sr is structurally locked at current level. The only resolution path becomes military, not diplomatic. Trap persists indefinitely.<br><br>
+            <em>Monitoring indicator</em>: Iranian IRGC strike activity targeting Qatari energy infrastructure (North Field LNG) or Omani diplomatic assets is the primary μ → 0 signal.
+          </div>
+        </div>
       </div>
     </div>
     <div class="insight-strip">
@@ -110,6 +120,10 @@
       <div class="insight">
         <div class="insight-icon">Sr = 18 ≈ JCPOA 2.0</div>
         <div class="insight-text">The instruments required to deliver Sr=18 are diplomatically equivalent to ending Maximum Pressure — exactly the comprehensive deal Iran has sought since 2018. The equation maps to Iran's stated reopening conditions.</div>
+      </div>
+      <div class="insight" style="border-top:2px solid #22c55e;background:rgba(34,197,94,0.04);">
+        <div class="insight-icon" style="color:#86efac;">μ = 1 (current, fragile)</div>
+        <div class="insight-text">mediator_status gates the entire Sr pathway. Qatar (North Field LNG) and Oman (longstanding Iran channel) are active. Monitor: any IRGC strike on Qatari/Omani assets = μ → 0. At μ = 0, Sr is locked — military resolution only.</div>
       </div>
     </div>
   </div>
@@ -237,12 +251,32 @@
   <div class="section-inner">
     <div class="section-tag">06 · Interactive</div>
     <h2 class="section-title">Sr Threshold Simulator</h2>
-    <p class="section-lead">Drag Sr to see how the dominance condition changes. The chart shows how Iran's payoff advantage shrinks as Sr rises toward the threshold.</p>
+    <p class="section-lead">Drag Sr to see how the dominance condition changes. The chart shows how Iran's payoff advantage shrinks as Sr rises toward the threshold. <strong style="color:#86efac;">mediator_status</strong> gates whether Sr can rise at all.</p>
+    <!-- mediator_status = 0 warning banner -->
+    <div id="mediator-closed-banner" style="display:none;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.45);border-radius:8px;padding:0.85rem 1.2rem;margin-bottom:1.25rem;font-size:0.88rem;color:#fca5a5;line-height:1.6;">
+      <strong style="color:#f87171;">⛔ mediator_status = 0 — Sr pathway closed</strong> — Qatar/Oman channel is non-operative. Sr is locked at its current value and cannot increase through diplomacy. The Sr slider is overridden. Only military resolution remains structurally available. Monitor: Iranian IRGC strike activity on Qatari/Omani assets as the primary reactivation indicator.
+    </div>
     <div class="sim-layout">
       <div class="sim-controls">
+        <!-- mediator_status toggle -->
+        <div class="sim-param" style="padding:0.85rem 1rem;background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.3);border-radius:8px;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.75rem;">
+          <label style="cursor:pointer;display:flex;align-items:center;gap:0.6rem;margin:0;font-size:0.88rem;color:#86efac;font-weight:600;flex:1;" for="sim-mediator">
+            <span style="font-size:1.1em;" id="mediator-icon">🟢</span>
+            mediator_status
+            <span style="font-size:0.78rem;font-weight:400;color:#9ca3af;">(Qatar/Oman channel — gates Sr pathway)</span>
+          </label>
+          <div style="position:relative;width:44px;height:24px;flex-shrink:0;">
+            <input type="checkbox" id="sim-mediator" checked style="opacity:0;width:0;height:0;position:absolute;">
+            <span id="mediator-toggle-track" onclick="document.getElementById('sim-mediator').click()" style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#22c55e;border-radius:24px;transition:.25s;"></span>
+            <span id="mediator-toggle-thumb" style="position:absolute;content:'';height:18px;width:18px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.25s;transform:translateX(20px);pointer-events:none;"></span>
+          </div>
+        </div>
         <div class="sim-param"><label>G — Iran yuan gain</label><input type="range" id="sim-G" min="1" max="15" step="1" value="8"><span class="sim-val" id="sim-Gv">8</span></div>
         <div class="sim-param"><label>S — Iran sanctions cost</label><input type="range" id="sim-S" min="1" max="15" step="1" value="10"><span class="sim-val" id="sim-Sv">10</span></div>
-        <div class="sim-param"><label>Sr — sanctions relief offered</label><input type="range" id="sim-Sr" min="0" max="25" step="1" value="0"><span class="sim-val" id="sim-Srv">0</span></div>
+        <div class="sim-param" id="sim-Sr-param"><label>Sr — sanctions relief offered</label><input type="range" id="sim-Sr" min="0" max="25" step="1" value="0"><span class="sim-val" id="sim-Srv">0</span></div>
+        <div id="sim-Sr-locked" style="display:none;padding:0.6rem 0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:6px;font-size:0.85rem;color:#fca5a5;">
+          Sr = <strong id="sim-Srv-locked">0</strong> <span style="color:#9ca3af;font-size:0.78rem;">(pathway locked — mediator_status = 0)</span>
+        </div>
         <div class="sim-param"><label>H — U.S. hegemony loss</label><input type="range" id="sim-H" min="1" max="12" step="1" value="7"><span class="sim-val" id="sim-Hv">7</span></div>
       </div>
       <div class="sim-outputs">
