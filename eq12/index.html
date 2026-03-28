@@ -258,19 +258,16 @@
     </div>
     <div class="sim-layout">
       <div class="sim-controls">
-        <!-- mediator_status toggle -->
-        <div class="sim-param" style="padding:0.85rem 1rem;background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.3);border-radius:8px;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.75rem;">
-          <label style="cursor:pointer;display:flex;align-items:center;gap:0.6rem;margin:0;font-size:0.88rem;color:#86efac;font-weight:600;flex:1;" for="sim-mediator">
-            <span style="font-size:1.1em;" id="mediator-icon">🟢</span>
-            mediator_status
-            <span style="font-size:0.78rem;font-weight:400;color:#9ca3af;">(Qatar/Oman channel — gates Sr pathway)</span>
-          </label>
-          <div style="position:relative;width:44px;height:24px;flex-shrink:0;">
-            <input type="checkbox" id="sim-mediator" checked style="opacity:0;width:0;height:0;position:absolute;">
-            <span id="mediator-toggle-track" onclick="document.getElementById('sim-mediator').click()" style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#22c55e;border-radius:24px;transition:.25s;"></span>
-            <span id="mediator-toggle-thumb" style="position:absolute;content:'';height:18px;width:18px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.25s;transform:translateX(20px);pointer-events:none;"></span>
-          </div>
-        </div>
+        <!-- mediator_status toggle — wraps entire row in a single label to avoid double-fire -->
+        <label for="sim-mediator" style="display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.3);border-radius:8px;margin-bottom:0.5rem;cursor:pointer;">
+          <input type="checkbox" id="sim-mediator" checked style="position:absolute;opacity:0;width:0;height:0;pointer-events:none;">
+          <span id="mediator-icon" style="font-size:1.1em;">🟢</span>
+          <span style="font-size:0.88rem;color:#86efac;font-weight:600;flex:1;">mediator_status <span style="font-size:0.78rem;font-weight:400;color:#9ca3af;">(Qatar/Oman channel — gates Sr pathway)</span></span>
+          <span style="position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0;">
+            <span id="mediator-toggle-track" style="position:absolute;top:0;left:0;right:0;bottom:0;background:#22c55e;border-radius:24px;transition:.25s;"></span>
+            <span id="mediator-toggle-thumb" style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.25s;transform:translateX(20px);pointer-events:none;"></span>
+          </span>
+        </label>
         <div class="sim-param"><label>G — Iran yuan gain</label><input type="range" id="sim-G" min="1" max="15" step="1" value="8"><span class="sim-val" id="sim-Gv">8</span></div>
         <div class="sim-param"><label>S — Iran sanctions cost</label><input type="range" id="sim-S" min="1" max="15" step="1" value="10"><span class="sim-val" id="sim-Sv">10</span></div>
         <div class="sim-param" id="sim-Sr-param"><label>Sr — sanctions relief offered</label><input type="range" id="sim-Sr" min="0" max="25" step="1" value="0"><span class="sim-val" id="sim-Srv">0</span></div>
