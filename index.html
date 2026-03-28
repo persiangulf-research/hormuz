@@ -941,7 +941,7 @@ footer {
     <a href="index2.html" class="h-research-link" style="background:rgba(0,212,161,0.07);border-color:rgba(0,212,161,0.35);color:#00d4a1;" title="IntelDash — AI news impact analysis + game theory simulation">
       ◈ IntelDash
     </a>
-    <a href="https://persian-Persian Persian Gulf.medium.com/" target="_blank" rel="noopener" class="h-research-link">
+    <a href="https://persian-gulf.medium.com/" target="_blank" rel="noopener" class="h-research-link">
       Research Articles ↗
     </a>
     <div class="h-date" id="live-date">21 March 2026</div>
@@ -1116,7 +1116,7 @@ footer {
     <div class="card-eq">G_s + kν > P_s⁽⁰⁾(1−δ)^k</div>
     <div class="card-title">The Swing Producer Cascade</div>
     <div class="card-desc">
-      Equation 7 — the network externality tipping model for Persian Persian Gulf state de-dollarisation.
+      Equation 7 — the network externality tipping model for Persian Gulf state de-dollarisation.
       Why the cascade is supermodular, when the tipping threshold is crossed, and how
       Saudi Arabia's Yanbu diversion has inadvertently demonstrated the pipeline arithmetic
       that validates m ≈ 3.
@@ -1976,7 +1976,7 @@ const EVENT_RULES = [
   },
   // ── Eq.7 swing cascade events ─────────────────────────────────────
   {
-    patterns: ['saudi', 'uae', 'iraq', 'kuwait', 'qatar', 'Persian Persian Gulf state', 'swing', 'yuan pric', 'mbridge', 'petrodollar', 'brics', 'cips', 'bilateral'],
+    patterns: ['saudi', 'uae', 'iraq', 'kuwait', 'qatar', 'Persian Gulf state', 'swing', 'yuan pric', 'mbridge', 'petrodollar', 'brics', 'cips', 'bilateral'],
     eq: '7', eqTitle: 'Swing Producer Cascade', color: '#10b981',
     formula: 'Gs + kν > Ps(0)·(1−δ)^k',
     param: 'k',
@@ -1986,7 +1986,7 @@ const EVENT_RULES = [
       let dk = 0, note = '';
       if (t.includes('saudi')) { dk = 1.0; note = 'Saudi Arabia full switch: k += 1.0 (largest single cascade event)'; }
       else if (t.includes('uae') && (t.includes('yuan') || t.includes('switch'))) { dk = 0.7; note = 'UAE yuan switch: k += 0.7'; }
-      else if (t.includes('iraq') || t.includes('kuwait') || t.includes('qatar')) { dk = 0.5; note = 'Persian Persian Gulf state bilateral: k += 0.5'; }
+      else if (t.includes('iraq') || t.includes('kuwait') || t.includes('qatar')) { dk = 0.5; note = 'Persian Gulf state bilateral: k += 0.5'; }
       else if (t.includes('mbridge') || t.includes('cips')) { dk = 0.2; note = 'Payment infrastructure event: k += ~0.2 (raises ν)'; }
       else { dk = 0.3; note = 'Bilateral deal signal: k += ~0.3'; }
       const kNew = MODEL.k + dk;
@@ -1999,7 +1999,7 @@ const EVENT_RULES = [
           { name: 'Distance to tipping', val: Math.max(0, kstar - kNew).toFixed(1), note: kNew >= kstar ? '★ TIPPING POINT CROSSED' : 'switchers remaining' },
         ],
         analysis: kNew >= kstar
-          ? `★ Tipping point crossed. k = ${kNew.toFixed(1)} ≥ k* ≈ ${kstar}. The cascade is now self-completing — remaining Persian Persian Gulf states face a yuan side above the guarantee side. This is irreversible. Open Eq.7 simulator → n slider to ${Math.round(kNew)} to confirm.`
+          ? `★ Tipping point crossed. k = ${kNew.toFixed(1)} ≥ k* ≈ ${kstar}. The cascade is now self-completing — remaining Persian Gulf states face a yuan side above the guarantee side. This is irreversible. Open Eq.7 simulator → n slider to ${Math.round(kNew)} to confirm.`
           : `Cascade advancing. k rises from ${MODEL.k.toFixed(1)} to ${kNew.toFixed(1)}. ${(kstar - kNew).toFixed(1)} more equivalent switchers needed to reach tipping point k* ≈ ${kstar}. Open Eq.7 simulator → n slider to ${Math.round(kNew)} to visualise decay.`,
         urgent: kNew >= kstar,
       };
