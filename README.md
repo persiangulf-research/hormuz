@@ -1,8 +1,8 @@
-# Hormuz Gambit — Geoeconomics Research Series
+# Hormuz Gambit — Geopolitical & Geoeconomics Research Series
 
-Game-theoretic analysis of the 2026 Hormuz crisis and Iran's de-dollarisation strategy.
+## Game-theoretic analysis of the 2026 Hormuz crisis and Iran's de-dollarisation strategy.
 
-# Introdction to use Analyst Plattform for Stretegic briefing and Event Classification
+# Introdction to use Analyst Platform for Stretegic briefing and Event Classification
 
 https://github.com/user-attachments/assets/8f3a792e-8f84-4dab-893f-d23837d470a8
 
