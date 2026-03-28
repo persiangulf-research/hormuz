@@ -133,6 +133,27 @@ header {
   padding-left: 1.5rem; margin-left: auto;
 }
 .h-date { font-size: 11px; color: var(--muted); }
+.h-datetime {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 0;
+  line-height: 1.25;
+}
+.h-time { font-size: 10px; color: var(--faint); margin-top: 2px; }
+.h-admin-btn {
+  font-family: var(--mono);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--faint);
+  text-decoration: none;
+  border: 1px solid var(--border2);
+  padding: 4px 12px; border-radius: 2px;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.h-admin-btn:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.25);
+  color: var(--text);
+}
 
 /* ── SUB-HEADER — live/geopolitical metrics below main header ──────── */
 .sub-header {
@@ -156,6 +177,7 @@ header {
 }
 .sub-ticker {
   display: flex; gap: 1.75rem; overflow: hidden; flex: 1;
+  font-size: 11px;
 }
 
 /* ── HERO MASTHEAD ─────────────────────────────────────────────────── */
@@ -930,11 +952,6 @@ footer {
       <div class="h-tick"><span class="h-tick-label">G</span><span class="h-tick-val" id="tick-g">8</span></div>
       <div class="h-tick"><span class="h-tick-label">S</span><span class="h-tick-val" id="tick-s">10</span></div>
       <div class="h-tick"><span class="h-tick-label">k</span><span class="h-tick-val" id="tick-k">1.3</span></div>
-      <div class="h-tick"><span class="h-tick-label">Sr</span><span class="h-tick-val" id="tick-sr">0.78 / 18 req.</span></div>
-      <div class="h-tick"><span class="h-tick-label">Dom.Margin</span><span class="h-tick-val red" id="tick-dommargin">17.22</span></div>
-      <div class="h-tick"><span class="h-tick-label">U(Esc)</span><span class="h-tick-val red" id="tick-uesc">−20.7</span></div>
-      <div class="h-tick"><span class="h-tick-label">U(Acc)</span><span class="h-tick-val" id="tick-uacc">−7</span></div>
-      <div class="h-tick"><span class="h-tick-label">TRAP</span><span class="h-tick-val red" id="tick-trap">ACTIVE</span></div>
     </div>
   </div>
   <div class="h-right">
@@ -944,7 +961,13 @@ footer {
     <a href="https://persian-gulf.medium.com/" target="_blank" rel="noopener" class="h-research-link">
       Research Articles ↗
     </a>
-    <div class="h-date" id="live-date">21 March 2026</div>
+    <a href="admin.html" class="h-admin-btn" title="Admin Panel — API Keys &amp; Configuration">
+      ⚙ Admin
+    </a>
+    <div class="h-datetime">
+      <div class="h-date" id="live-date">21 March 2026</div>
+      <div class="h-time" id="live-utc-time">—</div>
+    </div>
   </div>
 </header>
 
@@ -953,13 +976,16 @@ footer {
   <span class="sub-header-label">Live</span>
   <div class="sub-ticker">
     <div class="h-tick"><span class="h-tick-label">CLOSURE</span><span class="h-tick-val" id="closure-days">Day —</span></div>
+    <div class="h-tick"><span class="h-tick-label">Sr</span><span class="h-tick-val" id="tick-sr">0.78 / 18 req.</span></div>
+    <div class="h-tick"><span class="h-tick-label">Dom.Margin</span><span class="h-tick-val red" id="tick-dommargin">17.22</span></div>
+    <div class="h-tick"><span class="h-tick-label">U(Esc)</span><span class="h-tick-val red" id="tick-uesc">−20.7</span></div>
+    <div class="h-tick"><span class="h-tick-label">U(Acc)</span><span class="h-tick-val" id="tick-uacc">−7</span></div>
+    <div class="h-tick"><span class="h-tick-label">TRAP</span><span class="h-tick-val red" id="tick-trap">ACTIVE</span></div>
     <div class="h-tick"><span class="h-tick-label">ρ_I</span><span class="h-tick-val" id="tick-rhoi">0.030</span></div>
     <div class="h-tick"><span class="h-tick-label">ν</span><span class="h-tick-val" id="tick-nu">3</span></div>
     <div class="h-tick"><span class="h-tick-label">Ps</span><span class="h-tick-val" id="tick-ps">12</span></div>
     <div class="h-tick"><span class="h-tick-label">n</span><span class="h-tick-val" id="tick-n">1.3</span></div>
     <div class="h-tick"><span class="h-tick-label">Sr Cov.</span><span class="h-tick-val" id="tick-srcov">4%</span></div>
-    <div class="h-tick"><span class="h-tick-label">TROOPS</span><span class="h-tick-val red">5th Fleet</span></div>
-    <div class="h-tick"><span class="h-tick-label">TALKS</span><span class="h-tick-val green" id="tick-talks">Trump-Iran signal</span></div>
   </div>
 </div>
 
@@ -1309,13 +1335,18 @@ function updateClosureDays() {
 updateClosureDays();
 setInterval(updateClosureDays, 60000);
 
-// ── Live date ────────────────────────────────────────────────────────
+// ── Live date + UTC time ─────────────────────────────────────────────
 (function(){
-  const el = document.getElementById('live-date');
-  if (!el) return;
-  const d = new Date();
+  const dateEl = document.getElementById('live-date');
+  const timeEl = document.getElementById('live-utc-time');
   const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  el.textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  function updateDateTime() {
+    const d = new Date();
+    if (dateEl) dateEl.textContent = d.getUTCDate() + ' ' + months[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
+    if (timeEl) timeEl.textContent = d.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'UTC'}) + ' UTC';
+  }
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
 })();
 
 // ── Breaking banner time ─────────────────────────────────────────────
