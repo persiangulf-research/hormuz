@@ -289,9 +289,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;heigh
     <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:.35rem">params.json preview</div>
     <div class="jbox" id="jbox">{}</div>
 
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem;flex-wrap:wrap;gap:.4rem">
       <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)">Changelog</div>
-      <button class="btn bg" onclick="viewChangelog()" style="font-size:9px;padding:4px 8px">View history</button>
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+        <button class="btn bg" onclick="viewChangelog()" style="font-size:9px;padding:4px 8px">View history</button>
+        <button class="btn bg" onclick="downloadChangelog()" style="font-size:9px;padding:4px 8px">&#x2193; Download JSON</button>
+      </div>
     </div>
     <div id="changelog-area"></div>
 
@@ -785,6 +788,23 @@ function viewChangelog(){
   html += '<div style="margin-top:.5rem;font-size:9px;color:var(--fa);text-align:center">Showing '+recent.length+' of '+changelog.length+' total entries</div>';
   
   area.innerHTML = html;
+}
+
+function downloadChangelog(){
+  const changelog = JSON.parse(localStorage.getItem('hg_changelog') || '[]');
+  if(!changelog.length){
+    sal('pub-ale','No changelog entries to download. Run AI calibration first.','er');
+    return;
+  }
+  const ts = new Date().toISOString().slice(0,19).replace(/[T:]/g,'-');
+  const filename = 'hormuz-changelog-' + ts + '.json';
+  const blob = new Blob([JSON.stringify(changelog, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+  addLog('m', 'Changelog downloaded — ' + changelog.length + ' entries');
+  sal('pub-ale', 'Changelog downloaded: ' + filename + ' (' + changelog.length + ' entries)', 'ok');
 }
 
 // Params from params.json (the canonical published defaults)
