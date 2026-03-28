@@ -1,83 +1,109 @@
 {
   "meta": {
-    "published": "2026-03-27T17:52:18.238Z",
-    "closureDays": 27,
+    "published": "2026-03-28T03:34:10.448Z",
+    "closureDays": 28,
     "analystNotes": null,
     "aiCalibrated": true,
-    "brentPrice": 112.72,
-    "brentFetched": "2026-03-27T17:50:32.673Z",
+    "brentPrice": 112.57,
+    "brentFetched": "2026-03-28T02:31:24.565Z",
     "primaryEquation": "Eq.3",
     "trapStatus": "active",
-    "strategicSummary": "Day 27 of Hormuz closure has crossed a qualitative threshold: direct US-Israeli kinetic strikes on Iran's Arak heavy water facility and two flagship steel plants represent a dramatic broadening of the conflict from a maritime chokepoint dispute into a full-spectrum military-economic campaign against Iranian strategic infrastructure. Credibility of Iran's closure posture is now near-maximum (0.97) — the regime has existential domestic political reasons to hold the strait closed and escalate asymmetrically. Escalation cost E surges to 9.5 as conflict scope expands beyond any plausible 'limited strike' narrative. Brent at $111.72 reflects market pricing of sustained disruption but likely underestimates tail risk if Iran retaliates against Gulf energy infrastructure. The Ps (US guarantee) erosion continues as Gulf partners face uncomfortable alignment with nuclear-site strikes. The dollar trap remains fully active: Iran's industrial destruction paradoxically accelerates its yuan-settlement trajectory as the dollar system is perceived as the weapon being wielded against it.",
-    "mostSignificantEvent": "US-Israel strike on Arak heavy water facility (headlines 0 and 2) — this is the most significant event because targeting a nuclear-adjacent site crosses an internationally recognized threshold, transforms the conflict from conventional military into potential WMD-escalation territory, maximally hardens Iranian closure commitment, and risks drawing in Russian and Chinese diplomatic-military responses in defense of their JCPOA stakeholder positions.",
+    "strategicSummary": "Day 28 of closure sees the strategic landscape shift toward coalition consolidation on the U.S.-Israeli side. The UAE's potential operational participation and Saudi Arabia's explicit encouragement of escalation represent a significant hardening of Gulf Arab posture — MBS appears to view Iranian weakness as a generational opportunity to restructure regional power. The expansion of Hormuz disruption into fertilizer and LNG compounds economic damage globally, raising the m multiplier and broadening political stakes. Ps recovers meaningfully from its depressed level as Gulf partners step forward, but Qatar, Oman, and Kuwait's private dissent signals a coalition with internal fractures that Iran will attempt to exploit. The trap remains firmly active: Iran's closure strategy is raising costs globally but the coalition is strengthening rather than fracturing, and UAE operational involvement could directly threaten Iran's ability to sustain the closure.",
+    "mostSignificantEvent": "Headline 2 (MBS 'historic opportunity' framing): This signals Saudi Arabia has shifted from passive beneficiary to active strategic actor seeking to reshape the regional order — this transforms the conflict from a U.S.-Iran bilateral into a potential Gulf-wide realignment that dramatically raises both escalation stakes and the cost of Iranian miscalculation.",
     "news": [
       {
         "id": "N-001",
-        "date": "2026-03-27",
-        "headline": "US-Israel bombed the heavy water facility in the \"Khondab\" area near the Iranian city of \"Arak\"",
+        "date": "2026-03-28",
+        "headline": "UAE, Saudi Arabia and Bahrain urging US to ramp up Iran attacks, intelligence source confirms",
         "severity": "amber",
-        "eq": "x",
-        "eqLabel": "Eq.x",
+        "eq": "7",
+        "eqLabel": "Eq.7 — Cascade",
         "metricsImpact": {
-          "c_delta": "+0.05 — Arak heavy water strike is a red line crossing; Iran closure commitment becomes near-certain, credibility surges",
-          "E_delta": "+1.5 — nuclear-adjacent target dramatically broadens conflict scope",
-          "Ps_delta": "-0.5 — Gulf partners alarmed by nuclear site targeting, coalition stress rises",
-          "note": "Arak heavy water reactor is a NPT-sensitive dual-use site; striking it signals willingness to cross internationally recognized thresholds"
+          "c_delta": "+0.01 — UAE/Saudi/Bahrain urging more attacks raises coalition credibility of sustained military pressure",
+          "Ps_delta": "+1.0 — active Gulf partner encouragement strengthens U.S. guarantee",
+          "note": "Moves Iran's expected cost calculus: coalition is not fracturing, counter to Iran's likely bet"
         },
-        "ticker": "US-Israel bombed the heavy water facility in the \"Khondab\" area near the Iranian city of \"Arak\""
+        "ticker": "UAE, Saudi Arabia and Bahrain urging US to ramp up Iran attacks, intelligence source confirms"
       },
       {
         "id": "N-002",
-        "date": "2026-03-27",
-        "headline": "Israeli Air Force strikes hit two of Iran’s largest steel plants — Khuzestan Steel near Ahvaz and Mobarakeh Steel in Isfahan",
+        "date": "2026-03-28",
+        "headline": "Crown Prince Mohammed bin Salman is said to view US-Israeli war as ‘historic opportunity’ to remake Middle East",
         "severity": "amber",
         "eq": "x",
         "eqLabel": "Eq.x",
         "metricsImpact": {
-          "c_delta": "+0.02 — industrial targeting reinforces Iranian resolve to maintain closure as economic destruction mounts",
-          "E_delta": "+0.5 — strikes on civilian-adjacent steel infrastructure broaden conflict into economic warfare domain",
-          "G_delta": "+0.5 — destruction of domestic industry increases Iran's motivation to deepen yuan trade as dollar system provides cover for attacks",
-          "rhoI_delta": "+0.005 — loss of steel export capacity pushes Iran faster toward alternative settlement systems",
-          "note": "Khuzestan Steel and Mobarakeh Steel are among Iran's largest foreign-exchange earners; their destruction is economically devastating and politically radicalizing"
+          "E_delta": "+0.5 — MBS 'historic opportunity' framing signals willingness to broaden conflict scope regionally",
+          "k_delta": "+0.15 — Saudi strategic ambition aligns Riyadh more firmly with U.S.-Israeli axis",
+          "note": "Regional reshaping ambition raises escalation ceiling but also risk of miscalculation spirals"
         },
-        "ticker": "Israeli Air Force strikes hit two of Iran’s largest steel plants — Khuzestan Steel near Ahvaz and Mobarakeh Steel in Isfahan"
+        "ticker": "Crown Prince Mohammed bin Salman is said to view US-Israeli war as ‘historic opportunity’ to remake Middle East"
       },
       {
         "id": "N-003",
-        "date": "2026-03-27",
-        "headline": "US-Israel bombed the heavy water facility in the \"Khondab\" area near the Iranian city of \"Arak\"",
+        "date": "2026-03-28",
+        "headline": "The UAE is emerging as a central focus in Iranian threat perceptions. Reports indicate that Abu Dhabi is exploring participation in efforts to reopen the Strait and may support U.S. operations",
         "severity": "amber",
         "eq": "x",
         "eqLabel": "Eq.x",
         "metricsImpact": {
-          "c_delta": "+0.01 — duplicate confirmation of Arak strike; second source hardens credibility assessment but marginal incremental impact",
-          "E_delta": "+0.0 — no new escalation information beyond headline 0 confirmation",
-          "note": "Duplicate headline treated as confirmation signal only; parameters already adjusted in headline 0, minimal additional delta applied to avoid double-counting"
+          "c_delta": "+0.01 — UAE operational participation in reopening Strait raises credibility of coalition action",
+          "Ps_delta": "+0.5 — UAE military contribution strengthens U.S. guarantee materially",
+          "n_delta": "+0.15 — UAE partial operational switch raises n alongside k",
+          "note": "Abu Dhabi participation is the most concrete coalition development; directly threatens Iran's closure strategy"
         },
-        "ticker": "US-Israel bombed the heavy water facility in the \"Khondab\" area near the Iranian city of \"Arak\""
+        "ticker": "The UAE is emerging as a central focus in Iranian threat perceptions. Reports indicate that Abu Dhabi is exploring participation in efforts to reopen the Strait and may support U.S. operations"
+      },
+      {
+        "id": "N-004",
+        "date": "2026-03-28",
+        "headline": "The disruption is now affecting not only energy but also global food supply chains. A significant portion of fertilizer trade and LNG flows passing through the Strait of Hormuz has been impacted, raising concerns about broader economic consequences.",
+        "severity": "amber",
+        "eq": "x",
+        "eqLabel": "Eq.x",
+        "metricsImpact": {
+          "m_delta": "+0.2 — fertilizer and LNG disruptions expand multiplier beyond crude baseline",
+          "E_delta": "+0.3 — food supply chain impacts broaden economic damage, raising political pressure to escalate or resolve",
+          "note": "Broader commodity disruption increases international stakeholder pressure and may accelerate coalition or ceasefire dynamics"
+        },
+        "ticker": "The disruption is now affecting not only energy but also global food supply chains. A significant portion of fertilizer trade and LNG flows passing through the Strait of Hormuz has been impacted, raising concerns about broader economic consequences."
+      },
+      {
+        "id": "N-005",
+        "date": "2026-03-28",
+        "headline": "Qatar, Oman and Kuwait are calling for a quick end to the war behind closed doors, fearing economic consequences and retaliation.",
+        "severity": "red",
+        "eq": "5",
+        "eqLabel": "Eq.5 — Commitment Device / c",
+        "metricsImpact": {
+          "Ps_delta": "+0.5 — Qatar/Oman/Kuwait dissent is real but private, limiting damage to coalition public face",
+          "c_delta": "-0.01 — internal Gulf dissent introduces minor uncertainty about coalition unanimity",
+          "note": "Private calls for peace by smaller Gulf states partially offset UAE/Saudi hawkishness but do not break coalition; Iran may exploit this wedge diplomatically"
+        },
+        "ticker": "Qatar, Oman and Kuwait are calling for a quick end to the war behind closed doors, fearing economic consequences and retaliation."
       }
     ]
   },
   "parameters": {
-    "E": 9.5,
-    "c": 0.97,
-    "m": 3,
+    "E": 10.5,
+    "c": 0.91,
+    "m": 3.2,
     "H": 7.5,
     "G": 6.5,
     "S": 10,
     "Sr": 0.78,
-    "k": 1.3,
+    "k": 1.6,
     "nu": 3,
-    "Ps": 3.5,
+    "Ps": 5.5,
     "rhoI": 0.045,
-    "n": 1.3
+    "n": 1.6
   },
   "derived": {
-    "estar": 27.93,
-    "estarRatio": 2.94,
+    "estar": 31.521,
+    "estarRatio": 3.002,
     "dominanceMargin": 15.72,
     "srCoverage": 5,
     "uAccommodate": -7.5,
-    "uEscalate": -35.43
+    "uEscalate": -39.021
   }
 }
