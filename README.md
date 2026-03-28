@@ -2,7 +2,7 @@
 
 ## Game-theoretic analysis of the 2026 Hormuz crisis and Iran's de-dollarisation strategy.
 
-# Introdction to use Analyst Platform for Stretegic briefing and Event Classification
+# Introdction to use analyst platform for strategic briefing and event classification
 
 https://github.com/user-attachments/assets/8f3a792e-8f84-4dab-893f-d23837d470a8
 
