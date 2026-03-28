@@ -130,6 +130,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;heigh
 
 .pubbtn{width:100%;padding:10px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--gn);color:#000;border:none;border-radius:3px;cursor:pointer;transition:background .2s;margin-bottom:.4rem}
 .pubbtn:hover{background:#16a34a}
+.resetbtn{width:100%;padding:8px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:transparent;color:var(--rd);border:1px solid rgba(239,68,68,.35);border-radius:3px;cursor:pointer;transition:all .2s;margin-bottom:.5rem;font-family:var(--mo)}
+.resetbtn:hover{background:var(--rdd)}
 </style>
 </head>
 <body>
@@ -256,6 +258,15 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;heigh
     <div id="ai-area"><div class="empty">AI calibration results appear here.<br>Claude reasons about each parameter from the headlines.</div></div>
 
     <hr>
+
+    <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:.5rem">&#x21BA; Reset parameters</div>
+    <div style="font-size:10px;color:var(--fa);margin-bottom:.5rem;line-height:1.5">Restore all parameters to the values currently published in <code style="color:var(--al)">params.json</code>. News classification and AI results are preserved.</div>
+    <div class="brow" style="margin-top:0;margin-bottom:.65rem">
+      <button class="btn br" onclick="resetParams()" id="reset-btn">&#x21BA; Reset to params.json defaults</button>
+    </div>
+    <div id="reset-ale"></div>
+
+    <hr>
     <div class="f">
       <label>Manual headline paste (fallback if NewsAPI unavailable)</label>
       <textarea id="manual-hl" placeholder="One headline per line&#x2026;" style="min-height:70px"></textarea>
@@ -292,6 +303,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;heigh
     </div>
 
     <div id="pub-ale"></div>
+    <button class="resetbtn" onclick="resetParams()">&#x21BA; Reset all parameters to params.json defaults</button>
     <button class="pubbtn" onclick="publish()">&#x2191; Download params.json</button>
     <div style="font-size:10px;color:var(--fa);line-height:1.5">
       Save to <code style="color:var(--al)">github_site/params.json</code> &#x2192; push to GitHub.<br>
@@ -773,6 +785,31 @@ function viewChangelog(){
   html += '<div style="margin-top:.5rem;font-size:9px;color:var(--fa);text-align:center">Showing '+recent.length+' of '+changelog.length+' total entries</div>';
   
   area.innerHTML = html;
+}
+
+// Params from params.json (the canonical published defaults)
+const PARAMS_JSON_DEFAULTS={
+  E:6, c:0.92, m:3.0, H:8, G:8, S:10, Sr:0.78,
+  k:1.3, nu:3, Ps:8, rhoI:0.03, n:1.3,
+  dual_strait:0, m_base:3.0, m_activated:4.75, mediator_status:1
+};
+
+function resetParams(){
+  // Reset all parameters to params.json published values
+  Object.keys(PD).forEach(k=>{
+    const def = PARAMS_JSON_DEFAULTS[k];
+    P[k] = def !== undefined ? def : PD[k].v;
+    SR[k] = 'default';
+  });
+  // Clear AI result so source badges reset cleanly
+  AIR = null;
+  // Clear localStorage saved params so future sessions also start fresh
+  localStorage.removeItem('hg_p');
+  // Re-render grid, derived box, JSON preview
+  renderPG(); upD(); upJ();
+  // Show confirmation in both reset alert areas
+  sal('reset-ale','All parameters reset to params.json defaults.','ok');
+  addLog('m','Parameters reset to params.json defaults');
 }
 
 init();
