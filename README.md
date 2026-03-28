@@ -1,4 +1,4 @@
-# Hormuz Gambit — Geopolitical & Geoeconomics Research Series
+# Hormuz Gambit — Geopolitical & Geoeconomics Analyst Platform
 
 ## Game-theoretic analysis of the 2026 Iran War and Iran's de-dollarisation strategy.
 
