@@ -1272,6 +1272,7 @@ footer {
 <!-- RESET BUTTON — restore MODEL to params.json defaults -->
 <div style="padding:.75rem clamp(1.5rem,4vw,3rem);border-bottom:1px solid var(--border);background:rgba(8,12,18,0.6);display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
   <button id="reset-params-btn" onclick="resetToParamsDefaults()" style="font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:transparent;color:#ef4444;border:1px solid rgba(239,68,68,.35);border-radius:3px;padding:7px 16px;cursor:pointer;transition:all .2s;white-space:nowrap;">&#x21BA; Reset to params.json defaults</button>
+  <button id="resume-live-btn" onclick="resumeLiveParams()" style="display:none;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:transparent;color:#22c55e;border:1px solid rgba(34,197,94,.35);border-radius:3px;padding:7px 16px;cursor:pointer;transition:all .2s;white-space:nowrap;">&#x25B6; Resume live params.json</button>
   <span id="reset-params-msg" style="font-family:var(--mono);font-size:10px;color:rgba(232,226,212,.35);letter-spacing:.06em;"></span>
   <span style="font-family:var(--mono);font-size:10px;color:rgba(232,226,212,.2);letter-spacing:.05em;margin-left:auto;">Restores all model parameters (E, c, m, H, G, S, Sr, k, ν, Ps, ρ_I, n) to published params.json values &amp; refreshes all tickers.</span>
 </div>
@@ -1809,8 +1810,8 @@ function updateAllTickers(p, derived, meta) {
 }
 
 async function loadParams() {
-  // Check if user has requested a reset to defaults (set by resetToParamsDefaults())
-  const useDefaults = sessionStorage.getItem('hg_reset_to_defaults') === '1';
+  // Check if user has requested a reset to defaults (persisted in localStorage across sessions)
+  const useDefaults = localStorage.getItem('hg_reset_to_defaults') === '1';
 
   // Always seed MODEL from inline fallback first (works on file://)
   (function seedFromFallback() {
@@ -2247,9 +2248,10 @@ setInterval(() => {
 }, 8000);
 
 // ── Reset MODEL to published params.json defaults ─────────────────────
+// Uses localStorage so the reset persists across page closes/reopens until explicitly cleared.
 function resetToParamsDefaults() {
-  // Set a sessionStorage flag so loadParams() uses PARAMS_FALLBACK on next call/reload
-  sessionStorage.setItem('hg_reset_to_defaults', '1');
+  // Persist reset flag in localStorage (survives browser close/reopen, unlike sessionStorage)
+  localStorage.setItem('hg_reset_to_defaults', '1');
   const p = PARAMS_FALLBACK.parameters;
   // Restore all model parameters to the published params.json values
   Object.assign(MODEL, {
@@ -2269,16 +2271,45 @@ function resetToParamsDefaults() {
   // Refresh all tickers, derived metrics, and briefing
   updateAllTickers(MODEL, PARAMS_FALLBACK.derived || {}, PARAMS_FALLBACK.meta || {});
   runBriefing(PARAMS_FALLBACK);
+  // Show/hide buttons
+  const resumeBtn = document.getElementById('resume-live-btn');
+  if (resumeBtn) resumeBtn.style.display = 'inline-block';
   // Show confirmation
   const btn = document.getElementById('reset-params-btn');
   const msg = document.getElementById('reset-params-msg');
   if (btn) { btn.style.color = '#22c55e'; btn.style.borderColor = 'rgba(34,197,94,.35)'; }
-  if (msg) { msg.textContent = '✓ Parameters reset to params.json defaults'; msg.style.color = '#22c55e'; }
+  if (msg) { msg.textContent = '✓ Reset active — persists until you click Resume'; msg.style.color = 'rgba(34,197,94,.7)'; }
   setTimeout(() => {
     if (btn) { btn.style.color = '#ef4444'; btn.style.borderColor = 'rgba(239,68,68,.35)'; }
-    if (msg) { msg.textContent = ''; }
-  }, 3000);
+    if (msg) { msg.textContent = '⚠ Using PARAMS_FALLBACK defaults (not live params.json)'; msg.style.color = 'rgba(232,226,212,.3)'; }
+  }, 3500);
 }
+
+// ── Resume live params.json (clear the reset flag) ────────────────────
+function resumeLiveParams() {
+  localStorage.removeItem('hg_reset_to_defaults');
+  // Hide resume button
+  const resumeBtn = document.getElementById('resume-live-btn');
+  if (resumeBtn) resumeBtn.style.display = 'none';
+  // Clear the status message
+  const msg = document.getElementById('reset-params-msg');
+  if (msg) { msg.textContent = '↻ Fetching live params.json…'; msg.style.color = 'rgba(232,226,212,.45)'; }
+  // Re-run loadParams() to fetch live data immediately
+  loadParams().then(() => {
+    if (msg) { msg.textContent = '✓ Live params.json restored'; msg.style.color = '#22c55e'; }
+    setTimeout(() => { if (msg) msg.textContent = ''; }, 2500);
+  });
+}
+
+// ── On page load: if reset flag is active, show the resume button ─────
+(function initResetUI() {
+  if (localStorage.getItem('hg_reset_to_defaults') === '1') {
+    const resumeBtn = document.getElementById('resume-live-btn');
+    const msg       = document.getElementById('reset-params-msg');
+    if (resumeBtn) resumeBtn.style.display = 'inline-block';
+    if (msg) { msg.textContent = '⚠ Using PARAMS_FALLBACK defaults (not live params.json)'; msg.style.color = 'rgba(232,226,212,.3)'; }
+  }
+})();
 </script>
 </body>
 </html>
