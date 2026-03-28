@@ -1809,6 +1809,9 @@ function updateAllTickers(p, derived, meta) {
 }
 
 async function loadParams() {
+  // Check if user has requested a reset to defaults (set by resetToParamsDefaults())
+  const useDefaults = sessionStorage.getItem('hg_reset_to_defaults') === '1';
+
   // Always seed MODEL from inline fallback first (works on file://)
   (function seedFromFallback() {
     const p = PARAMS_FALLBACK.parameters || {};
@@ -1831,6 +1834,13 @@ async function loadParams() {
     updateAllTickers(MODEL, PARAMS_FALLBACK.derived || {}, PARAMS_FALLBACK.meta || {});
     runBriefing(PARAMS_FALLBACK);
   })();
+
+  // If reset-to-defaults flag is active, skip the live params.json fetch
+  // so the fallback values (above) are used for this session.
+  if (useDefaults) {
+    console.log('[loadParams] Reset-to-defaults active — using PARAMS_FALLBACK, skipping live fetch.');
+    return;
+  }
 
   try {
     const r = await fetch('params.json?v=' + Date.now(), { cache: 'no-store' });
@@ -2238,6 +2248,8 @@ setInterval(() => {
 
 // ── Reset MODEL to published params.json defaults ─────────────────────
 function resetToParamsDefaults() {
+  // Set a sessionStorage flag so loadParams() uses PARAMS_FALLBACK on next call/reload
+  sessionStorage.setItem('hg_reset_to_defaults', '1');
   const p = PARAMS_FALLBACK.parameters;
   // Restore all model parameters to the published params.json values
   Object.assign(MODEL, {
