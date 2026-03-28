@@ -1,88 +1,30 @@
 {
   "meta": {
-    "published": "2026-03-28T04:23:32.229Z",
+    "published": "2026-03-28T10:53:59.948Z",
     "closureDays": 28,
     "analystNotes": null,
-    "aiCalibrated": true,
-    "brentPrice": 112.57,
-    "brentFetched": "2026-03-28T04:22:17.291Z",
-    "primaryEquation": "Eq.3 (Escalation threshold: E* = E + m*c - Ps)",
+    "aiCalibrated": false,
+    "brentPrice": null,
+    "brentFetched": null,
+    "primaryEquation": null,
     "trapStatus": "active",
-    "strategicSummary": "Day 28 of the Hormuz closure sees a decisive shift in Gulf state posture: Saudi Arabia, UAE, and Bahrain have moved from passive beneficiaries of Iranian pressure to active advocates for expanded US military operations. MBS framing the crisis as a 'historic opportunity' removes the most important potential Arab de-escalation broker, materially raising the base escalation cost E to 6. The UAE's emerging operational role strengthens the US coalition guarantee (Ps rises to 14), while the food/fertilizer supply chain disruption at day 28 signals that the global economic damage is now transmitting beyond energy markets into systemic commodity shocks — increasing international urgency but not yet changing structural model parameters. Credibility c ticks up modestly as the sustained multi-actor pressure environment makes any near-term Iranian capitulation less likely. The mediator channel remains nominally open but is under increasing strain as Gulf states actively push for attacks rather than negotiation.",
-    "mostSignificantEvent": "Headline 4 (UAE/Saudi/Bahrain urging US to ramp up Iran attacks): This trilateral demand is the most consequential because it transforms three of the largest regional stakeholders from potential pressure-for-ceasefire actors into active escalation advocates, eliminates a key diplomatic off-ramp, directly drives Ps upward, and confirms E should move to 6 — fundamentally reshaping the coalition architecture of the conflict.",
-    "news": [
-      {
-        "id": "N-001",
-        "date": "2026-03-28",
-        "headline": "Crown Prince Mohammed bin Salman is said to view US-Israeli war as ‘historic opportunity’ to remake Middle East.",
-        "severity": "red",
-        "eq": "5",
-        "eqLabel": "Eq.5 — Commitment Device / c",
-        "metricsImpact": {
-          "E_delta": "+1 (conflict broadening framing)",
-          "c_delta": "+0.01 (MBS opportunism signals sustained escalation appetite)",
-          "note": "MBS 'historic opportunity' framing is the most geopolitically destabilizing signal — it suggests Saudi Arabia will not push for a quick ceasefire, removing a key de-escalation actor and raising the probability of a wider regional war that raises E from 5 to 6."
-        },
-        "ticker": "Crown Prince Mohammed bin Salman is said to view US-Israeli war as ‘historic opportunity’ to remake Middle East."
-      },
-      {
-        "id": "N-002",
-        "date": "2026-03-28",
-        "headline": "The UAE is emerging as a central focus in Iranian threat perceptions. Reports indicate that Abu Dhabi is exploring participation in efforts to reopen the Strait and may support U.S. operations",
-        "severity": "amber",
-        "eq": "7",
-        "eqLabel": "Eq.7 — Cascade / network switchers",
-        "metricsImpact": {
-          "Ps_delta": "+1 (UAE operational support strengthens coalition)",
-          "c_delta": "+0.005 (UAE threat perception confirms Iran closure credibility)",
-          "note": "UAE pivot toward active participation in reopening operations increases US coalition depth and Ps; Iran perceiving UAE as a target also raises escalation risk symmetrically."
-        },
-        "ticker": "The UAE is emerging as a central focus in Iranian threat perceptions. Reports indicate that Abu Dhabi is exploring participation in efforts to reopen the Strait and may support U.S. operations"
-      },
-      {
-        "id": "N-003",
-        "date": "2026-03-28",
-        "headline": "The disruption is now affecting not only energy but also global food supply chains. A significant portion of fertilizer trade and LNG flows passing through the Strait of Hormuz has been impacted, raising concerns about broader economic consequences",
-        "severity": "red",
-        "eq": "5",
-        "eqLabel": "Eq.5 — Commitment Device / c",
-        "metricsImpact": {
-          "E_delta": "+0 (already captured in E=6; but food/fertilizer dimension raises international pressure on all parties)",
-          "m_note": "m_base unchanged — fertilizer/LNG disruption is a downstream effect of existing closure, not a new strait event",
-          "note": "Food supply chain contagion broadens the economic damage narrative, increasing international pressure for resolution but also raising the stakes for Iran's coercive leverage; does not mechanically change m but strengthens the political economy case for a higher effective multiplier over time."
-        },
-        "ticker": "The disruption is now affecting not only energy but also global food supply chains. A significant portion of fertilizer trade and LNG flows passing through the Strait of Hormuz has been impacted, raising concerns about broader economic consequences"
-      },
-      {
-        "id": "N-004",
-        "date": "2026-03-28",
-        "headline": "UAE, Saudi Arabia and Bahrain urging US to ramp up Iran attacks, intelligence source confirms",
-        "severity": "amber",
-        "eq": "7",
-        "eqLabel": "Eq.7 — Cascade / network switchers",
-        "metricsImpact": {
-          "Ps_delta": "+1 (trilateral Gulf state urging confirms coalition solidarity)",
-          "c_delta": "+0.01 (explicit state actors demanding escalation confirms no imminent ceasefire)",
-          "E_delta": "confirms +1 move already captured",
-          "note": "The trilateral demand from UAE/Saudi/Bahrain is the most direct driver of Ps increase to 14 and confirms the E escalation to 6; this is the operationally decisive headline for coalition modeling."
-        },
-        "ticker": "UAE, Saudi Arabia and Bahrain urging US to ramp up Iran attacks, intelligence source confirms"
-      }
-    ]
+    "strategicSummary": null,
+    "mostSignificantEvent": null,
+    "news": []
   },
   "parameters": {
-    "E": 6,
+    "E": 10.5,
     "c": 0.91,
-    "m": 3,
-    "H": 7,
-    "G": 8,
+    "m": 3.2,
+    "H": 7.5,
+    "G": 6.5,
     "S": 10,
     "Sr": 0.78,
-    "k": 1.3,
+    "k": 1.6,
     "nu": 3,
-    "Ps": 14,
-    "rhoI": 0.03,
-    "n": 1.3,
+    "Ps": 5.5,
+    "rhoI": 0.045,
+    "n": 1.6,
     "dual_strait": 0,
     "m_base": 3,
     "m_activated": 4.75,
@@ -113,11 +55,11 @@
     "mediator_status": "Binary flag: 1 = Qatar/Oman back-channel operative (sanctions-relief pathway open); 0 = mediator pathway closed (IRGC strike on Qatari/Omani assets or diplomatic rupture). When 0, Sr is gated — cannot rise regardless of diplomatic signals."
   },
   "derived": {
-    "estar": 16.92,
-    "estarRatio": 2.82,
-    "dominanceMargin": 17.22,
-    "srCoverage": 4,
-    "uAccommodate": -7,
-    "uEscalate": -23.92
+    "estar": 31.521,
+    "estarRatio": 3.002,
+    "dominanceMargin": 15.72,
+    "srCoverage": 5,
+    "uAccommodate": -7.5,
+    "uEscalate": -39.021
   }
 }
