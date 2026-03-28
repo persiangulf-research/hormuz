@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -305,18 +305,35 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;heigh
 <script>
 const WAR_START=new Date('2026-02-28T00:00:00Z');
 const PD={
-  E:   {v:5,  mn:1,  mx:15,  s:.5,  l:'Base escalation cost'},
-  c:   {v:.90,mn:0,  mx:1,   s:.01, l:'Credibility scalar c'},
-  m:   {v:3.0,mn:1,  mx:5,   s:.1,  l:'Geographic multiplier m'},
-  H:   {v:7,  mn:1,  mx:12,  s:.5,  l:'U.S. hegemony loss H'},
-  G:   {v:8,  mn:1,  mx:15,  s:.5,  l:'Iran yuan gain G'},
-  S:   {v:10, mn:1,  mx:15,  s:.5,  l:'Iran sanctions cost S'},
-  Sr:  {v:.78,mn:0,  mx:25,  s:.1,  l:'Sanctions relief Sr'},
-  k:   {v:1.3,mn:0,  mx:10,  s:.1,  l:'Cascade switchers k'},
-  nu:  {v:3,  mn:1,  mx:8,   s:.5,  l:'Network gain/switcher nu'},
-  Ps:  {v:12, mn:5,  mx:20,  s:.5,  l:'U.S. guarantee value Ps'},
-  rhoI:{v:.03,mn:.005,mx:.15,s:.005,l:'Iran decay rate rhoI'},
-  n:   {v:1.3,mn:0,  mx:5,   s:.1,  l:'Swing states n_t'},
+  E:            {v:5,   mn:1,   mx:15,  s:.5,  l:'Base escalation cost'},
+  c:            {v:.90, mn:0,   mx:1,   s:.01, l:'Credibility scalar c'},
+  m:            {v:3.0, mn:1,   mx:5,   s:.1,  l:'Geographic multiplier m'},
+  H:            {v:7,   mn:1,   mx:12,  s:.5,  l:'U.S. hegemony loss H'},
+  G:            {v:8,   mn:1,   mx:15,  s:.5,  l:'Iran yuan gain G'},
+  S:            {v:10,  mn:1,   mx:15,  s:.5,  l:'Iran sanctions cost S'},
+  Sr:           {v:.78, mn:0,   mx:25,  s:.1,  l:'Sanctions relief Sr'},
+  k:            {v:1.3, mn:0,   mx:10,  s:.1,  l:'Cascade switchers k'},
+  nu:           {v:3,   mn:1,   mx:8,   s:.5,  l:'Network gain/switcher nu'},
+  Ps:           {v:12,  mn:5,   mx:20,  s:.5,  l:'U.S. guarantee value Ps'},
+  rhoI:         {v:.03, mn:.005,mx:.15, s:.005,l:'Iran decay rate rhoI'},
+  n:            {v:1.3, mn:0,   mx:5,   s:.1,  l:'Swing states n_t'},
+  dual_strait:  {v:0,   mn:0,   mx:1,   s:1,   l:'Dual-strait scenario (0=off,1=on) [Eq.5]'},
+  m_base:       {v:3.0, mn:1,   mx:5,   s:.1,  l:'m base (Hormuz only) [Eq.5]'},
+  m_activated:  {v:4.75,mn:1,   mx:7,   s:.05, l:'m dual-strait activated [Eq.5]'},
+  mediator_status:{v:1, mn:0,   mx:1,   s:1,   l:'Mediator pathway μ (0=closed,1=open) [Eq.12]'},
+};
+const PARAM_EQUATIONS={
+  E:'Eq.5',c:'Eq.5',m:'Eq.5',H:'Eq.5',
+  G:'Eq.5 / Eq.12',S:'Eq.12',Sr:'Eq.12',
+  k:'Eq.7',nu:'Eq.7 / Eq.8',Ps:'Eq.7',
+  rhoI:'Eq.8',n:'Eq.7 / Eq.8',
+  dual_strait:'Eq.5',m_base:'Eq.5',m_activated:'Eq.5',mediator_status:'Eq.12'
+};
+const PARAM_NOTES={
+  dual_strait:'Binary flag: 0 = Hormuz-only scenario; 1 = dual-strait activation (Hormuz + Bab-el-Mandeb via Houthi proxy). When 1, m switches from m_base to m_activated.',
+  m_base:'Geographic multiplier when only Hormuz is threatened (~20% global oil). Default 3.0.',
+  m_activated:'Geographic multiplier when both Hormuz and Bab-el-Mandeb (Houthi proxy) are simultaneously threatened (~30% global oil + Red Sea disruption). Default 4.75.',
+  mediator_status:'Binary flag: 1 = Qatar/Oman back-channel operative (sanctions-relief pathway open); 0 = mediator pathway closed (IRGC strike on Qatari/Omani assets or diplomatic rupture). When 0, Sr is gated — cannot rise regardless of diplomatic signals.'
 };
 const DEFKWS=['Hormuz','Iran sanctions','Brent crude','IRGC','Saudi yuan','USS Boxer','Bessent oil','Iran ceasefire','mBridge yuan','CIPS settlement','Iran nuclear','petrodollar'];
 const SYS=`You calibrate a game-theoretic model of the 2026 Hormuz crisis.
@@ -331,10 +348,14 @@ k/n: Swing producer switchers (Iran=1, India partial=0.3, Saudi full=+1).
 nu: Network gain per switcher (2-4). Rises with CIPS liquidity.
 Ps: U.S. guarantee (5-20). Falls with coalition defections.
 rhoI: Iran decay rate (0.02-0.08). Rises with more yuan settlements.
+dual_strait: Binary flag (0 or 1 only). Set to 1 ONLY if Houthi Bab-el-Mandeb blockade confirmed simultaneous with Hormuz closure. Extremely rare — default 0.
+m_base: Geographic multiplier for Hormuz-only scenario (default 3.0). Change rarely.
+m_activated: Geographic multiplier for dual-strait scenario (default 4.75). Change rarely.
+mediator_status: Binary flag (0 or 1). Set to 0 ONLY if Qatar/Oman mediation channel is formally closed (IRGC strike on Qatari/Omani assets, diplomatic expulsion). Default 1.
 Be CONSERVATIVE. Only move parameters when you have clear evidence.
 Also provide a "news_impacts" array — one entry per headline (in the same order as supplied) — with a short metricsImpact object describing what that headline does to the model.
 Return ONLY valid JSON - no other text before or after:
-{"parameters":{"c":{"value":0.90,"delta":0.00,"confidence":"high","justification":"one sentence"},"m":{"value":3.0,"delta":0.00,"confidence":"high","justification":"one sentence"},"E":{"value":5,"delta":0,"confidence":"medium","justification":"one sentence"},"H":{"value":7,"delta":0,"confidence":"medium","justification":"one sentence"},"G":{"value":8,"delta":0,"confidence":"medium","justification":"one sentence"},"S":{"value":10,"delta":0,"confidence":"high","justification":"one sentence"},"Sr":{"value":0.78,"delta":0,"confidence":"high","justification":"one sentence"},"k":{"value":1.3,"delta":0,"confidence":"medium","justification":"one sentence"},"nu":{"value":3,"delta":0,"confidence":"low","justification":"one sentence"},"Ps":{"value":12,"delta":0,"confidence":"medium","justification":"one sentence"},"rhoI":{"value":0.03,"delta":0,"confidence":"low","justification":"one sentence"},"n":{"value":1.3,"delta":0,"confidence":"medium","justification":"one sentence"}},"news_impacts":[{"headline_index":0,"metricsImpact":{"c_delta":"c impact description","E_star":"E* result","note":"strategic note"}}],"summary":"One paragraph strategic read.","most_significant_event":"Most important headline and why.","primary_equation":"Eq.X","trap_status":"active|weakening|broken"}`;
+{"parameters":{"c":{"value":0.90,"delta":0.00,"confidence":"high","justification":"one sentence"},"m":{"value":3.0,"delta":0.00,"confidence":"high","justification":"one sentence"},"E":{"value":5,"delta":0,"confidence":"medium","justification":"one sentence"},"H":{"value":7,"delta":0,"confidence":"medium","justification":"one sentence"},"G":{"value":8,"delta":0,"confidence":"medium","justification":"one sentence"},"S":{"value":10,"delta":0,"confidence":"high","justification":"one sentence"},"Sr":{"value":0.78,"delta":0,"confidence":"high","justification":"one sentence"},"k":{"value":1.3,"delta":0,"confidence":"medium","justification":"one sentence"},"nu":{"value":3,"delta":0,"confidence":"low","justification":"one sentence"},"Ps":{"value":12,"delta":0,"confidence":"medium","justification":"one sentence"},"rhoI":{"value":0.03,"delta":0,"confidence":"low","justification":"one sentence"},"n":{"value":1.3,"delta":0,"confidence":"medium","justification":"one sentence"},"dual_strait":{"value":0,"delta":0,"confidence":"high","justification":"one sentence"},"m_base":{"value":3.0,"delta":0.00,"confidence":"high","justification":"one sentence"},"m_activated":{"value":4.75,"delta":0.00,"confidence":"high","justification":"one sentence"},"mediator_status":{"value":1,"delta":0,"confidence":"high","justification":"one sentence"}},"news_impacts":[{"headline_index":0,"metricsImpact":{"c_delta":"c impact description","E_star":"E* result","note":"strategic note"}}],"summary":"One paragraph strategic read.","most_significant_event":"Most important headline and why.","primary_equation":"Eq.X","trap_status":"active|weakening|broken"}`;
 
 let P={},SR={},HL=[],AIR=null,BRT={p:null,ts:null,live:false};
 
@@ -481,15 +502,22 @@ function updBrentBar(){
 setInterval(updBrentBar,30000);
 
 function gEq(t){const s=t.toLowerCase();
-  if(/sanction|ofac|waiver|swift|jcpoa|asset release|talks|resolution|nuclear deal/.test(s))return'12';
-  if(/saudi|Persian Gulf state|mbridge|cips|brics|yuan pric|petrodollar|bilateral/.test(s))return'7';
-  if(/attack|vessel|tanker|mine|irgc|drone|clos|seize|missile|credib/.test(s))return'5';
-  if(/troop|marines|carrier|destroyer|naval|escort|military|deploy|pentagon|a-10/.test(s))return'5m';
-  if(/accommodate|refus|coalition|ceasefire|bessent|treasury/.test(s))return'4';
-  if(/cips|yuan settle|hegemony|dollar share|renminbi|iea reserve/.test(s))return'8';
-  return'x';}
-const EQC={'12':'e12','7':'e7','5':'e5','5m':'e5','4':'e4','8':'e8','x':'ex'};
-const EQL={'12':'Eq.12','7':'Eq.7','5':'Eq.5','5m':'Eq.5/m','4':'Eq.4','8':'Eq.8','x':'other'};
+  // Eq.12 — sanctions relief / diplomacy threshold
+  if(/sanction|ofac|waiver|swift|jcpoa|asset release|talks|resolution|nuclear deal|ceasefire deal|diplomatic|envoy|mediator|qatar|oman|back.?channel|de-escalat|negotiat|agreement|settlement talks|release|hostage|prisoner/.test(s))return'12';
+  // Eq.7 — cascade / network switchers
+  if(/saudi|gulf state|uae|kuwait|mbridge|cips|brics|yuan pric|petrodollar|bilateral|india oil|china oil|rupee|dirham|network|switch|partner|ally|coalition defect|alternative pay/.test(s))return'7';
+  // Eq.8 — hegemony decay / dollar share
+  if(/cips|yuan settle|hegemony|dollar share|renminbi|iea reserve|reserve currency|de-dollariz|currency swap|central bank|monetary|petrocurrency|cross-border pay/.test(s))return'8';
+  // Eq.5 / m — geographic multiplier (dual-strait, Bab-el-Mandeb, Houthi)
+  if(/troop|marines|carrier|destroyer|naval|escort|military|deploy|pentagon|a-10|ground force|air strike|bomb|airpower|f-35|b-52|gunboat|warship|frigate|battlegroup|operation|houthi|bab.?el.?mandeb|red sea|suez|dual.?strait|blockade/.test(s))return'5m';
+  // Eq.5 — commitment device / credibility (closure, attacks, IRGC)
+  if(/attack|vessel|tanker|mine|irgc|drone|clos|seize|missile|credib|hormuz|strait|iran|nuclear|enrich|centrifuge|uranium|proxy|revolution|khamenei|trump|escalat|threat|warn|deterr|brent|crude|oil price|barrel|supply|disruption|export|shipping|cargo|maritime|coast guard/.test(s))return'5';
+  // Eq.4 — dominant strategy / accommodation
+  if(/accommodate|refus|coalition|bessent|treasury|concede|capitulat|back down|de-escalat|withdraw|pull back|exit|end|halt|pause|freeze|cancel/.test(s))return'4';
+  // Catch-all: default to Eq.5 (crisis context — all unclassified headlines affect the core commitment device)
+  return'5';}
+const EQC={'12':'e12','7':'e7','5':'e5','5m':'e5','4':'e4','8':'e8'};
+const EQL={'12':'Eq.12','7':'Eq.7','5':'Eq.5','5m':'Eq.5/m','4':'Eq.4','8':'Eq.8'};
 
 async function fetchNews(){
   const c=cfg();const key=c.news||document.getElementById('k-news').value.trim();
@@ -627,7 +655,8 @@ function upD(){
 
 function bldJ(){
   const p=P;const e=rn(p.E*(1+p.c*(p.m-1)));
-  const EQL_MAP={'12':'Sr threshold','7':'Cascade','5':'Commitment Device / c','5m':'Commitment Device / m','8':'Hegemony Decay','4':'Dominant Strategy NE'};
+  const EQL_MAP={'12':'Sr threshold','7':'Cascade / network switchers','5':'Commitment Device / c','5m':'Commitment Device / m','8':'Hegemony Decay','4':'Dominant Strategy NE'};
+  const EQ_LABEL={'12':'Eq.12','7':'Eq.7','5':'Eq.5','5m':'Eq.5','4':'Eq.4','8':'Eq.8'};
 
   // Build per-headline metricsImpact — prefer AIR.news_impacts[] (Claude per-headline data),
   // fall back to deriving from AIR param justifications, then plain note.
@@ -659,7 +688,7 @@ function bldJ(){
     return {note: h.desc||''};
   }
 
-  return{meta:{published:new Date().toISOString(),closureDays:Math.floor((new Date()-WAR_START)/864e5),analystNotes:document.getElementById('notes').value.trim()||null,aiCalibrated:AIR!==null,brentPrice:BRT.p||null,brentFetched:BRT.ts?.toISOString()||null,primaryEquation:AIR?.primary_equation||null,trapStatus:AIR?.trap_status||(p.G+p.S-p.Sr>0?'active':'broken'),strategicSummary:AIR?.summary||null,mostSignificantEvent:AIR?.most_significant_event||null,news:HL.slice(0,10).map((h,i)=>({id:'N-'+String(i+1).padStart(3,'0'),date:h.time?h.time.slice(0,10):new Date().toISOString().slice(0,10),headline:h.title,severity:['5','5m'].includes(String(h.eq))?'red':'amber',eq:String(h.eq).replace('m',''),eqLabel:'Eq.'+h.eq+(EQL_MAP[h.eq]?' — '+EQL_MAP[h.eq]:''),metricsImpact:buildMetrics(h,i),ticker:h.title}))},parameters:Object.fromEntries(Object.entries(P).map(([k,v])=>[k,rn(v)])),derived:{estar:e,estarRatio:rn(e/p.E),dominanceMargin:rn(p.G+p.S-p.Sr),srCoverage:Math.round(p.Sr/(p.G+p.S)*100),uAccommodate:rn(-p.H),uEscalate:rn(-(p.H+e))}};
+  return{meta:{published:new Date().toISOString(),closureDays:Math.floor((new Date()-WAR_START)/864e5),analystNotes:document.getElementById('notes').value.trim()||null,aiCalibrated:AIR!==null,brentPrice:BRT.p||null,brentFetched:BRT.ts?.toISOString()||null,primaryEquation:AIR?.primary_equation||null,trapStatus:AIR?.trap_status||(p.G+p.S-p.Sr>0?'active':'broken'),strategicSummary:AIR?.summary||null,mostSignificantEvent:AIR?.most_significant_event||null,news:HL.slice(0,10).map((h,i)=>{const eq=String(h.eq);const eqBase=eq.replace('m','');const eqLbl=(EQ_LABEL[eq]||'Eq.'+eqBase)+(EQL_MAP[eq]?' — '+EQL_MAP[eq]:'');return{id:'N-'+String(i+1).padStart(3,'0'),date:h.time?h.time.slice(0,10):new Date().toISOString().slice(0,10),headline:h.title,severity:['5','5m'].includes(eq)?'red':'amber',eq:eqBase,eqLabel:eqLbl,metricsImpact:buildMetrics(h,i),ticker:h.title};})},parameters:Object.fromEntries(Object.entries(P).map(([k,v])=>[k,rn(v)])),paramEquations:PARAM_EQUATIONS,paramNotes:PARAM_NOTES,derived:{estar:e,estarRatio:rn(e/p.E),dominanceMargin:rn(p.G+p.S-p.Sr),srCoverage:Math.round(p.Sr/(p.G+p.S)*100),uAccommodate:rn(-p.H),uEscalate:rn(-(p.H+e))}};
 }
 function upJ(){document.getElementById('jbox').textContent=JSON.stringify(bldJ(),null,2);}
 function publish(){
