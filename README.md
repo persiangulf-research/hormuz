@@ -2,6 +2,11 @@
 
 Game-theoretic analysis of the 2026 Hormuz crisis and Iran's de-dollarisation strategy.
 
+# Introdction to use Analyst Plattform for Stretegic briefing and Event Classification
+
+https://github.com/user-attachments/assets/8f3a792e-8f84-4dab-893f-d23837d470a8
+
+
 
 ## 🚀 Deploy to GitHub Pages
 
@@ -184,7 +189,8 @@ Use these insights to:
 ---
 
 ## 📑 Analyses
-
+see Article
+https://persian-gulf.medium.com/the-hormuz-strait-coalition-why-a-naval-coalition-cannot-break-irans-trap-f05cd274bf95
 | ID | Equation | Status | Path | Description |
 |---|---|---|---|---|
 | 001 | E* = E×[1 + c(m−1)] | ✅ Live | [/eq5/](eq5/) | Hormuz Commitment Device |
