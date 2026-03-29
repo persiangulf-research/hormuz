@@ -209,15 +209,49 @@
   const ids = ['E','c','m','H','G','S'];
   let chart = null;
   const STEPS = 50;
+  const M_BASE = 3.0;       // Hormuz-only
+  const M_ACTIVATED = 4.75; // Dual-strait (Houthi activation of Bab-el-Mandeb)
 
   function gv(id){ return +document.getElementById('sim-'+id).value; }
   function sv(id,v){ document.getElementById('sim-'+id+'v').textContent = v; }
 
-  function calc(){
-    const E=gv('E'), cv=gv('c')/10, mv=gv('m')/10, H=gv('H'), G=gv('G'), S=gv('S');
-    sv('E', E); sv('c', cv.toFixed(1)); sv('m', mv.toFixed(1)); sv('H', H); sv('G', G); sv('S', S);
+  // Update toggle visual state
+  function updateToggleVisual(isDual){
+    const track = document.getElementById('dual-toggle-track');
+    const thumb = document.getElementById('dual-toggle-thumb');
+    const btn = document.getElementById('dual-toggle-btn');
+    if(track) track.style.background = isDual ? '#f97316' : '#374151';
+    if(thumb) thumb.style.transform = isDual ? 'translateX(20px)' : 'translateX(0)';
+    if(btn){
+      btn.style.background = isDual ? 'rgba(249,115,22,0.14)' : 'rgba(249,115,22,0.07)';
+      btn.style.borderColor = isDual ? 'rgba(249,115,22,0.6)' : 'rgba(249,115,22,0.3)';
+    }
+  }
 
-    const estar = E*(1+cv*(mv-1));
+  function calc(){
+    const btn = document.getElementById('dual-toggle-btn');
+    const isDual = btn ? btn.getAttribute('data-on')==='1' : false;
+    const E=gv('E'), cv=gv('c')/10, H=gv('H'), G=gv('G'), S=gv('S');
+    // m is conditional: override slider when dual-strait is active
+    const mv = isDual ? M_ACTIVATED : gv('m')/10;
+    sv('E', E); sv('c', cv.toFixed(1)); sv('H', H); sv('G', G); sv('S', S);
+    if(isDual){
+      sv('m', mv.toFixed(2));
+      document.getElementById('sim-mv-dual').textContent = mv.toFixed(2);
+    } else {
+      sv('m', mv.toFixed(1));
+    }
+
+    // Show/hide dual-strait UI elements
+    const banner = document.getElementById('dual-strait-banner');
+    const mParam = document.getElementById('sim-m-param');
+    const mDualDisplay = document.getElementById('sim-m-dual-display');
+    if(banner){ banner.style.display = isDual ? 'block' : 'none'; }
+    if(mParam){ mParam.style.display = isDual ? 'none' : ''; }
+    if(mDualDisplay){ mDualDisplay.style.display = isDual ? 'block' : 'none'; }
+    updateToggleVisual(isDual);
+
+    const estar = E * (1+cv*(mv-1));
     const ef = Math.round(estar*10)/10;
     const ratio = Math.round(estar/E*100)/100;
     const uAcc = -H, uEsc = -H-estar, gap = estar;
@@ -225,8 +259,10 @@
     const iranYuan = G, iranDol = -S;
     const iranYuanEsc = G-estar, iranDolEsc = -S-estar;
 
+    const mvStr = isDual ? mv.toFixed(2) : mv.toFixed(1);
     document.getElementById('sim-eq').textContent =
-      `E* = ${E} × [1 + ${cv.toFixed(1)}(${mv.toFixed(1)}−1)] = ${E} × [1 + ${Math.round(cv*(mv-1)*100)/100}] = ${ef}`;
+      `E* = ${E} × [1 + ${cv.toFixed(1)}(${mvStr}−1)] = ${E} × [1 + ${Math.round(cv*(mv-1)*100)/100}] = ${ef}` +
+      (isDual ? '  [Dual-strait]' : '');
 
     document.getElementById('sm-estar').textContent = ef;
     document.getElementById('sm-ratio').textContent = ratio.toFixed(2)+'×';
@@ -246,6 +282,9 @@
     if(dom<=0){
       vEl.textContent = `Dominant strategy BROKEN: G+S=${dom} ≤ 0. Yuan no longer dominant for Iran.`;
       vEl.style.borderColor='#f87171'; vEl.style.background='rgba(239,68,68,0.08)';
+    } else if(isDual && ef>12){
+      vEl.textContent = `⚡ DUAL-STRAIT SCENARIO — Suicidal escalation. E*=${ef} (m=4.75, Bab-el-Mandeb activated). Deterrence gap = ${Math.round(gap*10)/10} units. Suez bypass is eliminated. U.S. Escalate payoff (${Math.round(uEsc*10)/10}) vs Accommodate (${Math.round(uAcc)}). At m_activated=4.75 vs m_base=3.0, effective cost rises ${Math.round((ef/14-1)*100)}% above Hormuz-only scenario. Escalation is structurally infeasible.`;
+      vEl.style.borderColor='#f97316'; vEl.style.background='rgba(249,115,22,0.08)';
     } else if(ef>12){
       vEl.textContent = `Suicidal escalation zone. E*=${ef} creates a deterrence gap of ${Math.round(gap*10)/10} units. U.S. Escalate payoff (${Math.round(uEsc*10)/10}) vs Accommodate (${Math.round(uAcc)}). Coalition-level resistance to High Response is structurally justified.`;
       vEl.style.borderColor='#f87171'; vEl.style.background='rgba(239,68,68,0.06)';
@@ -294,7 +333,7 @@
       }
     };
 
-    const yMin = Math.min(-H-E*mv-1, -S-1);
+    const yMin = Math.min(-H-E * mv-1, -S-1);
     const yMax = Math.max(G+2, 3);
 
     if(chart){ chart.destroy(); chart=null; }
@@ -324,6 +363,18 @@
     const el = document.getElementById('sim-'+id);
     if(el) el.addEventListener('input', calc);
   });
+  
+  // Add dual-strait toggle button event listener
+  const dualBtn = document.getElementById('dual-toggle-btn');
+  if(dualBtn){
+    dualBtn.addEventListener('click', function(){
+      const currentState = this.getAttribute('data-on');
+      const newState = currentState === '1' ? '0' : '1';
+      this.setAttribute('data-on', newState);
+      calc();
+    });
+  }
+  
   calc();
 })();
 
