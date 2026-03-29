@@ -101,12 +101,50 @@
 // Simulator
 (function(){
   let chart=null;
+  let lockedSr=0; // Sr value locked when mediator_status goes to 0
+
   function gv(id){return+document.getElementById('sim-'+id).value;}
+
+  function updateMediatorVisual(isOperative){
+    const track=document.getElementById('mediator-toggle-track');
+    const thumb=document.getElementById('mediator-toggle-thumb');
+    const icon=document.getElementById('mediator-icon');
+    const btn=document.getElementById('mediator-toggle-btn');
+    if(track) track.style.background=isOperative?'#22c55e':'#ef4444';
+    if(thumb) thumb.style.transform=isOperative?'translateX(20px)':'translateX(0)';
+    if(icon) icon.textContent=isOperative?'🟢':'🔴';
+    if(btn){
+      btn.style.background=isOperative?'rgba(34,197,94,0.07)':'rgba(239,68,68,0.07)';
+      btn.style.borderColor=isOperative?'rgba(34,197,94,0.3)':'rgba(239,68,68,0.3)';
+    }
+  }
+
   function calc(){
-    const G=gv('G'),S=gv('S'),Sr=gv('Sr'),H=gv('H');
-    ['G','S','Sr','H'].forEach(k=>document.getElementById('sim-'+k+'v').textContent=gv(k));
+    const btn=document.getElementById('mediator-toggle-btn');
+    const isOperative=btn ? btn.getAttribute('data-on')==='1' : true;
+    const G=gv('G'),S=gv('S'),H=gv('H');
+    // Gate Sr: if mediator_status=0, Sr is locked at the value it had when pathway closed
+    const Sr = isOperative ? gv('Sr') : lockedSr;
+    if(isOperative) lockedSr=gv('Sr');
+
+    // Show/hide UI elements based on mediator_status
+    const banner=document.getElementById('mediator-closed-banner');
+    const srParam=document.getElementById('sim-Sr-param');
+    const srLocked=document.getElementById('sim-Sr-locked');
+    const srLockedVal=document.getElementById('sim-Srv-locked');
+    if(banner) banner.style.display=isOperative?'none':'block';
+    if(srParam) srParam.style.display=isOperative?'':'none';
+    if(srLocked) srLocked.style.display=isOperative?'none':'block';
+    if(srLockedVal) srLockedVal.textContent=Sr;
+    updateMediatorVisual(isOperative);
+
+    ['G','S','H'].forEach(k=>document.getElementById('sim-'+k+'v').textContent=gv(k));
+    if(isOperative) document.getElementById('sim-Srv').textContent=Sr;
+
     const dom=G+S-Sr,threshold=G+S,cov=Math.min(100,Math.round(Sr/threshold*100)),gap=Math.max(0,threshold-Sr);
-    document.getElementById('sim-eq').textContent=`G+(S−Sr) = ${G}+(${S}−${Sr}) = ${dom} ${dom>0?'> 0 → Yuan dominant':'≤ 0 → Dominance broken!'}`;
+
+    const eqPrefix=isOperative?'':'[μ=0, Sr locked] ';
+    document.getElementById('sim-eq').textContent=`${eqPrefix}G+(S−Sr) = ${G}+(${S}−${Sr}) = ${dom} ${dom>0?'> 0 → Yuan dominant':'≤ 0 → Dominance broken!'}`;
     document.getElementById('sm-dom').textContent=(dom>=0?'+':'')+dom;
     document.getElementById('sm-dom').className='sm-val '+(dom>0?'accent':'green');
     document.getElementById('sm-req').textContent=threshold;
@@ -115,11 +153,20 @@
     document.getElementById('sm-iy').textContent='+'+G;
     document.getElementById('sm-id').textContent=((-S+Sr)>=0?'+':'')+((-S+Sr));
     const vEl=document.getElementById('sim-verdict');
-    if(dom<=0){vEl.textContent=`Dominance broken! Sr=${Sr} ≥ threshold=${threshold}. Iran's Yuan strategy is no longer dominant. Dollar pricing is now at least as attractive as yuan. E* will decay as Iran loses incentive to maintain closure.`;vEl.style.borderColor='#86efac';vEl.style.background='rgba(139,92,246,0.08)';}
-    else{vEl.textContent=`Trap active. Dominance margin = ${dom}. Sr coverage: ${cov}% (${Sr} of ${threshold} required). Remaining gap: ${gap} units ≈ $${(gap*2.25).toFixed(0)}B/year equivalent in sanctions cost reduction.`;vEl.style.borderColor='#a78bfa';vEl.style.background='rgba(139,92,246,0.06)';}
-    updateChart(G,S,Sr);
+    if(!isOperative){
+      vEl.textContent=`⛔ mediator_status = 0 — Sr pathway closed. Qatar/Oman channel non-operative. Sr is structurally locked at ${Sr}. Dominance margin = ${dom}. The trap cannot break through diplomacy. Only military resolution or mediator reactivation (μ → 1) changes this outcome. Monitor: IRGC strike activity on Qatari/Omani assets as the μ = 0 trigger.`;
+      vEl.style.borderColor='#ef4444';vEl.style.background='rgba(239,68,68,0.06)';
+    } else if(dom<=0){
+      vEl.textContent=`Dominance broken! Sr=${Sr} ≥ threshold=${threshold}. Iran's Yuan strategy is no longer dominant. Dollar pricing is now at least as attractive as yuan. E* will decay as Iran loses incentive to maintain closure.`;
+      vEl.style.borderColor='#86efac';vEl.style.background='rgba(139,92,246,0.08)';
+    } else {
+      vEl.textContent=`Trap active. Dominance margin = ${dom}. Sr coverage: ${cov}% (${Sr} of ${threshold} required). Remaining gap: ${gap} units ≈ $${(gap*2.25).toFixed(0)}B/year equivalent in sanctions cost reduction.`;
+      vEl.style.borderColor='#a78bfa';vEl.style.background='rgba(139,92,246,0.06)';
+    }
+    updateChart(G,S,Sr,isOperative);
   }
-  function updateChart(G,S,Sr){
+  
+  function updateChart(G,S,Sr,isOperative){
     const srVals=Array.from({length:51},(_,i)=>i/50*(G+S+4));
     const datasets=[
       {label:'Iran Yuan +G',data:srVals.map(sr=>({x:sr,y:G})),borderColor:'#86efac',borderWidth:2.5,pointRadius:0,tension:0},
@@ -146,6 +193,18 @@
     chart=new Chart(document.getElementById('sim-chart').getContext('2d'),{type:'line',data:{datasets},plugins:[annot],options:{responsive:true,maintainAspectRatio:false,animation:false,parsing:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1f2937',titleColor:'#e5e7eb',bodyColor:'#9ca3af',borderColor:'rgba(255,255,255,.1)',borderWidth:.5,padding:9,callbacks:{title:i=>'Sr = '+Math.round(i[0].parsed.x*10)/10,label:i=>i.dataset.label.split(' ').slice(0,2).join(' ')+': '+(i.parsed.y>=0?'+':'')+Math.round(i.parsed.y*10)/10}}},scales:{x:{type:'linear',min:0,max:G+S+4,title:{display:true,text:'sanctions relief Sr',color:tc,font:{size:11}},grid:{color:gc},ticks:{color:tc,font:{size:10},stepSize:3,callback:v=>Math.round(v)}},y:{title:{display:true,text:'payoff',color:tc,font:{size:11}},grid:{color:c=>c.tick?.value===0?zc:gc},ticks:{color:tc,font:{size:10},callback:v=>(v>=0?'+':'')+Math.round(v)}}}}}); 
   }
   ['G','S','Sr','H'].forEach(id=>document.getElementById('sim-'+id).addEventListener('input',calc));
+  
+  // Add mediator toggle button event listener
+  const mediatorBtn = document.getElementById('mediator-toggle-btn');
+  if(mediatorBtn){
+    mediatorBtn.addEventListener('click', function(){
+      const currentState = this.getAttribute('data-on');
+      const newState = currentState === '1' ? '0' : '1';
+      this.setAttribute('data-on', newState);
+      calc();
+    });
+  }
+  
   calc();
 })();
 
