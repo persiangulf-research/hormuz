@@ -1446,17 +1446,12 @@ const PARAMS_FALLBACK = {
     const closureDays = Math.floor((new Date() - WAR_START) / 86400000);
     let parts = [];
 
-    // Strategic summary (includes "Day X" prefix already)
+    // Lead: closure day + strategic summary
+    parts.push('▶ HORMUZ CLOSURE — DAY ' + closureDays);
     if (data.meta && data.meta.strategicSummary) {
-      // If summary doesn't start with "Day", add the closure day prefix
-      const summary = data.meta.strategicSummary;
-      if (!/^Day \d+/i.test(summary)) {
-        parts.push('▶ HORMUZ CLOSURE — DAY ' + closureDays);
-      }
+      // Remove "Day X" prefix from strategic summary to avoid duplication
+      const summary = data.meta.strategicSummary.replace(/^Day \d+\s+/i, '');
       parts.push(summary);
-    } else {
-      // Fallback if no strategic summary available
-      parts.push('▶ HORMUZ CLOSURE — DAY ' + closureDays);
     }
 
     // Each news item ticker
