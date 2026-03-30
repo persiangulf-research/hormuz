@@ -1,3 +1,42 @@
+// ── Global params loaded from params.json ────────────────────────────
+let globalParams = {
+  G: 8, S: 10, Sr: 0.78, H: 7, mediator_status: 1,
+  dominanceMargin: 18, threshold: 18, srCoverage: 4.3
+};
+
+// Fetch params.json on page load
+fetch('../params.json')
+  .then(res => res.json())
+  .then(data => {
+    if(data.parameters){
+      globalParams.G = data.parameters.G || 8;
+      globalParams.S = data.parameters.S || 10;
+      globalParams.Sr = data.parameters.Sr || 0.78;
+      globalParams.H = data.parameters.H || 7;
+      globalParams.mediator_status = data.parameters.mediator_status !== undefined ? data.parameters.mediator_status : 1;
+    }
+    if(data.derived){
+      globalParams.dominanceMargin = data.derived.dominanceMargin || (globalParams.G + globalParams.S - globalParams.Sr);
+      globalParams.threshold = globalParams.G + globalParams.S;
+      globalParams.srCoverage = data.derived.srCoverage || ((globalParams.Sr / globalParams.threshold) * 100);
+    }
+    // Update hero stats with loaded values
+    updateHeroStats();
+    // Update simulator with new defaults
+    updateSimulatorDefaults();
+  })
+  .catch(err => console.warn('Failed to load params.json, using defaults:', err));
+
+function updateHeroStats(){
+  const heroThreshold = document.getElementById('hero-threshold');
+  const heroSr = document.getElementById('hero-sr');
+  const heroCoverage = document.getElementById('hero-coverage');
+  
+  if(heroThreshold) heroThreshold.textContent = globalParams.threshold.toFixed(0);
+  if(heroSr) heroSr.textContent = globalParams.Sr.toFixed(2);
+  if(heroCoverage) heroCoverage.textContent = globalParams.srCoverage.toFixed(1) + '%';
+}
+
 // Hero canvas — threshold approaching animation
 (function(){
   const canvas=document.getElementById('hero-canvas');if(!canvas)return;
@@ -5,8 +44,9 @@
   function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;}
   function draw(t){
     ctx.clearRect(0,0,W,H);
-    const sr=Math.abs(Math.sin(t*.0004))*18;
-    const pct=sr/18;
+    const threshold = globalParams.threshold;
+    const sr=Math.abs(Math.sin(t*.0004))*threshold;
+    const pct=sr/threshold;
     const barW=W*.7,barX=W*.15,barY=H*.5,barH=8;
     ctx.fillStyle='rgba(139,92,246,0.08)';ctx.fillRect(barX,barY-barH/2,barW,barH);
     ctx.fillStyle=`rgba(139,92,246,${0.2+pct*.3})`;ctx.fillRect(barX,barY-barH/2,barW*pct,barH);
@@ -17,7 +57,7 @@
     ctx.fillStyle=`rgba(167,139,250,${0.3+pct*.4})`;ctx.font='500 12px monospace';ctx.textAlign='left';
     ctx.fillText('Sr = '+sr.toFixed(1),barX+barW*pct+6,barY+4);
     ctx.fillStyle='rgba(139,92,246,0.2)';ctx.font='10px monospace';ctx.textAlign='right';
-    ctx.fillText('Threshold 18',barX+barW-4,barY-14);
+    ctx.fillText('Threshold '+threshold,barX+barW-4,barY-14);
     requestAnimationFrame(draw);
   }
   window.addEventListener('resize',resize);resize();requestAnimationFrame(draw);
@@ -98,10 +138,28 @@
   });
 })();
 
+// Simulator defaults update function
+function updateSimulatorDefaults(){
+  const simG = document.getElementById('sim-G');
+  const simS = document.getElementById('sim-S');
+  const simSr = document.getElementById('sim-Sr');
+  const simH = document.getElementById('sim-H');
+  const mediatorBtn = document.getElementById('mediator-toggle-btn');
+  
+  if(simG) simG.value = Math.round(globalParams.G);
+  if(simS) simS.value = Math.round(globalParams.S);
+  if(simSr) simSr.value = Math.round(globalParams.Sr * 10) / 10; // Sr can be decimal
+  if(simH) simH.value = Math.round(globalParams.H);
+  if(mediatorBtn) mediatorBtn.setAttribute('data-on', globalParams.mediator_status.toString());
+  
+  // Trigger calculation update
+  if(window.simCalc) window.simCalc();
+}
+
 // Simulator
 (function(){
   let chart=null;
-  let lockedSr=0; // Sr value locked when mediator_status goes to 0
+  let lockedSr=globalParams.Sr; // Sr value locked when mediator_status goes to 0
 
   function gv(id){return+document.getElementById('sim-'+id).value;}
 
@@ -204,6 +262,9 @@
       calc();
     });
   }
+  
+  // Expose calc globally for updates
+  window.simCalc = calc;
   
   calc();
 })();
