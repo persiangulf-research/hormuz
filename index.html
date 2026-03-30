@@ -2310,6 +2310,24 @@ function resumeLiveParams() {
     if (msg) { msg.textContent = '⚠ Using PARAMS_FALLBACK defaults (not live params.json)'; msg.style.color = 'rgba(232,226,212,.3)'; }
   }
 })();
+
+// ── Clear Cache & Reload (nuclear option for users) ───────────────────
+function clearCacheAndReload() {
+  try {
+    localStorage.clear();
+    sessionStorage.clear();
+    // Show brief confirmation before reload
+    const btn = document.getElementById('clear-cache-btn');
+    if (btn) {
+      btn.textContent = '✓ Cleared — reloading...';
+      btn.style.color = '#22c55e';
+      btn.style.borderColor = 'rgba(34,197,94,.5)';
+    }
+    setTimeout(() => location.reload(), 600);
+  } catch(e) {
+    alert('Could not clear cache: ' + e.message);
+  }
+}
 </script>
 </body>
 </html>
