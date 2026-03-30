@@ -105,8 +105,8 @@
     {num:'05',title:'Bessent waiver — Sr reduces S, not ρ',params:'Equation 8 vs Equation 12 interaction',res:'No effect on decay rate',
      steps:[
       {label:'What Bessent\'s Sr does to Equation 8',eq:'Sr reduces S (dominance condition). Sr does NOT reduce ρ_I or ρ_S.',note:'The 140M barrel waiver changes Iran\'s sanctions cost S marginally. It does not change how much H is eroded per yuan-settled transit. ρ_I is a function of the payment infrastructure, not the sanctions regime.'},
-      {label:'CIPS transactions during waiver period',eq:'140M barrels settled via CIPS = additional operational CIPS record',note:'The waiver actually increases the pace of decay — by allowing 140M barrels to clear via yuan-denominated payment, it adds to the CIPS operational record and deepens the yuan rail\'s credibility. Sr reduces dominance margin; the clearing mechanism increases ρ_I.'},
-      {label:'Net Equation 8 effect of Bessent offer',eq:'ΔS = −0.78 (via Eq.12). Δρ_I = +small positive (via CIPS transactions).',note:'The waiver simultaneously makes Iran\'s dominant strategy marginally less dominant (good for U.S.) and accelerates hegemony decay (bad for U.S.). The net effect on the trap is ambiguous — the Equation 8 channel may offset the Equation 12 channel.'},
+      {label:'CIPS transactions during waiver period (confirmed)',eq:'140M barrels × yuan settlement = CIPS operational depth +Δρ_I ≈ +0.001',note:'Confirmed: 140M bbl settled via CIPS adds to operational record. rhoI rises marginally from 0.030 to ~0.031. H(30) falls from 33% to 32% of H_0 — small but permanent. The waiver is simultaneously a partial Sr signal (dominance −0.03) and a hegemony accelerant (+Δρ).'},
+      {label:'Trump-Iran talks (23 Mar) — Eq.8 perspective',eq:'If Sr=18 deal: rhoI collapses as yuan trades cease. H stabilises at ~33% of H_0.',note:'A genuine Sr=18 deal is the only event that can halt Eq.8 decay. If talks produce structural Sr, yuan trades cease, CIPS transactions stop accumulating, rhoI falls back toward pre-war level (~0.01). H stabilises. The 33% H_0 already eroded is permanent regardless.'},
     ]},
   ];
   const list=document.getElementById('examples-list');if(!list)return;
@@ -154,7 +154,7 @@
       const x21=x.getPixelForValue(21);
       ctx.save();ctx.strokeStyle='rgba(251,191,36,.4)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
       ctx.beginPath();ctx.moveTo(x21,y.getPixelForValue(y.max));ctx.lineTo(x21,y.getPixelForValue(y.min));ctx.stroke();ctx.setLineDash([]);
-      ctx.fillStyle='#fbbf24';ctx.font='500 10px monospace';ctx.textAlign='center';ctx.fillText('day 21',x21,y.getPixelForValue(y.max)+12);ctx.restore();
+      ctx.fillStyle='#fbbf24';ctx.font='500 10px monospace';ctx.textAlign='center';ctx.fillText('day 30',x21,y.getPixelForValue(y.max)+12);ctx.restore();
     }};
     const datasets=[
       {label:'U.S. payoff −H(t)',data:tVals.map((t,i)=>({x:t,y:uAVals[i]})),borderColor:'#38bdf8',borderWidth:2.5,pointRadius:0,tension:.3},
