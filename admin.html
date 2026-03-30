@@ -396,7 +396,7 @@ function init(){
     setTimeout(fetchBrent, 1000);
   }
   
-  // Auto-fetch every 15 minutes on weekdays only (skip Sat/Sun — markets closed)
+  // Auto-fetch every 6 hours on weekdays only (skip Sat/Sun — markets closed)
   setInterval(() => {
     const today = new Date();
     const dow = today.getDay();
@@ -404,9 +404,9 @@ function init(){
       console.log('[Auto-fetch] Weekend (' + (dow === 0 ? 'Sunday' : 'Saturday') + ') — skipping.');
       return;
     }
-    console.log('[Auto-fetch] 15-minute interval triggered');
+    console.log('[Auto-fetch] 6-hour interval triggered');
     fetchBrent();
-  }, 900000);
+  }, 21600000);
 }
 
 function cfg(){return JSON.parse(localStorage.getItem('hg_cfg')||'{}');}

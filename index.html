@@ -997,7 +997,7 @@ footer {
   <div style="font-family:var(--mono);font-size:11px;color:var(--muted);max-width:420px;line-height:1.7;">
     <span style="color:var(--amber);font-weight:700;font-size:9px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:.35rem;">Live price feed · oilpriceapi.com</span>
     Real-time Brent crude + Natural Gas fetched <strong style="color:var(--amber-l)">directly from oilpriceapi.com</strong> by this page.
-    Refreshes every <strong style="color:var(--text)">15 min</strong> on weekdays.
+    Refreshes every <strong style="color:var(--text)">6 hours</strong> on weekdays.
     24h Δ reflects Hormuz closure risk premium. Brent feeds directly into
     <strong style="color:var(--amber-l)">E* = E × [1 + c(m−1)]</strong> — Brent ↑ → c ↑ → E* ↑.
     <span style="display:block;margin-top:.35rem;color:var(--faint);font-size:10px;">
@@ -1740,9 +1740,9 @@ async function loadPriceWidget() {
   updateDisplay(BRENT_FALLBACK, false);
 }
 
-// Invoke immediately then refresh every 15 minutes on weekdays only (weekend guard inside)
+// Invoke immediately then refresh every 6 hours on weekdays only (weekend guard inside)
 loadPriceWidget();
-setInterval(loadPriceWidget, 900000); // Refresh every 15 minutes
+setInterval(loadPriceWidget, 21600000); // Refresh every 6 hours
 
 
 // ═══════════════════════════════════════════════════════════════════════
