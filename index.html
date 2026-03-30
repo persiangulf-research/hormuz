@@ -917,7 +917,7 @@ footer {
   <span class="bb-badge">Breaking</span>
   <div class="bb-scroll">
     <span class="bb-text" id="bb-text">
-      Loading latest intelligence… Day <span id="bb-days">—</span>
+      Loading latest intelligence…
     </span>
   </div>
   <span class="bb-time" id="bb-time">—</span>
@@ -1336,9 +1336,7 @@ function updateClosureDays() {
   const days = Math.floor((now - WAR_START) / (1000 * 60 * 60 * 24));
   const txt = 'Day ' + days;
   const el = document.getElementById('closure-days');
-  const bbEl = document.getElementById('bb-days');
   if (el) el.textContent = txt;
-  if (bbEl) bbEl.textContent = days;
 }
 updateClosureDays();
 setInterval(updateClosureDays, 60000);
@@ -1374,7 +1372,7 @@ setInterval(updateClosureDays, 60000);
 // Used when fetch() is blocked (file:// protocol) or params.json unavailable.
 const PARAMS_FALLBACK = {
   meta: {
-    closureDays: 28,
+    closureDays: 28, // NOTE: This is now calculated dynamically in buildBannerText()
     trapStatus: 'active',
     strategicSummary: 'Day 28 sees the crisis deepen on three axes simultaneously: the economic damage surface is expanding beyond energy into food and fertilizer (raising m and E), the Gulf coalition is consolidating into an active pro-escalation bloc rather than passive observer (raising k, n, and Ps while also raising E), and MBS\'s \'historic opportunity\' framing signals the Gulf states are pursuing independent strategic maximization rather than simple U.S. burden-sharing. Iran now faces encirclement signaling from both UAE operational participation and the Saudi-Bahrain lobbying track, which risks a credibility-hardening response from Tehran. The mediator channel remains technically open but is under structural stress as Qatar must navigate between its Gulf neighbors\' escalatory preferences and its traditional bridging role. The most important model tension is that Ps is rising (coalition strengthening) while E is also rising (conflict broadening), meaning the trap cost function is becoming more expensive for all parties simultaneously — a classic entrapment dynamic.',
     analystNotes: null,
