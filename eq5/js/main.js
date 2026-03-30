@@ -1,3 +1,51 @@
+// ── Global params loaded from params.json ────────────────────────────
+let globalParams = {
+  E: 5, c: 0.9, m: 3.0, H: 7, G: 8, S: 10, Sr: 0,
+  m_base: 3.0, m_activated: 4.75, estar: 14, estarRatio: 2.8
+};
+
+// Fetch params.json on page load
+fetch('../params.json')
+  .then(res => res.json())
+  .then(data => {
+    if(data.parameters){
+      globalParams.E = data.parameters.E || 5;
+      globalParams.c = data.parameters.c || 0.9;
+      globalParams.m = data.parameters.m || 3.0;
+      globalParams.H = data.parameters.H || 7;
+      globalParams.G = data.parameters.G || 8;
+      globalParams.S = data.parameters.S || 10;
+      globalParams.Sr = data.parameters.Sr || 0;
+      globalParams.m_base = data.parameters.m_base || 3.0;
+      globalParams.m_activated = data.parameters.m_activated || 4.75;
+    }
+    if(data.derived){
+      globalParams.estar = data.derived.estar || (globalParams.E * (1 + globalParams.c * (globalParams.m - 1)));
+      globalParams.estarRatio = data.derived.estarRatio || (globalParams.estar / globalParams.E);
+    }
+    // Update hero stats with loaded values
+    updateHeroStats();
+    // Update sensitivity table
+    updateSensitivityTable();
+    // Update simulator with new defaults
+    updateSimulatorDefaults();
+  })
+  .catch(err => console.warn('Failed to load params.json, using defaults:', err));
+
+function updateHeroStats(){
+  const heroEstar = document.getElementById('hero-estar');
+  if(heroEstar) heroEstar.textContent = globalParams.estar.toFixed(1);
+  
+  const heroStats = document.querySelector('.hero-stats');
+  if(heroStats){
+    const statVals = heroStats.querySelectorAll('.stat-val');
+    if(statVals[0]) statVals[0].textContent = globalParams.estar.toFixed(1);
+    if(statVals[1]) statVals[1].textContent = globalParams.estarRatio.toFixed(1) + '×';
+    if(statVals[2]) statVals[2].textContent = 'c≈' + globalParams.c.toFixed(2);
+    if(statVals[3]) statVals[3].textContent = 'm≈' + globalParams.m.toFixed(1);
+  }
+}
+
 // ── Hero canvas animation ────────────────────────────────────────────
 (function(){
   const canvas = document.getElementById('hero-canvas');
@@ -15,7 +63,7 @@
     lines = [];
     const cVals = [0,0.2,0.4,0.6,0.8,0.9,1.0];
     const mVals = [1.5,2.0,2.5,3.0,3.5,4.0];
-    const E = 5;
+    const E = globalParams.E;
     mVals.forEach((m,mi) => {
       cVals.forEach((c,ci) => {
         const estar = E * (1 + c*(m-1));
@@ -26,7 +74,8 @@
 
   function draw(t){
     ctx.clearRect(0,0,W,H);
-    const E=5, maxEstar=15;
+    const E = globalParams.E;
+    const maxEstar = globalParams.estar * 1.2; // Scale based on current estar
     lines.forEach(l => {
       const x = (l.c / 1.0) * W;
       const y = H - (l.estar / maxEstar) * H * 0.85 - H*0.05;
@@ -41,9 +90,9 @@
       ctx.fill();
     });
     // draw current position
-    const curX = (0.9/1.0)*W;
-    const curEstar = 14;
-    const curY = H - (curEstar/maxEstar)*H*0.85 - H*0.05;
+    const curX = (globalParams.c / 1.0) * W;
+    const curEstar = globalParams.estar;
+    const curY = H - (curEstar / maxEstar) * H * 0.85 - H*0.05;
     const pulse = 0.6 + 0.4*Math.sin(t*0.005);
     ctx.beginPath();
     ctx.arc(curX, curY, 8, 0, Math.PI*2);
@@ -63,23 +112,29 @@
 })();
 
 // ── Sensitivity table population ────────────────────────────────────
-(function(){
+function updateSensitivityTable(){
   const mVals = [1.5,2.0,2.5,3.0,3.5,4.0];
   const cVals = [0.0,0.2,0.4,0.6,0.8,0.9,1.0];
   const tbody = document.getElementById('sens-body');
   if(!tbody) return;
+  
+  // Clear existing rows
+  tbody.innerHTML = '';
+
+  const currentM = Math.round(globalParams.m * 10) / 10;
+  const currentC = Math.round(globalParams.c * 10) / 10;
 
   mVals.forEach(m => {
     const tr = document.createElement('tr');
     const mCell = document.createElement('td');
     mCell.textContent = 'm='+m.toFixed(1);
-    if(m===3.0) mCell.style.color='#fbbf24';
+    if(Math.abs(m - currentM) < 0.15) mCell.style.color='#fbbf24';
     tr.appendChild(mCell);
     cVals.forEach(c => {
       const td = document.createElement('td');
       const val = 1 + c*(m-1);
       td.textContent = val.toFixed(2);
-      const isCurrent = (m===3.0 && c===0.9);
+      const isCurrent = (Math.abs(m - currentM) < 0.15 && Math.abs(c - currentC) < 0.15);
       if(isCurrent){
         td.className = 'cell-current';
         td.textContent = '★ '+val.toFixed(2);
@@ -91,7 +146,10 @@
     });
     tbody.appendChild(tr);
   });
-})();
+}
+
+// Initial sensitivity table (will be updated once params load)
+updateSensitivityTable();
 
 // ── Examples accordion ───────────────────────────────────────────────
 (function(){
@@ -126,16 +184,8 @@
         {label:'1987 vs 2026 comparison', eq:'E*(1987) = 5.44  vs  E*(2026) = 14.0 → ratio 2.57×', note:'The 2.57× difference explains why the same escort strategy worked then and fails now. Both c and m have doubled.'},
       ]
     },
-    {
-      num:'04', title:'Current active closure — March 2026 (day 19)',
-      params:'c=0.90, m=3.0, E=5, H=7',
-      estar:'E*=14.0',
-      steps:[
-        {label:'Compute E*', eq:'E* = 5×[1+0.90×(3.0−1)] = 5×[1+1.80] = 5×2.80 = 14.0', note:'E* tripled from base. 180% increase above baseline escalation cost.'},
-        {label:'Payoff comparison', eq:'Accommodate: −7  |  Escalate: −21  |  Gap: 14', note:'Deterrence gap = 14 = 2×H. Even strong hawks face 14-unit penalty for choosing Escalate. Germany, France, Australia refusing = empirical validation.'},
-        {label:'Market translation', eq:'Brent $65→$105 = 62% premium. ΔP/P consistent with E*/E=2.80', note:'The 62% Brent premium is the market\'s real-world read of E*. Oil markets have priced effective escalation cost into the forward curve.'},
-      ]
-    },
+    // Example 04 will be dynamically generated from globalParams
+    null, // placeholder
     {
       num:'05', title:'Swing Producer endorsement scenario',
       params:'c: 0.90→0.96, m: 3.0→3.4, E=5',
@@ -147,13 +197,13 @@
       ]
     },
     {
-      num:'06', title:'Bessent 140-million-barrel waiver (19 March 2026)',
-      params:'Sr analysis against Eq. 12',
-      estar:'Sr≈0.78',
+      num:'06', title:'U.S. Precision Strike + Dual-Strait Escalation (Scenario B)',
+      params:'Strike triggers Houthi activation',
+      estar:'E*=21.9',
       steps:[
-        {label:'Sr calculation', eq:'140M bbl × $100/bbl = $14B ÷ $18B/yr = Sr ≈ 0.78 units', note:'On a scale where G = 8 units ≈ $18B/year, the one-time $14B = 0.78 units. Temporary, asset-specific.'},
-        {label:'Effect on dominance', eq:'G+(S−Sr) = 8+(10−0.78) = 17.22 > 0 → Yuan still dominant', note:'Dominant strategy unchanged. Iran\'s payoff advantage = 17.22 units. 0.78 of 18 required achieved (4.3%).'},
-        {label:'Effect on E*', eq:'ΔE*(from Sr) = 0. E* remains 14.0', note:'Sr does not change c (empirically resolved), m (geology), or E (war costs). E* is unaffected by the waiver entirely.'},
+        {label:'Strike scenario', eq:'U.S. targets IRGC-N facilities, Kharg Island, missile sites', note:'Iran responds by activating Houthi forces at Bab-el-Mandeb, eliminating Suez bypass route. Two-chokepoint system becomes structurally non-additive.'},
+        {label:'Geographic multiplier shift', eq:'m: 3.0 (Hormuz-only) → 4.75 (dual-strait)', note:'Red Sea routing (~12% global trade) severed. Net irreplaceability rises from 58% to near-total. m_activated = 4.75 reflects bypass collapse.'},
+        {label:'New E* calculation', eq:'E* = 5×[1+0.90×(4.75−1)] = 5×4.375 = 21.9', note:'E* rises 56% above Hormuz-only (14.0 → 21.9). U.S. Escalate = −28.9 vs Accommodate = −7. Gap = 21.9 units = 3.1×H. Enters suicidal escalation zone. Strike option structurally infeasible.'},
       ]
     },
     {
@@ -171,7 +221,58 @@
   const list = document.getElementById('examples-list');
   if(!list) return;
 
+  // Function to generate dynamic Example 04
+  function generateCurrentExample() {
+    const E = globalParams.E;
+    const c = globalParams.c;
+    const m = globalParams.m;
+    const H = globalParams.H;
+    const estar = globalParams.estar;
+    const ratio = globalParams.estarRatio;
+    const uAcc = -H;
+    const uEsc = -H - estar;
+    const gap = estar;
+    const gapRatio = (gap / H).toFixed(1);
+    const brentStart = 65;
+    const brentCurrent = Math.round(brentStart * (1 + (ratio - 1) * 0.5)); // Approximate Brent based on ratio
+    const brentPremium = Math.round(((brentCurrent - brentStart) / brentStart) * 100);
+    
+    // Calculate current date info
+    const closureStart = new Date('2026-03-02');
+    const currentDate = new Date();
+    const daysDiff = Math.floor((currentDate - closureStart) / (1000 * 60 * 60 * 24));
+    const dateStr = currentDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    
+    return {
+      num:'04',
+      title:`Current active closure — ${dateStr} (day ${daysDiff})`,
+      params:`c=${c.toFixed(2)}, m=${m.toFixed(1)}, E=${E.toFixed(1)}, H=${H.toFixed(1)}`,
+      estar:`E*=${estar.toFixed(1)}`,
+      steps:[
+        {
+          label:'Compute E*',
+          eq:`E* = ${E.toFixed(1)}×[1+${c.toFixed(2)}×(${m.toFixed(1)}−1)] = ${E.toFixed(1)}×[1+${(c*(m-1)).toFixed(3)}] = ${E.toFixed(1)}×${ratio.toFixed(3)} = ${estar.toFixed(1)}`,
+          note:`E* amplified ${ratio.toFixed(2)}× from base. ${Math.round((ratio-1)*100)}% increase above baseline escalation cost. Crisis has ${daysDiff > 19 ? 'intensified significantly' : 'evolved'} since initial closure.`
+        },
+        {
+          label:'Payoff comparison',
+          eq:`Accommodate: ${uAcc.toFixed(1)}  |  Escalate: ${uEsc.toFixed(1)}  |  Gap: ${gap.toFixed(1)}`,
+          note:`Deterrence gap = ${gap.toFixed(1)} = ${gapRatio}×H. ${gap > 20 ? 'Escalation now in "suicidal" territory. Even the most aggressive hawks cannot justify this penalty.' : gap > 12 ? 'Strong deterrence. Hawks face severe penalty.' : 'Active deterrence zone.'} Coalition ${gap > 20 ? 'defection complete' : 'alignment under stress'} (Germany, France, Australia${gap > 20 ? ', UK hesitant' : ''}).`
+        },
+        {
+          label:'Market translation',
+          eq:`Brent $${brentStart}→$${brentCurrent}+ = ${brentPremium}% premium. ΔP/P consistent with E*/E=${ratio.toFixed(2)}`,
+          note:`The ${brentPremium}% Brent premium reflects market pricing of E*=${estar.toFixed(1)}. Oil futures curve shows ${gap > 20 ? 'no expectation of military resolution' : 'limited confidence in near-term resolution'}. Forward spreads indicate ${gap > 20 ? 'multi-month' : 'extended'} closure anticipated.`
+        }
+      ]
+    };
+  }
+
+  // Replace null placeholder with dynamic example
+  examples[3] = generateCurrentExample();
+
   examples.forEach((ex, i) => {
+    if(!ex) return; // skip null entries
     const item = document.createElement('div');
     item.className = 'example-item';
     item.innerHTML = `
@@ -205,12 +306,32 @@
 })();
 
 // ── Live Simulator ───────────────────────────────────────────────────
+function updateSimulatorDefaults(){
+  // Update simulator initial values from globalParams
+  const simE = document.getElementById('sim-E');
+  const simC = document.getElementById('sim-c');
+  const simM = document.getElementById('sim-m');
+  const simH = document.getElementById('sim-H');
+  const simG = document.getElementById('sim-G');
+  const simS = document.getElementById('sim-S');
+  
+  if(simE) simE.value = Math.round(globalParams.E);
+  if(simC) simC.value = Math.round(globalParams.c * 10);
+  if(simM) simM.value = Math.round(globalParams.m * 10);
+  if(simH) simH.value = Math.round(globalParams.H);
+  if(simG) simG.value = Math.round(globalParams.G);
+  if(simS) simS.value = Math.round(globalParams.S);
+  
+  // Trigger calculation update
+  if(window.simCalc) window.simCalc();
+}
+
 (function(){
   const ids = ['E','c','m','H','G','S'];
   let chart = null;
   const STEPS = 50;
-  const M_BASE = 3.0;       // Hormuz-only
-  const M_ACTIVATED = 4.75; // Dual-strait (Houthi activation of Bab-el-Mandeb)
+  let M_BASE = globalParams.m_base;       // Hormuz-only
+  let M_ACTIVATED = globalParams.m_activated; // Dual-strait (Houthi activation of Bab-el-Mandeb)
 
   function gv(id){ return +document.getElementById('sim-'+id).value; }
   function sv(id,v){ document.getElementById('sim-'+id+'v').textContent = v; }
@@ -220,11 +341,11 @@
     const track = document.getElementById('dual-toggle-track');
     const thumb = document.getElementById('dual-toggle-thumb');
     const btn = document.getElementById('dual-toggle-btn');
-    if(track) track.style.background = isDual ? '#f97316' : '#374151';
+    if(track) track.style.background = isDual ? '#2563eb' : '#374151';
     if(thumb) thumb.style.transform = isDual ? 'translateX(20px)' : 'translateX(0)';
     if(btn){
-      btn.style.background = isDual ? 'rgba(249,115,22,0.14)' : 'rgba(249,115,22,0.07)';
-      btn.style.borderColor = isDual ? 'rgba(249,115,22,0.6)' : 'rgba(249,115,22,0.3)';
+      btn.style.background = isDual ? 'rgba(37,99,235,0.18)' : 'rgba(37,99,235,0.12)';
+      btn.style.borderColor = isDual ? 'rgba(37,99,235,0.5)' : 'rgba(37,99,235,0.35)';
     }
   }
 
@@ -233,6 +354,8 @@
     const isDual = btn ? btn.getAttribute('data-on')==='1' : false;
     const E=gv('E'), cv=gv('c')/10, H=gv('H'), G=gv('G'), S=gv('S');
     // m is conditional: override slider when dual-strait is active
+    M_BASE = globalParams.m_base;
+    M_ACTIVATED = globalParams.m_activated;
     const mv = isDual ? M_ACTIVATED : gv('m')/10;
     sv('E', E); sv('c', cv.toFixed(1)); sv('H', H); sv('G', G); sv('S', S);
     if(isDual){
@@ -284,7 +407,7 @@
       vEl.style.borderColor='#f87171'; vEl.style.background='rgba(239,68,68,0.08)';
     } else if(isDual && ef>12){
       vEl.textContent = `⚡ DUAL-STRAIT SCENARIO — Suicidal escalation. E*=${ef} (m=4.75, Bab-el-Mandeb activated). Deterrence gap = ${Math.round(gap*10)/10} units. Suez bypass is eliminated. U.S. Escalate payoff (${Math.round(uEsc*10)/10}) vs Accommodate (${Math.round(uAcc)}). At m_activated=4.75 vs m_base=3.0, effective cost rises ${Math.round((ef/14-1)*100)}% above Hormuz-only scenario. Escalation is structurally infeasible.`;
-      vEl.style.borderColor='#f97316'; vEl.style.background='rgba(249,115,22,0.08)';
+      vEl.style.borderColor='#2563eb'; vEl.style.background='rgba(37,99,235,0.12)';
     } else if(ef>12){
       vEl.textContent = `Suicidal escalation zone. E*=${ef} creates a deterrence gap of ${Math.round(gap*10)/10} units. U.S. Escalate payoff (${Math.round(uEsc*10)/10}) vs Accommodate (${Math.round(uAcc)}). Coalition-level resistance to High Response is structurally justified.`;
       vEl.style.borderColor='#f87171'; vEl.style.background='rgba(239,68,68,0.06)';
@@ -374,6 +497,9 @@
       calc();
     });
   }
+  
+  // Expose calc globally for updates
+  window.simCalc = calc;
   
   calc();
 })();
