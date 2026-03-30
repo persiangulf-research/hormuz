@@ -1545,7 +1545,7 @@ function updateDisplay(brent, isLive) {
 // Response: { status, data: { price, formatted, changes:{"24h":{amount,percent}},
 //             updated_at, source, metadata.source_description } }
 // ══════════════════════════════════════════════════════════════════════
-const BRENT_FALLBACK   = 110.94;  // as of 27 Mar 2026 (live API confirmed)
+const BRENT_FALLBACK   = 115.57;  // as of 28 Mar 2026 (live API confirmed)
 const NATGAS_FALLBACK  = 3.06;    // as of 27 Mar 2026
 // API key is set via the admin panel (Keys & Config → OilPrice API key) and stored in localStorage
 function getOilApiKey() {
@@ -1748,7 +1748,7 @@ setInterval(loadPriceWidget, 900000); // Refresh every 15 minutes
 
 // Model state — kept in sync with live Brent updates and params.json
 const MODEL = {
-  brent: 110.94, isLive: false,
+  brent: 115.57, isLive: false,
   E: 6, H: 8, G: 8, S: 10, m: 3.0, Sr: 0.78,
   n: 1.3, k: 1.3,
   c: 0.92, nu: 3, Ps: 8, rhoI: 0.03,
