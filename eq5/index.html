@@ -23,7 +23,8 @@
       <a href="#sensitivity">Sensitivity</a>
       <a href="#examples">Examples</a>
       <a href="#simulator">Simulator</a>
-      <a href="#bessent">Bessent Test</a>
+      <a href="#bessent">Scenarios</a>
+      <a href="#bab-mandeb">Bab-el-Mandeb</a>
     </div>
     <button class="nav-burger" id="burger" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -161,8 +162,8 @@
         <div class="bc-eq">E* = 5 × 2.80 = 14.0</div>
         <div class="bc-note">March 2026. Active deterrence zone. Escalation gap = 14 units.</div>
       </div>
-      <div class="boundary bc-dual" style="border-color:#f97316;background:rgba(249,115,22,0.07);">
-        <div class="bc-label" style="color:#f97316;">Dual-strait · c=0.90, m=4.75</div>
+      <div class="boundary bc-dual" style="border-color:#2563eb;background:rgba(37,99,235,0.12);">
+        <div class="bc-label" style="color:#3b82f6;">Dual-strait · c=0.90, m=4.75</div>
         <div class="bc-eq">E* = 5 × 4.375 = 21.9</div>
         <div class="bc-note">Houthi activation of Bab-el-Mandeb. Suez bypass eliminated. Escalation becomes structurally infeasible.</div>
       </div>
@@ -204,24 +205,24 @@
         </div>
         <div class="bypass-note">Yanbu (7M bpd) + Fujairah (1.8M bpd) = 8.8M bpd bypass vs 21M bpd Hormuz. Only 42% covered. Net irreplaceable: ~58%.</div>
       </div>
-      <div class="param-card param-dual" style="border-top:2px solid #f97316;grid-column:1/-1;margin-top:1rem;">
+      <div class="param-card param-dual" style="border-top:2px solid #2563eb;grid-column:1/-1;margin-top:1rem;">
         <div class="param-header">
-          <div class="param-sym" style="color:#f97316;">m*</div>
+          <div class="param-sym" style="color:#3b82f6;">m*</div>
           <div class="param-title">Dual-strait scenario — Houthi activation of Bab-el-Mandeb</div>
         </div>
-        <div style="font-size:0.88rem;color:#9ca3af;line-height:1.8;margin-top:0.75rem;">
+        <div style="font-size:0.88rem;color:#d1d5db;line-height:1.8;margin-top:0.75rem;">
           <p style="margin:0 0 0.6rem;">When Houthi forces activate Bab-el-Mandeb simultaneously with Hormuz closure, the Suez Canal routing — the primary alternative for European and U.S. East Coast buyers — is eliminated. The two-chokepoint system is <em>structurally non-additive</em>: the bypass option that reduces Hormuz's m to ~3.0 ceases to exist, pushing m into the 4.5–5.0 range.</p>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.75rem;margin-top:0.8rem;">
-            <div style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.25);border-radius:6px;padding:0.75rem;">
-              <div style="color:#f97316;font-family:monospace;font-size:0.95rem;font-weight:600;">m_base = 3.0</div>
+            <div style="background:rgba(37,99,235,0.12);border:1px solid rgba(37,99,235,0.35);border-radius:6px;padding:0.75rem;">
+              <div style="color:#3b82f6;font-family:monospace;font-size:0.95rem;font-weight:600;">m_base = 3.0</div>
               <div style="color:#9ca3af;font-size:0.8rem;margin-top:0.3rem;">Hormuz-only. Suez bypass available (~58% irreplaceable).</div>
             </div>
-            <div style="background:rgba(249,115,22,0.14);border:1px solid rgba(249,115,22,0.45);border-radius:6px;padding:0.75rem;">
-              <div style="color:#f97316;font-family:monospace;font-size:0.95rem;font-weight:600;">m_activated = 4.5–5.0</div>
+            <div style="background:rgba(37,99,235,0.18);border:1px solid rgba(37,99,235,0.5);border-radius:6px;padding:0.75rem;">
+              <div style="color:#3b82f6;font-family:monospace;font-size:0.95rem;font-weight:600;">m_activated = 4.5–5.0</div>
               <div style="color:#9ca3af;font-size:0.8rem;margin-top:0.3rem;">Dual-strait. Suez blocked. Red Sea routing (~12% global trade) also severed. Near-total irreplaceability.</div>
             </div>
-            <div style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.25);border-radius:6px;padding:0.75rem;">
-              <div style="color:#f97316;font-family:monospace;font-size:0.95rem;font-weight:600;">E*(activated) ≈ 21.9</div>
+            <div style="background:rgba(37,99,235,0.12);border:1px solid rgba(37,99,235,0.35);border-radius:6px;padding:0.75rem;">
+              <div style="color:#3b82f6;font-family:monospace;font-size:0.95rem;font-weight:600;">E*(activated) ≈ 21.9</div>
               <div style="color:#9ca3af;font-size:0.8rem;margin-top:0.3rem;">At c=0.90, m=4.75: E*=5×[1+0.90×3.75]=5×4.375=21.9. Escalation structurally infeasible.</div>
             </div>
           </div>
@@ -274,15 +275,15 @@
     <h2 class="section-title">Live Simulator</h2>
     <p class="section-lead">Adjust parameters and watch E* update in real time. All payoff columns recalculate instantly.</p>
     <!-- Dual-strait scenario toggle -->
-    <div id="dual-strait-banner" style="display:none;background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.45);border-radius:8px;padding:0.85rem 1.2rem;margin-bottom:1.25rem;font-size:0.88rem;color:#fed7aa;line-height:1.6;">
-      <strong style="color:#f97316;">⚡ Dual-strait scenario active</strong> — Houthi forces have activated Bab-el-Mandeb. Suez Canal routing is eliminated. m has been elevated from m_base = 3.0 to m_activated = 4.75. The m slider is overridden; all bypass alternatives have collapsed.
+    <div id="dual-strait-banner" style="display:none;background:rgba(37,99,235,0.15);border:1px solid rgba(37,99,235,0.5);border-radius:8px;padding:0.85rem 1.2rem;margin-bottom:1.25rem;font-size:0.88rem;color:#60a5fa;line-height:1.6;">
+      <strong style="color:#3b82f6;">⚡ Dual-strait scenario active</strong> — Houthi forces have activated Bab-el-Mandeb. Suez Canal routing is eliminated. m has been elevated from m_base = 3.0 to m_activated = 4.75. The m slider is overridden; all bypass alternatives have collapsed.
     </div>
     <div class="sim-layout">
       <div class="sim-controls">
         <!-- Dual-strait toggle — button-based, no checkbox -->
-        <div id="dual-toggle-btn" data-on="0" style="display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;background:rgba(249,115,22,0.07);border:1px solid rgba(249,115,22,0.3);border-radius:8px;margin-bottom:0.5rem;cursor:pointer;user-select:none;">
+        <div id="dual-toggle-btn" data-on="0" style="display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;background:rgba(37,99,235,0.12);border:1px solid rgba(37,99,235,0.35);border-radius:8px;margin-bottom:0.5rem;cursor:pointer;user-select:none;">
           <span style="font-size:1.1em;">⚡</span>
-          <span style="font-size:0.88rem;color:#fed7aa;font-weight:600;flex:1;">Dual-strait scenario <span style="font-size:0.78rem;font-weight:400;color:#9ca3af;">(EQ5 extension, March 2026 — Houthi activation of Bab-el-Mandeb)</span></span>
+          <span style="font-size:0.88rem;color:#60a5fa;font-weight:600;flex:1;">Dual-strait scenario <span style="font-size:0.78rem;font-weight:400;color:#9ca3af;">(EQ5 extension, March 2026 — Houthi activation of Bab-el-Mandeb)</span></span>
           <span style="position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0;">
             <span id="dual-toggle-track" style="display:block;width:100%;height:100%;background:#374151;border-radius:24px;transition:.25s;"></span>
             <span id="dual-toggle-thumb" style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.25s;"></span>
@@ -303,7 +304,7 @@
           <input type="range" id="sim-m" min="10" max="60" step="1" value="30">
           <span class="sim-val" id="sim-mv">3.0</span>
         </div>
-        <div id="sim-m-dual-display" style="display:none;padding:0.6rem 0.75rem;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.3);border-radius:6px;font-size:0.85rem;color:#fed7aa;">
+        <div id="sim-m-dual-display" style="display:none;padding:0.6rem 0.75rem;background:rgba(37,99,235,0.12);border:1px solid rgba(37,99,235,0.35);border-radius:6px;font-size:0.85rem;color:#60a5fa;">
           m = <strong id="sim-mv-dual">4.75</strong> <span style="color:#9ca3af;font-size:0.78rem;">(dual-strait override — m_base overridden by Houthi activation)</span>
         </div>
         <div class="sim-param">
@@ -408,8 +409,117 @@
         </tbody>
       </table>
     </div>
-    <div style="margin-top:2rem;padding:1.25rem;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:8px;font-size:0.88rem;color:#fecaca;line-height:1.7;">
-      <strong style="color:#ef4444;">Strategic implication:</strong> Every kinetic option (A–C) either maintains or amplifies E* ≥ 14, making U.S. Escalate payoff structurally inferior to Accommodate. The dual-strait scenario (B) elevates E* to 21.9, entering "suicidal escalation" territory where gap = 3.1×H. Only Scenario D (diplomatic Sr ≥ 18) breaks Iran's dominant strategy and collapses c, reducing E* to 6.0 and enabling reopening. The mathematical structure of Equation 5 admits <em>only one</em> viable de-escalation path: sanctions relief sufficient to break G+S &gt; Sr.
+    <div style="margin-top:2rem;padding:1.25rem;background:rgba(37,99,235,0.12);border:1px solid rgba(37,99,235,0.4);border-radius:8px;font-size:0.88rem;color:#60a5fa;line-height:1.7;">
+      <strong style="color:#3b82f6;">Strategic implication:</strong> Every kinetic option (A–C) either maintains or amplifies E* ≥ 14, making U.S. Escalate payoff structurally inferior to Accommodate. The dual-strait scenario (B) elevates E* to 21.9, entering "suicidal escalation" territory where gap = 3.1×H. Only Scenario D (diplomatic Sr ≥ 18) breaks Iran's dominant strategy and collapses c, reducing E* to 6.0 and enabling reopening. The mathematical structure of Equation 5 admits <em>only one</em> viable de-escalation path: sanctions relief sufficient to break G+S &gt; Sr.
+    </div>
+  </div>
+</section>
+
+<!-- BAB-EL-MANDEB IMPLICATIONS -->
+<section id="bab-mandeb" class="section">
+  <div class="section-inner">
+    <div class="section-tag">08 · Dual-Strait Escalation Risk</div>
+    <h2 class="section-title">Bab-el-Mandeb: The 4 Million b/d Trigger</h2>
+    <p class="section-lead">Houthi activation of Bab-el-Mandeb converts a manageable Hormuz crisis (E*=14.0) into a structurally infeasible escalation trap (E*=21.9). The mathematics of dual-strait closure is non-linear: m doesn't add — it compounds.</p>
+    
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin:2rem 0;">
+      <div style="background:rgba(37,99,235,0.12);border:1px solid rgba(37,99,235,0.4);border-radius:8px;padding:1.25rem;">
+        <div style="color:#3b82f6;font-family:monospace;font-size:1.1rem;font-weight:700;margin-bottom:0.5rem;">~4.0M b/d</div>
+        <div style="color:#d1d5db;font-size:0.95rem;font-weight:600;margin-bottom:0.5rem;">Red Sea crude transit at risk</div>
+        <div style="color:#9ca3af;font-size:0.85rem;line-height:1.6;">Saudi Arabia (~2.5M b/d), Iraq (~1.0M b/d), UAE (~0.5M b/d) routing via Suez. Represents ~4% of global supply. When combined with Hormuz closure (21M b/d), net irreplaceable fraction rises from 58% to 85%+.</div>
+      </div>
+      
+      <div style="background:rgba(37,99,235,0.12);border:1px solid rgba(37,99,235,0.4);border-radius:8px;padding:1.25rem;">
+        <div style="color:#3b82f6;font-family:monospace;font-size:1.1rem;font-weight:700;margin-bottom:0.5rem;">12% global trade</div>
+        <div style="color:#d1d5db;font-size:0.95rem;font-weight:600;margin-bottom:0.5rem;">Total Red Sea routing severed</div>
+        <div style="color:#9ca3af;font-size:0.85rem;line-height:1.6;">Container ships, LNG tankers, refined products. Europe loses primary Asia-Med route. U.S. East Coast loses Suez shortcut. Cape of Good Hope alternative adds 10–14 days transit, raising freight costs 40–60%.</div>
+      </div>
+      
+      <div style="background:rgba(37,99,235,0.12);border:1px solid rgba(37,99,235,0.4);border-radius:8px;padding:1.25rem;">
+        <div style="color:#3b82f6;font-family:monospace;font-size:1.1rem;font-weight:700;margin-bottom:0.5rem;">m: 3.0 → 4.75</div>
+        <div style="color:#d1d5db;font-size:0.95rem;font-weight:600;margin-bottom:0.5rem;">Geographic multiplier jump</div>
+        <div style="color:#9ca3af;font-size:0.85rem;line-height:1.6;">+58% amplification in E*. The dual-strait system is structurally non-additive because the bypass option (Suez/Cape) that reduced Hormuz's impact to m=3.0 is itself eliminated. m rises to 4.5–5.0 range.</div>
+      </div>
+    </div>
+
+    <div style="margin:2rem 0;padding:1.5rem;background:rgba(37,99,235,0.10);border-left:4px solid #2563eb;border-radius:6px;">
+      <h3 style="color:#3b82f6;font-size:1.1rem;margin:0 0 1rem;">The Houthi trigger mechanism</h3>
+      <div style="color:#9ca3af;font-size:0.9rem;line-height:1.8;">
+        <p style="margin:0 0 0.75rem;">Houthi forces, operating as an extension of Iran's axis of resistance, control Yemen's western coastline facing Bab-el-Mandeb. Their demonstrated capability includes:</p>
+        <ul style="margin:0.5rem 0 0.75rem 1.5rem;padding:0;">
+          <li style="margin-bottom:0.5rem;"><strong style="color:#60a5fa;">Anti-ship cruise missiles (ASCMs):</strong> C-802, C-801 variants with 120–180km range. Effective against commercial vessels at chokepoint narrows (29km at Perim Island).</li>
+          <li style="margin-bottom:0.5rem;"><strong style="color:#60a5fa;">Unmanned surface vessels (USVs):</strong> Explosive-laden boats demonstrated in 2017 attack on Saudi frigate. Low-cost, high-volume threat.</li>
+          <li style="margin-bottom:0.5rem;"><strong style="color:#60a5fa;">Sea mines:</strong> Contact and influence mines deployable in shipping lanes. Clearing operations would require 4–6 weeks minimum.</li>
+          <li style="margin-bottom:0.5rem;"><strong style="color:#60a5fa;">Ballistic missiles:</strong> Burkan-2H and derivatives. Demonstrated strikes on Saudi ports (Jizan, Yanbu). 900km+ range covers entire Red Sea southern entrance.</li>
+        </ul>
+        <p style="margin:0.75rem 0 0;">The trigger condition is <em>Iranian strategic coordination</em>: if Iran closes Hormuz and signals Houthi activation, Bab-el-Mandeb closure follows within 24–48 hours. No separate Houthi political calculus required — the decision is made in Tehran, executed in Sana'a.</p>
+      </div>
+    </div>
+
+    <div style="margin:2rem 0;">
+      <h3 style="color:#3b82f6;font-size:1.1rem;margin:0 0 1rem;">Why m is non-additive: the bypass collapse</h3>
+      <div style="color:#9ca3af;font-size:0.9rem;line-height:1.8;margin-bottom:1.5rem;">
+        <p style="margin:0 0 0.75rem;">In the Hormuz-only scenario (m=3.0), the Suez Canal provides a critical bypass:</p>
+        <ul style="margin:0.5rem 0 0.75rem 1.5rem;padding:0;">
+          <li style="margin-bottom:0.5rem;">Saudi Arabia routes 8.8M b/d via Yanbu (Red Sea) and East-West Pipeline</li>
+          <li style="margin-bottom:0.5rem;">UAE routes 1.8M b/d via Fujairah (Indian Ocean, bypasses Hormuz)</li>
+          <li style="margin-bottom:0.5rem;">European refineries access Middle East crude via Suez, avoiding Hormuz</li>
+          <li style="margin-bottom:0.5rem;">Net effect: ~42% of Hormuz volume has a bypass → m = 3.0</li>
+        </ul>
+        <p style="margin:0.75rem 0 0;"><strong style="color:#60a5fa;">When Bab-el-Mandeb closes:</strong> Yanbu and East-West Pipeline oil must now route via Cape of Good Hope (adds 14 days, $8–12/bbl freight cost). Suez-dependent European buyers lose their primary Middle East supply route. The "bypass" no longer functions as a bypass — it becomes an equally disrupted alternative. Result: irreplaceable fraction rises from 58% to 85%, pushing m to 4.5–5.0.</p>
+      </div>
+    </div>
+
+    <div style="margin:2rem 0;padding:1.5rem;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);border-radius:8px;">
+      <h3 style="color:#3b82f6;font-size:1.1rem;margin:0 0 1rem;">E* escalation path: from manageable to infeasible</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+        <thead>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+            <th style="text-align:left;padding:0.75rem;color:#9ca3af;font-weight:600;">Scenario</th>
+            <th style="text-align:center;padding:0.75rem;color:#9ca3af;font-weight:600;">m</th>
+            <th style="text-align:center;padding:0.75rem;color:#9ca3af;font-weight:600;">E* (c=0.90)</th>
+            <th style="text-align:center;padding:0.75rem;color:#9ca3af;font-weight:600;">U.S. Escalate</th>
+            <th style="text-align:center;padding:0.75rem;color:#9ca3af;font-weight:600;">Gap vs Accommodate</th>
+            <th style="text-align:left;padding:0.75rem;color:#9ca3af;font-weight:600;">Assessment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+            <td style="padding:0.75rem;color:#e5e7eb;">Hormuz only (current)</td>
+            <td style="padding:0.75rem;text-align:center;color:#fbbf24;font-weight:600;">3.0</td>
+            <td style="padding:0.75rem;text-align:center;color:#fbbf24;font-weight:600;">14.0</td>
+            <td style="padding:0.75rem;text-align:center;color:#e5e7eb;">−21</td>
+            <td style="padding:0.75rem;text-align:center;color:#fbbf24;font-weight:600;">14 units</td>
+            <td style="padding:0.75rem;color:#9ca3af;">Active deterrence. Gap = 2×H. Escalate dominated but not structurally impossible.</td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.05);background:rgba(37,99,235,0.08);">
+            <td style="padding:0.75rem;color:#e5e7eb;"><strong style="color:#3b82f6;">Dual-strait (Bab-el-Mandeb activated)</strong></td>
+            <td style="padding:0.75rem;text-align:center;color:#3b82f6;font-weight:700;">4.75</td>
+            <td style="padding:0.75rem;text-align:center;color:#3b82f6;font-weight:700;">21.9</td>
+            <td style="padding:0.75rem;text-align:center;color:#e5e7eb;">−28.9</td>
+            <td style="padding:0.75rem;text-align:center;color:#ef4444;font-weight:700;">21.9 units</td>
+            <td style="padding:0.75rem;color:#9ca3af;"><strong style="color:#ef4444;">Suicidal escalation.</strong> Gap = 3.1×H. Structurally infeasible for any rational actor.</td>
+          </tr>
+          <tr>
+            <td style="padding:0.75rem;color:#e5e7eb;">Δ (Houthi activation impact)</td>
+            <td style="padding:0.75rem;text-align:center;color:#3b82f6;font-weight:600;">+58%</td>
+            <td style="padding:0.75rem;text-align:center;color:#3b82f6;font-weight:600;">+56%</td>
+            <td style="padding:0.75rem;text-align:center;color:#e5e7eb;">−7.9</td>
+            <td style="padding:0.75rem;text-align:center;color:#3b82f6;font-weight:600;">+7.9 units</td>
+            <td style="padding:0.75rem;color:#9ca3af;">E* rises by 56% of base. Escalate payoff worsens by 38%.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin:2rem 0;padding:1.5rem;background:rgba(37,99,235,0.12);border:1px solid rgba(37,99,235,0.4);border-radius:8px;">
+      <h3 style="color:#3b82f6;font-size:1.1rem;margin:0 0 1rem;">Policy implications: the dual-strait trap</h3>
+      <div style="color:#9ca3af;font-size:0.9rem;line-height:1.8;">
+        <p style="margin:0 0 0.75rem;"><strong style="color:#60a5fa;">1. Any U.S. strike on Iran risks Houthi activation.</strong> Precision strikes on IRGC-N, Kharg Island, or Iranian missile sites create the strategic justification for Tehran to signal Houthi closure of Bab-el-Mandeb. The dual-strait scenario isn't a separate contingency — it's the <em>expected Iranian response</em> to kinetic escalation.</p>
+        <p style="margin:0 0 0.75rem;"><strong style="color:#60a5fa;">2. E* jump from 14.0 to 21.9 makes Scenario B (precision strike) the worst U.S. option.</strong> The 56% amplification in E* transforms an already-unattractive escalation (U.S. payoff = −21) into a suicidal one (U.S. payoff = −28.9). Gap rises from 14 to 21.9 — exceeding 3×H. No rational decision-maker escalates at 3×H.</p>
+        <p style="margin:0 0 0.75rem;"><strong style="color:#60a5fa;">3. Bab-el-Mandeb functions as an automatic escalation firewall.</strong> Unlike Hormuz, which Iran controls directly, Bab-el-Mandeb is controlled by a proxy (Houthis) with demonstrated operational independence but strategic alignment with Tehran. This gives Iran a credible "escalation-on-demand" lever without requiring direct Iranian action in the Red Sea. The firewall activates automatically upon U.S. kinetic action.</p>
+        <p style="margin:0 0 0;"><strong style="color:#60a5fa;">4. The 4M b/d Red Sea flow is the lynchpin of European and Asian supply security.</strong> When combined with Hormuz closure, the dual-strait scenario cuts ~25M b/d (25% of global crude) from normal routing. IEA strategic reserves (1.5Bn barrels ≈ 90 days OECD consumption) would be exhausted in 3–4 months at current burn rates. By month 5, rationing becomes unavoidable in OECD economies. This timeline defines the outer limit of U.S. escalation sustainability.</p>
+      </div>
     </div>
   </div>
 </section>
