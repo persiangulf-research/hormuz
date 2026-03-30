@@ -1,87 +1,91 @@
 {
   "meta": {
-    "published": "2026-03-28T12:04:44.046Z",
-    "closureDays": 28,
+    "published": "2026-03-30T00:34:55.491Z",
+    "closureDays": 30,
     "analystNotes": null,
     "aiCalibrated": true,
-    "brentPrice": 115.57,
-    "brentFetched": "2026-03-28T12:04:02.575Z",
-    "primaryEquation": "Eq.3 — Coalition alignment shift drives k/n upward while simultaneously raising E, tightening the escalation trap cost function for all actors.",
+    "brentPrice": 116,
+    "brentFetched": "2026-03-30T00:32:03.322Z",
+    "primaryEquation": "Eq.3 (Escalation Dominance): c*m*E vs. H+G — with c at 0.97, m at 3.4, and E now 15.5, the escalation dominance product (51.1) now substantially exceeds the hegemony+gain sum (16.5), indicating the U.S. has crossed into a zone where kinetic action appears mathematically rational to decision-makers even as strategic costs accumulate.",
     "trapStatus": "active",
-    "strategicSummary": "Day 28 sees the crisis deepen on three axes simultaneously: the economic damage surface is expanding beyond energy into food and fertilizer (raising m and E), the Gulf coalition is consolidating into an active pro-escalation bloc rather than passive observer (raising k, n, and Ps while also raising E), and MBS's 'historic opportunity' framing signals the Gulf states are pursuing independent strategic maximization rather than simple U.S. burden-sharing. Iran now faces encirclement signaling from both UAE operational participation and the Saudi-Bahrain lobbying track, which risks a credibility-hardening response from Tehran. The mediator channel remains technically open but is under structural stress as Qatar must navigate between its Gulf neighbors' escalatory preferences and its traditional bridging role. The most important model tension is that Ps is rising (coalition strengthening) while E is also rising (conflict broadening), meaning the trap cost function is becoming more expensive for all parties simultaneously — a classic entrapment dynamic.",
-    "mostSignificantEvent": "Headline 4 (UAE, Saudi Arabia, Bahrain urging U.S. to ramp up Iran attacks) is the most significant because it converts Gulf state preference into active coalition lobbying, constraining U.S. de-escalation options, hardening Iran's threat perception of regional encirclement, and raising E materially — it transforms the conflict from a U.S.-Iran bilateral into a multilateral regional war dynamic.",
+    "strategicSummary": "Day 30 of Hormuz closure now represents a qualitative phase transition: Trump's explicit Kharg Island seizure threat and uranium extraction operation planning, backed by 50,000 troops, converts the crisis from coercive standoff to imminent resource war framing. Iran's senior official response — 'we determine when the war ends' — confirms Tehran has no near-term capitulation pathway and is prepared for extended conflict. The simultaneous escalation of U.S. military specificity (named targets, named operations) and Iranian defiance rhetoric eliminates the diplomatic middle ground that Qatar/Oman mediation depends upon. Critically, the 'take the oil' framing is strategically catastrophic for U.S. hegemony in the Global South, accelerating yuan infrastructure adoption beyond Iran to fence-sitting OPEC+ members watching the precedent. Escalation cost (E) surges to 15.5 as conflict scope now encompasses potential seizure of sovereign oil and nuclear infrastructure. Ps collapses to 5.5 as unilateral resource seizure rhetoric drives coalition defections. The trap is not just active — it is tightening on both sides simultaneously with no visible exit mechanism.",
+    "mostSignificantEvent": "Headline 0 (Trump Kharg Island seizure threat) is the most significant event because it names a specific military objective — seizing Iran's primary oil export terminal — which if executed would constitute an act of war against sovereign infrastructure, trigger Gulf-wide escalation, destroy U.S. rule-based order credibility with OPEC+ and Global South audiences, and permanently accelerate yuan settlement adoption as a dollar-system alternative. It transforms the model from coercive deterrence to resource war paradigm.",
     "news": [
       {
         "id": "N-001",
-        "date": "2026-03-28",
-        "headline": "Crown Prince Mohammed bin Salman is said to view US-Israeli war as ‘historic opportunity’ to remake Middle East.",
+        "date": "2026-03-30",
+        "headline": "Trump tells Financial Times that the US could 'take the oil in Iran' and he is 'considering seizing strategic Kharg Island'",
         "severity": "red",
         "eq": "5",
         "eqLabel": "Eq.5 — Commitment Device / c",
         "metricsImpact": {
-          "H_delta": "+0.5 — MBS framing conflict as historic opportunity signals autonomous Gulf agency, deepening hegemony erosion",
-          "E_delta": "+0.5 — Saudi willingness to exploit the moment raises the probability of conflict broadening",
-          "note": "This is a strategic realignment signal: the Gulf is not merely a passive U.S. client but an active shaper, which complicates U.S. escalation control."
+          "c_delta": "+0.04: Kharg Island seizure threat is the most operationally specific U.S. threat yet, converting rhetoric into named military objective and sharply raising credibility.",
+          "E_delta": "+2.0: Seizing sovereign oil infrastructure triggers Gulf-wide escalation cascade, dramatically raising base escalation cost.",
+          "H_delta": "+0.3: 'Take the oil' framing is maximally damaging to U.S. rule-based order narrative for OPEC+ and Global South observers.",
+          "Ps_delta": "-1.0: Unilateral resource seizure threat accelerates coalition partner defection from U.S. security umbrella.",
+          "note": "Most destabilizing single statement — transforms conflict from coercive deterrence into potential resource war, crossing a legal and normative threshold that reshapes allied calculations globally."
         },
-        "ticker": "Crown Prince Mohammed bin Salman is said to view US-Israeli war as ‘historic opportunity’ to remake Middle East."
+        "ticker": "Trump tells Financial Times that the US could 'take the oil in Iran' and he is 'considering seizing strategic Kharg Island'"
       },
       {
         "id": "N-002",
-        "date": "2026-03-28",
-        "headline": "The UAE is emerging as a central focus in Iranian threat perceptions. Reports indicate that Abu Dhabi is exploring participation in efforts to reopen the Strait and may support U.S. operations",
-        "severity": "amber",
-        "eq": "7",
-        "eqLabel": "Eq.7 — Cascade / network switchers",
+        "date": "2026-03-30",
+        "headline": "Trump is 'weighing a military operation to extract nearly 1,000 pounds of uranium from Iran', according to Wall Street Journal report",
+        "severity": "red",
+        "eq": "5",
+        "eqLabel": "Eq.5 — Commitment Device / m",
         "metricsImpact": {
-          "k_delta": "+0.15 — UAE partial operational alignment shifts swing producer/coalition weight toward anti-Iran axis",
-          "Ps_delta": "+0.5 — UAE military participation backstops U.S. guarantee credibility in theater",
-          "note": "UAE involvement is a double-edged signal: it strengthens U.S. coalition but makes Iran's threat perceptions more acute, potentially raising c if Iran interprets this as existential encirclement."
+          "c_delta": "+0.02: Uranium extraction operation is a specific named military objective signaling serious planning, though complexity and proliferation risk may slow execution.",
+          "E_delta": "+0.5: Nuclear material seizure operation risks Iranian WMD dispersal response and draws in IAEA/P5 actors, broadening conflict.",
+          "G_delta": "+0.5: Existential threat to Iran's nuclear program accelerates Tehran's non-dollar infrastructure buildout as strategic survival hedge.",
+          "note": "Creates second discrete military objective beyond oil, stretching U.S. operational planning and giving Iran multiple fronts to defend — paradoxically strengthening Iran's deterrence posture by raising U.S. cost calculus."
         },
-        "ticker": "The UAE is emerging as a central focus in Iranian threat perceptions. Reports indicate that Abu Dhabi is exploring participation in efforts to reopen the Strait and may support U.S. operations"
+        "ticker": "Trump is 'weighing a military operation to extract nearly 1,000 pounds of uranium from Iran', according to Wall Street Journal report"
       },
       {
         "id": "N-003",
-        "date": "2026-03-28",
-        "headline": "The disruption is now affecting not only energy but also global food supply chains. A significant portion of fertilizer trade and LNG flows passing through the Strait of Hormuz has been impacted, raising concerns about broader economic consequence",
+        "date": "2026-03-30",
+        "headline": "New York Times reports there are now 'over 50,000 American troops' in the Middle East, about 10,000 more than usual",
+        "severity": "red",
+        "eq": "5",
+        "eqLabel": "Eq.5 — Commitment Device / m",
+        "metricsImpact": {
+          "c_delta": "+0.02: 10,000 additional troops above normal deployment baseline is a concrete force posture signal that raises credibility of imminent kinetic action.",
+          "E_delta": "+0.5: Larger footprint means larger target surface for Iranian proxies, raising escalation cost via force protection exposure.",
+          "Ps_delta": "-0.5: Host nation consent for 50,000 troops will strain Gulf partner relationships, particularly if Kharg seizure proceeds.",
+          "note": "Force posture confirmation converts Trump statements from political signaling to operational preparation — the most structurally important headline for near-term kinetic probability assessment."
+        },
+        "ticker": "New York Times reports there are now 'over 50,000 American troops' in the Middle East, about 10,000 more than usual"
+      },
+      {
+        "id": "N-004",
+        "date": "2026-03-30",
+        "headline": "Senior Iranian official tells CNN that Tehran will 'determine when the war ends' and 'we will not stop defending until we teach Trump and Netanyahu a historic lesson'",
         "severity": "red",
         "eq": "5",
         "eqLabel": "Eq.5 — Commitment Device / c",
         "metricsImpact": {
-          "m_delta": "+0.2 — fertilizer and LNG disruption expands effective economic multiplier beyond crude baseline",
-          "E_delta": "+0.3 — food supply chain impact broadens international stakeholder pressure and escalation surface",
-          "note": "This is the most underpriced risk in the model: food security impacts draw in non-energy importers (South Asia, Africa) and accelerate calls for resolution or escalation from outside the Gulf theater."
+          "c_delta": "+0.01: Iranian defiance signal slightly raises Iran's own credibility of continued closure and resistance, locking in adversarial equilibrium.",
+          "rhoI_delta": "+0.01: 'Historic lesson' framing indicates leadership commitment to long-duration conflict, accelerating yuan settlement adoption as war economy deepens.",
+          "mediator_status_note": "WATCH: 'We determine when the war ends' rhetoric suggests Iran may be signaling it will not use Qatar/Oman channel — does not formally close it but reduces effectiveness.",
+          "note": "Iran's refusal posture eliminates near-term diplomatic off-ramp probability; combined with Trump's Kharg threat, both sides are now publicly committed to escalation tracks with no visible deescalation signal."
         },
-        "ticker": "The disruption is now affecting not only energy but also global food supply chains. A significant portion of fertilizer trade and LNG flows passing through the Strait of Hormuz has been impacted, raising concerns about broader economic consequence"
-      },
-      {
-        "id": "N-004",
-        "date": "2026-03-28",
-        "headline": "UAE, Saudi Arabia and Bahrain urging US to ramp up Iran attacks, intelligence source confirms",
-        "severity": "amber",
-        "eq": "7",
-        "eqLabel": "Eq.7 — Cascade / network switchers",
-        "metricsImpact": {
-          "k_delta": "+0.15 — Saudi and Bahrain explicit lobbying for escalation confirms hard coalition alignment",
-          "Ps_delta": "+0.5 — multilateral Gulf pressure on U.S. to act restores some guarantee credibility lost from prior defections",
-          "E_delta": "+0.2 — active GCC push for intensified strikes raises probability of broader conflict",
-          "note": "The trilateral GCC lobbying removes ambiguity about Gulf state preferences and raises the political cost for the U.S. of de-escalating unilaterally."
-        },
-        "ticker": "UAE, Saudi Arabia and Bahrain urging US to ramp up Iran attacks, intelligence source confirms"
+        "ticker": "Senior Iranian official tells CNN that Tehran will 'determine when the war ends' and 'we will not stop defending until we teach Trump and Netanyahu a historic lesson'"
       }
     ]
   },
   "parameters": {
-    "E": 12.5,
-    "c": 0.91,
+    "E": 15.5,
+    "c": 0.97,
     "m": 3.4,
-    "H": 8.5,
-    "G": 6.5,
+    "H": 9,
+    "G": 7.5,
     "S": 10,
     "Sr": 0.78,
     "k": 1.9,
     "nu": 3,
-    "Ps": 7.5,
-    "rhoI": 0.045,
+    "Ps": 5.5,
+    "rhoI": 0.055,
     "n": 1.9,
     "dual_strait": 0,
     "m_base": 3,
@@ -113,11 +117,11 @@
     "mediator_status": "Binary flag: 1 = Qatar/Oman back-channel operative (sanctions-relief pathway open); 0 = mediator pathway closed (IRGC strike on Qatari/Omani assets or diplomatic rupture). When 0, Sr is gated — cannot rise regardless of diplomatic signals."
   },
   "derived": {
-    "estar": 39.8,
-    "estarRatio": 3.184,
-    "dominanceMargin": 15.72,
-    "srCoverage": 5,
-    "uAccommodate": -8.5,
-    "uEscalate": -48.3
+    "estar": 51.584,
+    "estarRatio": 3.328,
+    "dominanceMargin": 16.72,
+    "srCoverage": 4,
+    "uAccommodate": -9,
+    "uEscalate": -60.584
   }
 }
