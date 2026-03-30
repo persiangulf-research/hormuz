@@ -1444,11 +1444,12 @@ const PARAMS_FALLBACK = {
   function buildBannerText(data) {
     if (!bbText) return;
     const news = (data.meta && data.meta.news) || [];
-    const closureDays = data.meta && data.meta.closureDays ? data.meta.closureDays : '';
+    // Calculate closure days dynamically from WAR_START
+    const closureDays = Math.floor((new Date() - WAR_START) / 86400000);
     let parts = [];
 
     // Lead: closure day + strategic summary
-    if (closureDays) parts.push('▶ HORMUZ CLOSURE — DAY ' + closureDays);
+    parts.push('▶ HORMUZ CLOSURE — DAY ' + closureDays);
     if (data.meta && data.meta.strategicSummary) parts.push(data.meta.strategicSummary);
 
     // Each news item ticker
