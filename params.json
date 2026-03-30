@@ -1,82 +1,91 @@
 {
   "meta": {
-    "published": "2026-03-30T00:34:55.491Z",
-    "closureDays": 30,
+    "published": "2026-03-30T23:48:54.721Z",
+    "closureDays": 28,
     "analystNotes": null,
     "aiCalibrated": true,
-    "brentPrice": 116,
-    "brentFetched": "2026-03-30T00:32:03.322Z",
-    "primaryEquation": "Eq.3 (Escalation Dominance): c*m*E vs. H+G — with c at 0.97, m at 3.4, and E now 15.5, the escalation dominance product (51.1) now substantially exceeds the hegemony+gain sum (16.5), indicating the U.S. has crossed into a zone where kinetic action appears mathematically rational to decision-makers even as strategic costs accumulate.",
+    "brentPrice": 114.39,
+    "brentFetched": "2026-03-30T23:34:14.648Z",
+    "primaryEquation": "Eq.3",
     "trapStatus": "active",
-    "strategicSummary": "Day 30 of Hormuz closure now represents a qualitative phase transition: Trump's explicit Kharg Island seizure threat and uranium extraction operation planning, backed by 50,000 troops, converts the crisis from coercive standoff to imminent resource war framing. Iran's senior official response — 'we determine when the war ends' — confirms Tehran has no near-term capitulation pathway and is prepared for extended conflict. The simultaneous escalation of U.S. military specificity (named targets, named operations) and Iranian defiance rhetoric eliminates the diplomatic middle ground that Qatar/Oman mediation depends upon. Critically, the 'take the oil' framing is strategically catastrophic for U.S. hegemony in the Global South, accelerating yuan infrastructure adoption beyond Iran to fence-sitting OPEC+ members watching the precedent. Escalation cost (E) surges to 15.5 as conflict scope now encompasses potential seizure of sovereign oil and nuclear infrastructure. Ps collapses to 5.5 as unilateral resource seizure rhetoric drives coalition defections. The trap is not just active — it is tightening on both sides simultaneously with no visible exit mechanism.",
-    "mostSignificantEvent": "Headline 0 (Trump Kharg Island seizure threat) is the most significant event because it names a specific military objective — seizing Iran's primary oil export terminal — which if executed would constitute an act of war against sovereign infrastructure, trigger Gulf-wide escalation, destroy U.S. rule-based order credibility with OPEC+ and Global South audiences, and permanently accelerate yuan settlement adoption as a dollar-system alternative. It transforms the model from coercive deterrence to resource war paradigm.",
+    "strategicSummary": "Day 28 of Hormuz closure sees a dangerous multi-front escalation: Iran has attacked a Kuwaiti tanker (broadening targeting to neutral Gulf states), Israel has opened an economic-targets campaign against Iran, and the internal U.S. coalition is visibly fracturing between Gulf allies demanding continued prosecution of the war and Vance seeking a quick exit. Rubio's 'new leadership' framing suggests a regime-change off-ramp narrative is being constructed in Washington even as kinetic escalation intensifies on the ground. The Ps collapse to 4.5 is critical — Gulf partners are being asked to escalate further while the U.S. guarantee erodes. E has risen to 17.5 reflecting the now-trilateral conflict (U.S./Israel/Gulf vs. Iran). The trap remains active but the U.S. internal incoherence is creating a dangerous window where Iran may interpret U.S. exit pressure as an opportunity to hold out longer.",
+    "mostSignificantEvent": "Headline 4 (Vance seeking quick exit): The internal U.S. strategic split between Vance's exit-seeking and Gulf allies' demands to continue the war is the most destabilizing signal in this cycle. It simultaneously weakens Ps (guarantee credibility), emboldens Iran to wait out U.S. resolve, and may be driving Israel's unilateral economic strikes as a hedge against U.S. abandonment — creating a runaway escalation dynamic independent of White House intent.",
     "news": [
       {
         "id": "N-001",
         "date": "2026-03-30",
-        "headline": "Trump tells Financial Times that the US could 'take the oil in Iran' and he is 'considering seizing strategic Kharg Island'",
-        "severity": "red",
-        "eq": "5",
-        "eqLabel": "Eq.5 — Commitment Device / c",
+        "headline": "Kuwaiti oil tanker was targeted in Iranian attack",
+        "severity": "amber",
+        "eq": "7",
+        "eqLabel": "Eq.7 — Cascade / network switchers",
         "metricsImpact": {
-          "c_delta": "+0.04: Kharg Island seizure threat is the most operationally specific U.S. threat yet, converting rhetoric into named military objective and sharply raising credibility.",
-          "E_delta": "+2.0: Seizing sovereign oil infrastructure triggers Gulf-wide escalation cascade, dramatically raising base escalation cost.",
-          "H_delta": "+0.3: 'Take the oil' framing is maximally damaging to U.S. rule-based order narrative for OPEC+ and Global South observers.",
-          "Ps_delta": "-1.0: Unilateral resource seizure threat accelerates coalition partner defection from U.S. security umbrella.",
-          "note": "Most destabilizing single statement — transforms conflict from coercive deterrence into potential resource war, crossing a legal and normative threshold that reshapes allied calculations globally."
+          "c_delta": "+0.03; kinetic attack on neutral Kuwaiti tanker is hard evidence of Iranian willingness to broaden targeting, sharply raising credibility.",
+          "E_star": "E rises; attack on third-party Gulf asset signals Iran is escalating beyond U.S.-Iran bilateral.",
+          "note": "Attack on Kuwait (a U.S. partner) risks pulling additional Gulf states into active conflict posture, raising coalition pressure on Trump."
         },
-        "ticker": "Trump tells Financial Times that the US could 'take the oil in Iran' and he is 'considering seizing strategic Kharg Island'"
+        "ticker": "Kuwaiti oil tanker was targeted in Iranian attack"
       },
       {
         "id": "N-002",
         "date": "2026-03-30",
-        "headline": "Trump is 'weighing a military operation to extract nearly 1,000 pounds of uranium from Iran', according to Wall Street Journal report",
-        "severity": "red",
-        "eq": "5",
-        "eqLabel": "Eq.5 — Commitment Device / m",
-        "metricsImpact": {
-          "c_delta": "+0.02: Uranium extraction operation is a specific named military objective signaling serious planning, though complexity and proliferation risk may slow execution.",
-          "E_delta": "+0.5: Nuclear material seizure operation risks Iranian WMD dispersal response and draws in IAEA/P5 actors, broadening conflict.",
-          "G_delta": "+0.5: Existential threat to Iran's nuclear program accelerates Tehran's non-dollar infrastructure buildout as strategic survival hedge.",
-          "note": "Creates second discrete military objective beyond oil, stretching U.S. operational planning and giving Iran multiple fronts to defend — paradoxically strengthening Iran's deterrence posture by raising U.S. cost calculus."
-        },
-        "ticker": "Trump is 'weighing a military operation to extract nearly 1,000 pounds of uranium from Iran', according to Wall Street Journal report"
-      },
-      {
-        "id": "N-003",
-        "date": "2026-03-30",
-        "headline": "New York Times reports there are now 'over 50,000 American troops' in the Middle East, about 10,000 more than usual",
-        "severity": "red",
-        "eq": "5",
-        "eqLabel": "Eq.5 — Commitment Device / m",
-        "metricsImpact": {
-          "c_delta": "+0.02: 10,000 additional troops above normal deployment baseline is a concrete force posture signal that raises credibility of imminent kinetic action.",
-          "E_delta": "+0.5: Larger footprint means larger target surface for Iranian proxies, raising escalation cost via force protection exposure.",
-          "Ps_delta": "-0.5: Host nation consent for 50,000 troops will strain Gulf partner relationships, particularly if Kharg seizure proceeds.",
-          "note": "Force posture confirmation converts Trump statements from political signaling to operational preparation — the most structurally important headline for near-term kinetic probability assessment."
-        },
-        "ticker": "New York Times reports there are now 'over 50,000 American troops' in the Middle East, about 10,000 more than usual"
-      },
-      {
-        "id": "N-004",
-        "date": "2026-03-30",
-        "headline": "Senior Iranian official tells CNN that Tehran will 'determine when the war ends' and 'we will not stop defending until we teach Trump and Netanyahu a historic lesson'",
+        "headline": "Persian Gulf allies of the US are 'urging' Trump to 'continue prosecuting the war against Iran, arguing that Tehran hasn't been weakened enough', according to Associated Press report",
         "severity": "red",
         "eq": "5",
         "eqLabel": "Eq.5 — Commitment Device / c",
         "metricsImpact": {
-          "c_delta": "+0.01: Iranian defiance signal slightly raises Iran's own credibility of continued closure and resistance, locking in adversarial equilibrium.",
-          "rhoI_delta": "+0.01: 'Historic lesson' framing indicates leadership commitment to long-duration conflict, accelerating yuan settlement adoption as war economy deepens.",
-          "mediator_status_note": "WATCH: 'We determine when the war ends' rhetoric suggests Iran may be signaling it will not use Qatar/Oman channel — does not formally close it but reduces effectiveness.",
-          "note": "Iran's refusal posture eliminates near-term diplomatic off-ramp probability; combined with Trump's Kharg threat, both sides are now publicly committed to escalation tracks with no visible deescalation signal."
+          "c_delta": "No direct c change; political pressure event.",
+          "E_star": "E_delta +0.5 contribution; Gulf allies urging continuation of war extends conflict duration expectations and raises base escalation cost.",
+          "note": "Creates internal tension with Vance exit-seeking narrative; coalition coherence fracture risk elevated."
         },
-        "ticker": "Senior Iranian official tells CNN that Tehran will 'determine when the war ends' and 'we will not stop defending until we teach Trump and Netanyahu a historic lesson'"
+        "ticker": "Persian Gulf allies of the US are 'urging' Trump to 'continue prosecuting the war against Iran, arguing that Tehran hasn't been weakened enough', according to Associated Press report"
+      },
+      {
+        "id": "N-003",
+        "date": "2026-03-30",
+        "headline": "Israeli military has been ordered to start targeting Iranian economic targets, according to the Times of Israel report",
+        "severity": "red",
+        "eq": "5",
+        "eqLabel": "Eq.5 — Commitment Device / m",
+        "metricsImpact": {
+          "c_delta": "+0.01 indirect; Israeli economic targeting of Iran confirms multi-front escalation is now active.",
+          "E_star": "E_delta +1.5 contribution; Israeli entry into economic target strikes significantly broadens the conflict and raises E.",
+          "note": "Israeli strikes on Iranian economic targets risk Iranian counter-strikes that could further threaten Gulf infrastructure and oil facilities."
+        },
+        "ticker": "Israeli military has been ordered to start targeting Iranian economic targets, according to the Times of Israel report"
+      },
+      {
+        "id": "N-004",
+        "date": "2026-03-30",
+        "headline": "RUBIO: The people of Iran are incredible people. The people who lead them are the problem.If there are new people now in charge with a more reasonable vision of the future, it would be good news for the entire world.",
+        "severity": "red",
+        "eq": "5",
+        "eqLabel": "Eq.5 — Commitment Device / c",
+        "metricsImpact": {
+          "c_delta": "No change; rhetorical signal only.",
+          "E_star": "No direct E change; but signals a potential off-ramp framing being constructed by U.S. diplomacy.",
+          "note": "Rubio's 'new people in charge' framing is a classic regime-change diplomatic signal — not a ceasefire offer but a conditional exit narrative being seeded publicly."
+        },
+        "ticker": "RUBIO: The people of Iran are incredible people. The people who lead them are the problem.If there are new people now in charge with a more reasonable vision of the future, it would be good news for the entire world."
+      },
+      {
+        "id": "N-005",
+        "date": "2026-03-30",
+        "headline": "Haaretz: JD Vance is seeking a quick exit from the war with Iran; apparently, what happens to Israel in the process doesn’t matter much",
+        "severity": "red",
+        "eq": "5",
+        "eqLabel": "Eq.5 — Commitment Device / c",
+        "metricsImpact": {
+          "c_delta": "No direct c change; but U.S. credibility to allies weakens.",
+          "E_star": "Ps_delta -1.0; Vance exit-seeking directly reduces U.S. guarantee value to Gulf and Israeli partners.",
+          "note": "U.S.-Israel strategic divergence on war termination is the most significant alliance fracture signal in this cycle; Israeli strikes may be partly driven by fear of U.S. abandonment."
+        },
+        "ticker": "Haaretz: JD Vance is seeking a quick exit from the war with Iran; apparently, what happens to Israel in the process doesn’t matter much"
       }
     ]
   },
   "parameters": {
-    "E": 15.5,
-    "c": 0.97,
+    "E": 17.5,
+    "c": 0.93,
     "m": 3.4,
     "H": 9,
     "G": 7.5,
@@ -84,7 +93,7 @@
     "Sr": 0.78,
     "k": 1.9,
     "nu": 3,
-    "Ps": 5.5,
+    "Ps": 4.5,
     "rhoI": 0.055,
     "n": 1.9,
     "dual_strait": 0,
@@ -117,11 +126,11 @@
     "mediator_status": "Binary flag: 1 = Qatar/Oman back-channel operative (sanctions-relief pathway open); 0 = mediator pathway closed (IRGC strike on Qatari/Omani assets or diplomatic rupture). When 0, Sr is gated — cannot rise regardless of diplomatic signals."
   },
   "derived": {
-    "estar": 51.584,
-    "estarRatio": 3.328,
+    "estar": 56.56,
+    "estarRatio": 3.232,
     "dominanceMargin": 16.72,
     "srCoverage": 4,
     "uAccommodate": -9,
-    "uEscalate": -60.584
+    "uEscalate": -65.56
   }
 }
