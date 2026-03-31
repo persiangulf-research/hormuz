@@ -159,14 +159,27 @@
     document.getElementById('sm-gap0').textContent=(gap0>0?'+':'')+gap0.toFixed(1);
     if(kstar!==null){const yk=Gs+kstar*nu+Fd,gk=Ps*Math.pow(1-delta,kstar);document.getElementById('sm-gapk').textContent='+'+(yk-gk).toFixed(1);}
     else{document.getElementById('sm-gapk').textContent='—';}
+    // Check for passive cascade at current k=1.3
+    const curK=1.3;
+    const yuanAtCurK=Gs+curK*nu+Fd;
+    const guarAtCurK=Ps*Math.pow(1-delta,curK);
+    const passiveCascade=(yuanAtCurK>guarAtCurK);
+    
     document.getElementById('sim-eq').textContent=`State switches at k where G_s+kν+F_d > P_s·(1-δ)^k  →  k* = ${kstar===null?'never (guarantee too strong)':kstar}`;
     const vEl=document.getElementById('sim-verdict');
-    if(kstar===null){vEl.textContent=`Cascade stalls. The U.S. guarantee is strong enough that the yuan option never crosses it. This requires either raising ν, raising F_d (Russia-style event), or lowering P_s(0) through a major U.S. credibility failure.`;vEl.style.borderColor='#f87171';vEl.style.background='rgba(231,76,60,0.06)';}
-    else if(kstar<=2){vEl.textContent=`Fast cascade. Tipping point at only k*=${kstar} switchers. With k≈1.3 (Iran+India), the cascade may be within 1–2 further bilateral deals of the threshold.`;vEl.style.borderColor='#34d399';vEl.style.background='rgba(16,185,129,0.08)';}
-    else{vEl.textContent=`Moderate cascade. k*=${kstar} switchers needed. Current k≈1.3. ${kstar-1} more major bilateral deals or Swing state switches required to reach tipping point.`;vEl.style.borderColor='#34d399';vEl.style.background='rgba(16,185,129,0.06)';}
-    updateChart(Gs,nu,Ps,delta,Fd,kstar);
+    
+    // Priority 1: Passive cascade warning (most dangerous)
+    if(passiveCascade){
+      vEl.textContent=`⚠️ PASSIVE CASCADE TRIGGERED: At current k=${curK} (Iran+India), yuan side (${yuanAtCurK.toFixed(1)}) EXCEEDS guarantee side (${guarAtCurK.toFixed(1)}). The cascade tipping condition is met passively — without any Gulf state formally announcing a yuan switch. This is the most dangerous mechanism: passive cascade triggered by P_s erosion rather than k accumulation. P_s has dropped below the threshold where the existing k is sufficient to tip the cascade.`;
+      vEl.style.borderColor='#ef4444';vEl.style.background='rgba(239,68,68,0.12)';vEl.style.fontWeight='600';
+    }
+    // Priority 2: Normal cascade logic
+    else if(kstar===null){vEl.textContent=`Cascade stalls. The U.S. guarantee is strong enough that the yuan option never crosses it. This requires either raising ν, raising F_d (Russia-style event), or lowering P_s(0) through a major U.S. credibility failure.`;vEl.style.borderColor='#f87171';vEl.style.background='rgba(231,76,60,0.06)';vEl.style.fontWeight='400';}
+    else if(kstar<=2){vEl.textContent=`Fast cascade. Tipping point at only k*=${kstar} switchers. With k≈1.3 (Iran+India), the cascade may be within 1–2 further bilateral deals of the threshold.`;vEl.style.borderColor='#34d399';vEl.style.background='rgba(16,185,129,0.08)';vEl.style.fontWeight='400';}
+    else{vEl.textContent=`Moderate cascade. k*=${kstar} switchers needed. Current k≈1.3. ${kstar-1} more major bilateral deals or Swing state switches required to reach tipping point.`;vEl.style.borderColor='#34d399';vEl.style.background='rgba(16,185,129,0.06)';vEl.style.fontWeight='400';}
+    updateChart(Gs,nu,Ps,delta,Fd,kstar,passiveCascade,yuanAtCurK,guarAtCurK);
   }
-  function updateChart(Gs,nu,Ps,delta,Fd,kstar){
+  function updateChart(Gs,nu,Ps,delta,Fd,kstar,passiveCascade,yuanAtCurK,guarAtCurK){
     const kVals=Array.from({length:11},(_,i)=>i);
     const yuanSide=kVals.map(k=>Gs+k*nu+Fd);
     const guarSide=kVals.map(k=>Ps*Math.pow(1-delta,k));
@@ -180,14 +193,24 @@
         ctx.fillStyle='#34d399';ctx.font='500 10px monospace';ctx.textAlign='center';
         ctx.fillText('k*='+kstar,xPx,y.getPixelForValue(y.max)+12);ctx.restore();
       }
-      // current k marker
+      // current k marker with passive cascade indicator
       const curK=1.3;
       if(curK<=10){
         const xPx=x.getPixelForValue(curK);
-        ctx.save();ctx.strokeStyle='rgba(251,191,36,.5)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+        const markerColor=passiveCascade?'rgba(239,68,68,.8)':'rgba(251,191,36,.5)';
+        const textColor=passiveCascade?'#ef4444':'#fbbf24';
+        ctx.save();ctx.strokeStyle=markerColor;ctx.lineWidth=passiveCascade?2:1;ctx.setLineDash([3,3]);
         ctx.beginPath();ctx.moveTo(xPx,y.getPixelForValue(y.max));ctx.lineTo(xPx,y.getPixelForValue(y.min));ctx.stroke();ctx.setLineDash([]);
-        ctx.fillStyle='#fbbf24';ctx.font='500 10px monospace';ctx.textAlign='center';
-        ctx.fillText('now',xPx,y.getPixelForValue(y.max)+12);ctx.restore();
+        ctx.fillStyle=textColor;ctx.font=passiveCascade?'700 11px monospace':'500 10px monospace';ctx.textAlign='center';
+        ctx.fillText(passiveCascade?'⚠ now':'now',xPx,y.getPixelForValue(y.max)+12);
+        // If passive cascade, add crossover annotation
+        if(passiveCascade){
+          const yY=y.getPixelForValue(yuanAtCurK);
+          const yG=y.getPixelForValue(guarAtCurK);
+          ctx.beginPath();ctx.arc(xPx,yY,5,0,Math.PI*2);ctx.fillStyle='rgba(52,211,153,.8)';ctx.fill();
+          ctx.beginPath();ctx.arc(xPx,yG,5,0,Math.PI*2);ctx.fillStyle='rgba(248,113,113,.8)';ctx.fill();
+        }
+        ctx.restore();
       }
     }};
     const datasets=[
