@@ -254,10 +254,9 @@ MIT License - Free to use and modify for research purposes.
 |------|-------|
 | **28 FEB 2026** | Crisis begins - Hormuz closure |
 | **23 MAR 2026** | Trump-Iran talks signal, Brent volatile |
-| **26 MAR 2026** | U.S. invades Khargh Island, Houthis leverage Bab al-Mandan |
+
 
 ### **Current Crisis Metrics:**
-- **Day 26** of Hormuz closure
-- **Brent** $89+ (up 18% on invasion)
+- **Brent** $105+ (up 18% on invasion)
 - **Trap Status** Active (dominance margin > 0)
 - **Primary Threat** Military escalation + Bab al-Mandan leverage
