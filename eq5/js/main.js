@@ -315,12 +315,12 @@ function updateSimulatorDefaults(){
   const simG = document.getElementById('sim-G');
   const simS = document.getElementById('sim-S');
   
-  if(simE) simE.value = Math.round(globalParams.E);
-  if(simC) simC.value = Math.round(globalParams.c * 10);
-  if(simM) simM.value = Math.round(globalParams.m * 10);
-  if(simH) simH.value = Math.round(globalParams.H);
-  if(simG) simG.value = Math.round(globalParams.G);
-  if(simS) simS.value = Math.round(globalParams.S);
+  if(simE) simE.value = Math.round(globalParams.E * 10);
+  if(simC) simC.value = Math.round(globalParams.c * 100);
+  if(simM) simM.value = Math.round(globalParams.m * 100);
+  if(simH) simH.value = Math.round(globalParams.H * 10);
+  if(simG) simG.value = Math.round(globalParams.G * 10);
+  if(simS) simS.value = Math.round(globalParams.S * 10);
   
   // Trigger calculation update
   if(window.simCalc) window.simCalc();
@@ -352,17 +352,17 @@ function updateSimulatorDefaults(){
   function calc(){
     const btn = document.getElementById('dual-toggle-btn');
     const isDual = btn ? btn.getAttribute('data-on')==='1' : false;
-    const E=gv('E'), cv=gv('c')/10, H=gv('H'), G=gv('G'), S=gv('S');
+    const E=gv('E')/10, cv=gv('c')/100, H=gv('H')/10, G=gv('G')/10, S=gv('S')/10;
     // m is conditional: override slider when dual-strait is active
     M_BASE = globalParams.m_base;
     M_ACTIVATED = globalParams.m_activated;
-    const mv = isDual ? M_ACTIVATED : gv('m')/10;
-    sv('E', E); sv('c', cv.toFixed(1)); sv('H', H); sv('G', G); sv('S', S);
+    const mv = isDual ? M_ACTIVATED : gv('m')/100;
+    sv('E', E.toFixed(1)); sv('c', cv.toFixed(2)); sv('H', H.toFixed(1)); sv('G', G.toFixed(1)); sv('S', S.toFixed(1));
     if(isDual){
       sv('m', mv.toFixed(2));
       document.getElementById('sim-mv-dual').textContent = mv.toFixed(2);
     } else {
-      sv('m', mv.toFixed(1));
+      sv('m', mv.toFixed(2));
     }
 
     // Show/hide dual-strait UI elements
@@ -382,9 +382,9 @@ function updateSimulatorDefaults(){
     const iranYuan = G, iranDol = -S;
     const iranYuanEsc = G-estar, iranDolEsc = -S-estar;
 
-    const mvStr = isDual ? mv.toFixed(2) : mv.toFixed(1);
+    const mvStr = mv.toFixed(2);
     document.getElementById('sim-eq').textContent =
-      `E* = ${E} × [1 + ${cv.toFixed(1)}(${mvStr}−1)] = ${E} × [1 + ${Math.round(cv*(mv-1)*100)/100}] = ${ef}` +
+      `E* = ${E.toFixed(1)} × [1 + ${cv.toFixed(2)}(${mvStr}−1)] = ${E.toFixed(1)} × [1 + ${(cv*(mv-1)).toFixed(3)}] = ${ef}` +
       (isDual ? '  [Dual-strait]' : '');
 
     document.getElementById('sm-estar').textContent = ef;
