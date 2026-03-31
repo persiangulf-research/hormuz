@@ -144,13 +144,13 @@
     return null;
   }
   function calc(){
-    const Gs=gv('Gs'),nu=gv('nu'),Ps=gv('Ps'),deltaRaw=gv('delta'),Fd=gv('Fd');
+    const Gs=gv('Gs')/10,nu=gv('nu')/10,Ps=gv('Ps')/10,deltaRaw=gv('delta'),Fd=gv('Fd')/10;
     const delta=deltaRaw/100;
-    document.getElementById('sim-Gsv').textContent=Gs;
-    document.getElementById('sim-nuv').textContent=nu;
-    document.getElementById('sim-Psv').textContent=Ps;
+    document.getElementById('sim-Gsv').textContent=Gs.toFixed(1);
+    document.getElementById('sim-nuv').textContent=nu.toFixed(1);
+    document.getElementById('sim-Psv').textContent=Ps.toFixed(1);
     document.getElementById('sim-deltav').textContent=delta.toFixed(2);
-    document.getElementById('sim-Fdv').textContent=Fd;
+    document.getElementById('sim-Fdv').textContent=Fd.toFixed(1);
     const kstar=findKstar(Gs,nu,Ps,delta,Fd);
     const y0=Gs+Fd,g0=Ps,gap0=g0-y0;
     document.getElementById('sm-kstar').textContent=kstar===null?'Never':kstar;
