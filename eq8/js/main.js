@@ -124,11 +124,12 @@
   let chart=null;
   function gv(id){return+document.getElementById('sim-'+id).value;}
   function calc(){
-    const rhoI=gv('rhoI')/1000,rhoS=gv('rhoS')/1000,n=gv('n')/10,G=gv('G'),H0=gv('H0');
+    const rhoI=gv('rhoI')/1000,rhoS=gv('rhoS')/1000,n=gv('n')/10,G=gv('G')/10,H0=gv('H0')/10;
     document.getElementById('sim-rhoIv').textContent=(rhoI).toFixed(3);
     document.getElementById('sim-rhoSv').textContent=(rhoS).toFixed(3);
     document.getElementById('sim-nv').textContent=(n).toFixed(1);
-    ['G','H0'].forEach(k=>document.getElementById('sim-'+k+'v').textContent=gv(k));
+    document.getElementById('sim-Gv').textContent=(G).toFixed(1);
+    document.getElementById('sim-H0v').textContent=(H0).toFixed(1);
     const rhoTotal=rhoI+n*rhoS;
     const h10=H0*Math.pow(1-rhoTotal,10),h20=H0*Math.pow(1-rhoTotal,20),h50=H0*Math.pow(1-rhoTotal,50);
     let halfLife=null;for(let t=1;t<=200;t++){if(H0*Math.pow(1-rhoTotal,t)<=H0/2){halfLife=t;break;}}
@@ -137,10 +138,10 @@
     document.getElementById('sm-h10').textContent=h10.toFixed(2);
     document.getElementById('sm-h20').textContent=h20.toFixed(2);
     document.getElementById('sm-h50').textContent=h50.toFixed(2);
-    document.getElementById('sm-iran').textContent='+'+G;
+    document.getElementById('sm-iran').textContent='+'+G.toFixed(1);
     document.getElementById('sm-half').textContent=halfLife?halfLife:'100+';
     const vEl=document.getElementById('sim-verdict');
-    vEl.textContent=`Decay rate ρ_total = ${rhoTotal.toFixed(3)}/round. Hegemony half-life: ${halfLife||'100+'} rounds. After 21 rounds: H = ${(H0*Math.pow(1-rhoTotal,21)).toFixed(2)} (${Math.round(Math.pow(1-rhoTotal,21)*100)}% of H_0). Iran collects +${G} every round regardless.`;
+    vEl.textContent=`Decay rate ρ_total = ${rhoTotal.toFixed(3)}/round. Hegemony half-life: ${halfLife||'100+'} rounds. After 21 rounds: H = ${(H0*Math.pow(1-rhoTotal,21)).toFixed(2)} (${Math.round(Math.pow(1-rhoTotal,21)*100)}% of H_0). Iran collects +${G.toFixed(1)} every round regardless.`;
     updateChart(rhoI,rhoS,n,G,H0,rhoTotal);
   }
   function updateChart(rhoI,rhoS,n,G,H0,rhoTotal){
