@@ -267,17 +267,18 @@
             <span id="mediator-toggle-thumb" style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.25s;transform:translateX(20px);"></span>
           </span>
         </div>
+        <div class="sim-param"><label>mediator_quality — mediation effectiveness</label><input type="range" id="sim-quality" min="0" max="100" step="1" value="100"><span class="sim-val" id="sim-qualityv">1.00</span></div>
         <div class="sim-param"><label>G — Iran yuan gain</label><input type="range" id="sim-G" min="1" max="15" step="1" value="8"><span class="sim-val" id="sim-Gv">8</span></div>
         <div class="sim-param"><label>S — Iran sanctions cost</label><input type="range" id="sim-S" min="1" max="15" step="1" value="10"><span class="sim-val" id="sim-Sv">10</span></div>
-        <div class="sim-param" id="sim-Sr-param"><label>Sr — sanctions relief offered</label><input type="range" id="sim-Sr" min="0" max="25" step="1" value="0"><span class="sim-val" id="sim-Srv">0</span></div>
+        <div class="sim-param" id="sim-Sr-param"><label>Sr — sanctions relief offered (nominal)</label><input type="range" id="sim-Sr" min="0" max="25" step="1" value="0"><span class="sim-val" id="sim-Srv">0</span></div>
         <div id="sim-Sr-locked" style="display:none;padding:0.6rem 0.75rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:6px;font-size:0.85rem;color:#fca5a5;">
           Sr = <strong id="sim-Srv-locked">0</strong> <span style="color:#9ca3af;font-size:0.78rem;">(pathway locked — mediator_status = 0)</span>
         </div>
-        <div class="sim-param"><label>H — U.S. hegemony loss</label><input type="range" id="sim-H" min="1" max="12" step="1" value="7"><span class="sim-val" id="sim-Hv">7</span></div>
       </div>
       <div class="sim-outputs">
-        <div class="sim-eq-display" id="sim-eq">G+(S−Sr) = 8+(10−0) = 18 > 0 → Dominant</div>
+        <div class="sim-eq-display" id="sim-eq">G+(S−Sr_eff) = 8+(10−0) = 18 > 0 → Dominant</div>
         <div class="sim-metrics">
+          <div class="sim-met"><div class="sm-label">Sr effective (nominal × quality)</div><div class="sm-val accent" id="sm-sreff">0.00</div></div>
           <div class="sim-met"><div class="sm-label">Dominance margin</div><div class="sm-val accent" id="sm-dom">+18</div></div>
           <div class="sim-met"><div class="sm-label">Threshold required</div><div class="sm-val" id="sm-req">18</div></div>
           <div class="sim-met"><div class="sm-label">Sr coverage</div><div class="sm-val amber" id="sm-cov">0%</div></div>
