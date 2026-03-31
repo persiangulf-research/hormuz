@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -52,7 +52,7 @@
 
 <section id="hero">
   <div class="hero-grid">
-    <div class="hero-tag">Geoeconomics Analysis · 30 March 2026 · Analysis-005</div>
+    <div class="hero-tag">Geoeconomics Analysis · March 2026 · Analysis-005</div>
     <h1 class="hero-title">
       <span class="hero-eq">H_{t+1} = H_t·(1 − ρ_I − n_t·ρ_S)</span>
       <span class="hero-subtitle">Hegemony Decay &amp; the Repeated Game</span>
@@ -89,7 +89,7 @@
         <div class="term">
           <div class="term-sym">n_t·ρ_S</div>
           <div class="term-name">Swing state acceleration</div>
-          <div class="term-desc">n_t = number of Swing Producers who have switched to yuan by round t. ρ_S = per-Swing-state decay contribution, larger than ρ_I because Gulf states have larger oil volumes and higher credibility signals. As n grows, the decay rate accelerates.</div>
+          <div class="term-desc">n_t = number of Swing Producers who have switched to yuan by round t. ρ_S = per-Swing-state decay contribution, larger than ρ_I because Persian Gulf states have larger oil volumes and higher credibility signals. As n grows, the decay rate accelerates.</div>
         </div>
         <div class="term">
           <div class="term-sym">U_A(t)</div>
@@ -160,8 +160,8 @@
         <div class="bc-note">Dollar invoices 100% of Hormuz volume. CIPS has no operational war-time record. Status quo intact.</div>
       </div>
       <div class="boundary bc-one">
-        <div class="bc-label">t=30 · Day 30 (current — 30 March 2026)</div>
-        <div class="bc-eq">H_30 ≈ H_0·(0.9635)^30 ≈ 0.33·H_0</div>
+        <div class="bc-label">t=21 · Day 21 (current)</div>
+        <div class="bc-eq">H_21 ≈ H_0·(0.97)^21 ≈ 0.53·H_0</div>
         <div class="bc-note">At ρ_I=0.03 per day, 21 rounds remove ~47% of Iran's contribution to hegemony. India, Pakistan, Turkey deals add n_t·ρ_S.</div>
       </div>
       <div class="boundary bc-m1">
@@ -223,9 +223,9 @@
     <p class="section-lead">Watch H decay over rounds as decay rates and Swing state switches accumulate. Iran's payoff line stays flat at G every round.</p>
     <div class="sim-layout">
       <div class="sim-controls">
-        <div class="sim-param"><label>ρ_I — Iran decay per round</label><input type="range" id="sim-rhoI" min="1" max="8" step="1" value="3"><span class="sim-val" id="sim-rhoIv">0.03</span></div>
-        <div class="sim-param"><label>ρ_S — per-Swing-state decay</label><input type="range" id="sim-rhoS" min="1" max="10" step="1" value="5"><span class="sim-val" id="sim-rhoSv">0.05</span></div>
-        <div class="sim-param"><label>n — Swing states switched</label><input type="range" id="sim-n" min="0" max="5" step="1" value="0"><span class="sim-val" id="sim-nv">0</span></div>
+        <div class="sim-param"><label>ρ_I — Iran decay per round</label><input type="range" id="sim-rhoI" min="10" max="80" step="1" value="30"><span class="sim-val" id="sim-rhoIv">0.030</span></div>
+        <div class="sim-param"><label>ρ_S — per-Swing-state decay</label><input type="range" id="sim-rhoS" min="10" max="100" step="1" value="50"><span class="sim-val" id="sim-rhoSv">0.050</span></div>
+        <div class="sim-param"><label>n — Swing states switched</label><input type="range" id="sim-n" min="0" max="50" step="1" value="0"><span class="sim-val" id="sim-nv">0.0</span></div>
         <div class="sim-param"><label>G — Iran yuan gain (constant)</label><input type="range" id="sim-G" min="1" max="15" step="1" value="8"><span class="sim-val" id="sim-Gv">8</span></div>
         <div class="sim-param"><label>H_0 — initial hegemony</label><input type="range" id="sim-H0" min="5" max="15" step="1" value="10"><span class="sim-val" id="sim-H0v">10</span></div>
       </div>
