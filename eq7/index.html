@@ -224,11 +224,11 @@
     <p class="section-lead">Adjust parameters and watch the cascade trajectory. The chart shows the yuan side (G_s + kν) vs the guarantee side (P_s(0)(1−δ)^k) as k rises from 0 to 10.</p>
     <div class="sim-layout">
       <div class="sim-controls">
-        <div class="sim-param"><label>G_s — swing base yuan gain</label><input type="range" id="sim-Gs" min="1" max="10" step="1" value="4"><span class="sim-val" id="sim-Gsv">4</span></div>
-        <div class="sim-param"><label>ν — network gain per switcher</label><input type="range" id="sim-nu" min="1" max="8" step="1" value="3"><span class="sim-val" id="sim-nuv">3</span></div>
-        <div class="sim-param"><label>P_s(0) — initial guarantee value</label><input type="range" id="sim-Ps" min="5" max="20" step="1" value="12"><span class="sim-val" id="sim-Psv">12</span></div>
+        <div class="sim-param"><label>G_s — swing base yuan gain</label><input type="range" id="sim-Gs" min="10" max="100" step="1" value="40"><span class="sim-val" id="sim-Gsv">4.0</span></div>
+        <div class="sim-param"><label>ν — network gain per switcher</label><input type="range" id="sim-nu" min="10" max="80" step="1" value="30"><span class="sim-val" id="sim-nuv">3.0</span></div>
+        <div class="sim-param"><label>P_s(0) — initial guarantee value</label><input type="range" id="sim-Ps" min="50" max="200" step="1" value="120"><span class="sim-val" id="sim-Psv">12.0</span></div>
         <div class="sim-param"><label>δ — guarantee erosion per switcher</label><input type="range" id="sim-delta" min="1" max="30" step="1" value="15"><span class="sim-val" id="sim-deltav">0.15</span></div>
-        <div class="sim-param"><label>F_d — asset-freeze fear bonus</label><input type="range" id="sim-Fd" min="0" max="6" step="1" value="2"><span class="sim-val" id="sim-Fdv">2</span></div>
+        <div class="sim-param"><label>F_d — asset-freeze fear bonus</label><input type="range" id="sim-Fd" min="0" max="60" step="1" value="20"><span class="sim-val" id="sim-Fdv">2.0</span></div>
       </div>
       <div class="sim-outputs">
         <div class="sim-eq-display" id="sim-eq">G_s + kν vs P_s(0)(1−δ)^k</div>
