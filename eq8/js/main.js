@@ -1,3 +1,9 @@
+// ── Crisis day counter synchronization ──────────────────────────────────
+const WAR_START = new Date('2026-03-02T00:00:00Z');
+function getCurrentCrisisDay() {
+  return Math.floor((new Date() - WAR_START) / (1000 * 60 * 60 * 24));
+}
+
 // Hero canvas — decay curve animation
 (function(){
   const canvas=document.getElementById('hero-canvas');if(!canvas)return;
@@ -50,19 +56,20 @@
 
 // Sensitivity table
 (function(){
-  const tVals=[5,10,21,30,50,100];
+  const crisisDay=getCurrentCrisisDay();
+  const tVals=[5,10,crisisDay,30,50,100];
   const rhoVals=[0.02,0.04,0.06,0.08,0.10,0.15];
   const tbody=document.getElementById('sens-body');if(!tbody)return;
   tVals.forEach(t=>{
     const tr=document.createElement('tr');
     const lbl=document.createElement('td');lbl.textContent='t='+t;
-    if(t===21)lbl.style.color='#38bdf8';
+    if(t===crisisDay)lbl.style.color='#38bdf8';
     tr.appendChild(lbl);
     rhoVals.forEach((rho,ri)=>{
       const td=document.createElement('td');
       const val=Math.pow(1-rho,t);
       const pct=Math.round(val*100);
-      const isCur=(t===21&&ri===2);
+      const isCur=(t===crisisDay&&ri===2);
       td.textContent=isCur?'★ '+pct+'%':pct+'%';
       if(isCur)td.className='cell-current';
       else if(val>=0.80)td.className='cell-low';
@@ -140,8 +147,9 @@
     document.getElementById('sm-h50').textContent=h50.toFixed(2);
     document.getElementById('sm-iran').textContent='+'+G.toFixed(1);
     document.getElementById('sm-half').textContent=halfLife?halfLife:'100+';
+    const crisisDay=getCurrentCrisisDay();
     const vEl=document.getElementById('sim-verdict');
-    vEl.textContent=`Decay rate ρ_total = ${rhoTotal.toFixed(3)}/round. Hegemony half-life: ${halfLife||'100+'} rounds. After 21 rounds: H = ${(H0*Math.pow(1-rhoTotal,21)).toFixed(2)} (${Math.round(Math.pow(1-rhoTotal,21)*100)}% of H_0). Iran collects +${G.toFixed(1)} every round regardless.`;
+    vEl.textContent=`Decay rate ρ_total = ${rhoTotal.toFixed(3)}/round. Hegemony half-life: ${halfLife||'100+'} rounds. After ${crisisDay} rounds: H = ${(H0*Math.pow(1-rhoTotal,crisisDay)).toFixed(2)} (${Math.round(Math.pow(1-rhoTotal,crisisDay)*100)}% of H_0). Iran collects +${G.toFixed(1)} every round regardless.`;
     updateChart(rhoI,rhoS,n,G,H0,rhoTotal);
   }
   function updateChart(rhoI,rhoS,n,G,H0,rhoTotal){
@@ -153,10 +161,11 @@
     const isDark=true,tc='#9ca3af',gc='rgba(255,255,255,.06)',zc='rgba(255,255,255,.18)';
     const annot={id:'a',afterDatasetsDraw(ch){
       const{ctx,scales:{x,y}}=ch;
-      const x21=x.getPixelForValue(21);
+      const crisisDay=getCurrentCrisisDay();
+      const xPos=x.getPixelForValue(crisisDay);
       ctx.save();ctx.strokeStyle='rgba(251,191,36,.4)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
-      ctx.beginPath();ctx.moveTo(x21,y.getPixelForValue(y.max));ctx.lineTo(x21,y.getPixelForValue(y.min));ctx.stroke();ctx.setLineDash([]);
-      ctx.fillStyle='#fbbf24';ctx.font='500 10px monospace';ctx.textAlign='center';ctx.fillText('day 21',x21,y.getPixelForValue(y.max)+12);ctx.restore();
+      ctx.beginPath();ctx.moveTo(xPos,y.getPixelForValue(y.max));ctx.lineTo(xPos,y.getPixelForValue(y.min));ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='#fbbf24';ctx.font='500 10px monospace';ctx.textAlign='center';ctx.fillText(`day ${crisisDay}`,xPos,y.getPixelForValue(y.max)+12);ctx.restore();
     }};
     const datasets=[
       {label:'U.S. payoff −H(t)',data:tVals.map((t,i)=>({x:t,y:uAVals[i]})),borderColor:'#38bdf8',borderWidth:2.5,pointRadius:0,tension:.3},
