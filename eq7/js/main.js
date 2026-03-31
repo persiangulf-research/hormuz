@@ -152,31 +152,33 @@
     document.getElementById('sim-deltav').textContent=delta.toFixed(2);
     document.getElementById('sim-Fdv').textContent=Fd.toFixed(1);
     const kstar=findKstar(Gs,nu,Ps,delta,Fd);
-    const y0=Gs+Fd,g0=Ps,gap0=g0-y0;
     document.getElementById('sm-kstar').textContent=kstar===null?'Never':kstar;
-    document.getElementById('sm-y0').textContent='+'+y0;
-    document.getElementById('sm-g0').textContent=g0.toFixed(1);
-    document.getElementById('sm-gap0').textContent=(gap0>0?'+':'')+gap0.toFixed(1);
-    if(kstar!==null){const yk=Gs+kstar*nu+Fd,gk=Ps*Math.pow(1-delta,kstar);document.getElementById('sm-gapk').textContent='+'+(yk-gk).toFixed(1);}
-    else{document.getElementById('sm-gapk').textContent='—';}
     // Check for passive cascade at current k=1.3
     const curK=1.3;
     const yuanAtCurK=Gs+curK*nu+Fd;
     const guarAtCurK=Ps*Math.pow(1-delta,curK);
+    const gapAtCurK=yuanAtCurK-guarAtCurK;
     const passiveCascade=(yuanAtCurK>guarAtCurK);
     
-    document.getElementById('sim-eq').textContent=`State switches at k where G_s+kν+F_d > P_s·(1-δ)^k  →  k* = ${kstar===null?'never (guarantee too strong)':kstar}`;
+    // Update current k=1.3 metrics
+    document.getElementById('sm-ycur').textContent='+'+yuanAtCurK.toFixed(1);
+    document.getElementById('sm-gcur').textContent=guarAtCurK.toFixed(1);
+    document.getElementById('sm-gapcur').textContent=(gapAtCurK>=0?'+':'')+gapAtCurK.toFixed(1);
+    document.getElementById('sm-status').textContent=passiveCascade?'⚠ EXCEEDED':'OK';
+    document.getElementById('sm-status').style.color=passiveCascade?'#ef4444':'#34d399';
+    
+    document.getElementById('sim-eq').textContent=`Theoretical k*=${kstar===null?'never':kstar}  |  Current k=1.3: Yuan ${yuanAtCurK.toFixed(1)} ${passiveCascade?'> (EXCEEDED)':'< (safe)'} Guarantee ${guarAtCurK.toFixed(1)}`;
     const vEl=document.getElementById('sim-verdict');
     
     // Priority 1: Passive cascade warning (most dangerous)
     if(passiveCascade){
-      vEl.textContent=`⚠️ PASSIVE CASCADE TRIGGERED: At current k=${curK} (Iran+India), yuan side (${yuanAtCurK.toFixed(1)}) EXCEEDS guarantee side (${guarAtCurK.toFixed(1)}). The cascade tipping condition is met passively — without any Gulf state formally announcing a yuan switch. This is the most dangerous mechanism: passive cascade triggered by P_s erosion rather than k accumulation. P_s has dropped below the threshold where the existing k is sufficient to tip the cascade.`;
+      vEl.textContent=`⚠️ PASSIVE CASCADE TRIGGERED: At current k=1.3 (Iran+India), yuan side (${yuanAtCurK.toFixed(1)}) EXCEEDS guarantee side (${guarAtCurK.toFixed(1)}) by ${gapAtCurK.toFixed(1)} units. The cascade tipping condition is met passively — without any Gulf state formally announcing a yuan switch. This is the most dangerous mechanism: passive cascade triggered by P_s erosion rather than k accumulation. P_s has dropped below the threshold where the existing k=1.3 is sufficient to tip the cascade.`;
       vEl.style.borderColor='#ef4444';vEl.style.background='rgba(239,68,68,0.12)';vEl.style.fontWeight='600';
     }
     // Priority 2: Normal cascade logic
-    else if(kstar===null){vEl.textContent=`Cascade stalls. The U.S. guarantee is strong enough that the yuan option never crosses it. This requires either raising ν, raising F_d (Russia-style event), or lowering P_s(0) through a major U.S. credibility failure.`;vEl.style.borderColor='#f87171';vEl.style.background='rgba(231,76,60,0.06)';vEl.style.fontWeight='400';}
-    else if(kstar<=2){vEl.textContent=`Fast cascade. Tipping point at only k*=${kstar} switchers. With k≈1.3 (Iran+India), the cascade may be within 1–2 further bilateral deals of the threshold.`;vEl.style.borderColor='#34d399';vEl.style.background='rgba(16,185,129,0.08)';vEl.style.fontWeight='400';}
-    else{vEl.textContent=`Moderate cascade. k*=${kstar} switchers needed. Current k≈1.3. ${kstar-1} more major bilateral deals or Swing state switches required to reach tipping point.`;vEl.style.borderColor='#34d399';vEl.style.background='rgba(16,185,129,0.06)';vEl.style.fontWeight='400';}
+    else if(kstar===null){vEl.textContent=`Cascade stalls. The U.S. guarantee is strong enough that the yuan option never crosses it. At current k=1.3, guarantee (${guarAtCurK.toFixed(1)}) still exceeds yuan side (${yuanAtCurK.toFixed(1)}) by ${Math.abs(gapAtCurK).toFixed(1)} units.`;vEl.style.borderColor='#f87171';vEl.style.background='rgba(231,76,60,0.06)';vEl.style.fontWeight='400';}
+    else if(kstar<=2){vEl.textContent=`Fast cascade. Theoretical k*=${kstar}. At current k=1.3, guarantee (${guarAtCurK.toFixed(1)}) still ahead of yuan (${yuanAtCurK.toFixed(1)}) by ${Math.abs(gapAtCurK).toFixed(1)} units. The cascade may be within 1–2 further bilateral deals of triggering.`;vEl.style.borderColor='#34d399';vEl.style.background='rgba(16,185,129,0.08)';vEl.style.fontWeight='400';}
+    else{vEl.textContent=`Moderate cascade. k*=${kstar} switchers needed. Current k=1.3 has guarantee ahead by ${Math.abs(gapAtCurK).toFixed(1)} units. ${kstar-1} more major bilateral deals or Swing state switches required to reach theoretical tipping point.`;vEl.style.borderColor='#34d399';vEl.style.background='rgba(16,185,129,0.06)';vEl.style.fontWeight='400';}
     updateChart(Gs,nu,Ps,delta,Fd,kstar,passiveCascade,yuanAtCurK,guarAtCurK);
   }
   function updateChart(Gs,nu,Ps,delta,Fd,kstar,passiveCascade,yuanAtCurK,guarAtCurK){
