@@ -1,101 +1,60 @@
 {
   "meta": {
-    "published": "2026-03-30T23:48:54.721Z",
-    "closureDays": 28,
+    "published": "2026-04-01T23:30:08.888Z",
+    "closureDays": 30,
     "analystNotes": null,
     "aiCalibrated": true,
-    "brentPrice": 114.39,
-    "brentFetched": "2026-03-30T23:34:14.648Z",
-    "primaryEquation": "Eq.3",
-    "trapStatus": "active",
-    "strategicSummary": "Day 28 of Hormuz closure sees a dangerous multi-front escalation: Iran has attacked a Kuwaiti tanker (broadening targeting to neutral Gulf states), Israel has opened an economic-targets campaign against Iran, and the internal U.S. coalition is visibly fracturing between Gulf allies demanding continued prosecution of the war and Vance seeking a quick exit. Rubio's 'new leadership' framing suggests a regime-change off-ramp narrative is being constructed in Washington even as kinetic escalation intensifies on the ground. The Ps collapse to 4.5 is critical — Gulf partners are being asked to escalate further while the U.S. guarantee erodes. E has risen to 17.5 reflecting the now-trilateral conflict (U.S./Israel/Gulf vs. Iran). The trap remains active but the U.S. internal incoherence is creating a dangerous window where Iran may interpret U.S. exit pressure as an opportunity to hold out longer.",
-    "mostSignificantEvent": "Headline 4 (Vance seeking quick exit): The internal U.S. strategic split between Vance's exit-seeking and Gulf allies' demands to continue the war is the most destabilizing signal in this cycle. It simultaneously weakens Ps (guarantee credibility), emboldens Iran to wait out U.S. resolve, and may be driving Israel's unilateral economic strikes as a hedge against U.S. abandonment — creating a runaway escalation dynamic independent of White House intent.",
+    "brentPrice": 100.24,
+    "brentFetched": "2026-04-01T23:29:19.759Z",
+    "primaryEquation": "Eq.2",
+    "trapStatus": "weakening",
+    "strategicSummary": "Day 30 of the Hormuz closure sees a decisive de-escalatory signal from the U.S. side: Trump's announced military wind-down paired with a national address, simultaneously met by Iran's president offering a 'no enmity' olive branch. This bilateral rhetorical retreat substantially deflates U.S. coercive credibility (c drops to 0.72) and weakens the security guarantee (Ps to 7), while Iran retains full sanctions pressure since no formal OFAC/SWIFT relief has been announced. The pattern strongly suggests a back-channel deal is in late stages, but the yuan infrastructure gains (G=8, H=8) remain locked in regardless of resolution, and Sr=0.78 holds until formal diplomatic instruments are signed. Brent at $100.24 reflects markets beginning to price in de-escalation without full closure relief — consistent with uncertainty about whether the wind-down translates to actual Hormuz reopening or merely reduced kinetic operations.",
+    "mostSignificantEvent": "Headline 0 — Trump's military wind-down announcement is the most significant event because it unilaterally collapses U.S. coercive credibility on day 30, effectively confirming to Iran and global markets that the maximum pressure phase is ending without a formal settlement, handing Iran a strategic endurance victory regardless of subsequent negotiations.",
     "news": [
       {
         "id": "N-001",
-        "date": "2026-03-30",
-        "headline": "Kuwaiti oil tanker was targeted in Iranian attack",
-        "severity": "amber",
-        "eq": "7",
-        "eqLabel": "Eq.7 — Cascade / network switchers",
-        "metricsImpact": {
-          "c_delta": "+0.03; kinetic attack on neutral Kuwaiti tanker is hard evidence of Iranian willingness to broaden targeting, sharply raising credibility.",
-          "E_star": "E rises; attack on third-party Gulf asset signals Iran is escalating beyond U.S.-Iran bilateral.",
-          "note": "Attack on Kuwait (a U.S. partner) risks pulling additional Gulf states into active conflict posture, raising coalition pressure on Trump."
-        },
-        "ticker": "Kuwaiti oil tanker was targeted in Iranian attack"
-      },
-      {
-        "id": "N-002",
-        "date": "2026-03-30",
-        "headline": "Persian Gulf allies of the US are 'urging' Trump to 'continue prosecuting the war against Iran, arguing that Tehran hasn't been weakened enough', according to Associated Press report",
-        "severity": "red",
-        "eq": "5",
-        "eqLabel": "Eq.5 — Commitment Device / c",
-        "metricsImpact": {
-          "c_delta": "No direct c change; political pressure event.",
-          "E_star": "E_delta +0.5 contribution; Gulf allies urging continuation of war extends conflict duration expectations and raises base escalation cost.",
-          "note": "Creates internal tension with Vance exit-seeking narrative; coalition coherence fracture risk elevated."
-        },
-        "ticker": "Persian Gulf allies of the US are 'urging' Trump to 'continue prosecuting the war against Iran, arguing that Tehran hasn't been weakened enough', according to Associated Press report"
-      },
-      {
-        "id": "N-003",
-        "date": "2026-03-30",
-        "headline": "Israeli military has been ordered to start targeting Iranian economic targets, according to the Times of Israel report",
+        "date": "2026-04-01",
+        "headline": "Trump Says U.S. Military Campaign to Wind Down and Plans National Address--NY Times",
         "severity": "red",
         "eq": "5",
         "eqLabel": "Eq.5 — Commitment Device / m",
         "metricsImpact": {
-          "c_delta": "+0.01 indirect; Israeli economic targeting of Iran confirms multi-front escalation is now active.",
-          "E_star": "E_delta +1.5 contribution; Israeli entry into economic target strikes significantly broadens the conflict and raises E.",
-          "note": "Israeli strikes on Iranian economic targets risk Iranian counter-strikes that could further threaten Gulf infrastructure and oil facilities."
+          "c_delta": "-0.12 — U.S. military wind-down announcement is a major credibility deflation; Iran reads this as confirmation the threat was time-limited",
+          "Ps_delta": "-1 — coalition partners lose confidence in U.S. staying power, weakening the security guarantee",
+          "E_delta": "-1 — U.S. de-escalatory posture reduces the realized escalation cost pressure on both sides",
+          "note": "This is the dominant event: a commander-in-chief publicly announcing wind-down on day 30 of closure fundamentally shifts the coercive bargaining balance toward Iran."
         },
-        "ticker": "Israeli military has been ordered to start targeting Iranian economic targets, according to the Times of Israel report"
+        "ticker": "Trump Says U.S. Military Campaign to Wind Down and Plans National Address--NY Times"
       },
       {
-        "id": "N-004",
-        "date": "2026-03-30",
-        "headline": "RUBIO: The people of Iran are incredible people. The people who lead them are the problem.If there are new people now in charge with a more reasonable vision of the future, it would be good news for the entire world.",
+        "id": "N-002",
+        "date": "2026-04-01",
+        "headline": "Middle East crisis live: Iran’s president says his country has no ‘enmity’ for American people ahead of Trump’s address--Guardian",
         "severity": "red",
         "eq": "5",
         "eqLabel": "Eq.5 — Commitment Device / c",
         "metricsImpact": {
-          "c_delta": "No change; rhetorical signal only.",
-          "E_star": "No direct E change; but signals a potential off-ramp framing being constructed by U.S. diplomacy.",
-          "note": "Rubio's 'new people in charge' framing is a classic regime-change diplomatic signal — not a ceasefire offer but a conditional exit narrative being seeded publicly."
+          "c_delta": "negligible — rhetorical softening by Iran's president is face-saving positioning ahead of expected negotiation, not an operational shift",
+          "Sr_delta": "0 — 'no enmity' language is diplomatic signaling, not a formal OFAC/SWIFT qualifying action",
+          "note": "Iran is creating diplomatic cover for a negotiated exit while preserving leverage; pairs with Trump wind-down to suggest back-channel deal is likely imminent but not yet formalized."
         },
-        "ticker": "RUBIO: The people of Iran are incredible people. The people who lead them are the problem.If there are new people now in charge with a more reasonable vision of the future, it would be good news for the entire world."
-      },
-      {
-        "id": "N-005",
-        "date": "2026-03-30",
-        "headline": "Haaretz: JD Vance is seeking a quick exit from the war with Iran; apparently, what happens to Israel in the process doesn’t matter much",
-        "severity": "red",
-        "eq": "5",
-        "eqLabel": "Eq.5 — Commitment Device / c",
-        "metricsImpact": {
-          "c_delta": "No direct c change; but U.S. credibility to allies weakens.",
-          "E_star": "Ps_delta -1.0; Vance exit-seeking directly reduces U.S. guarantee value to Gulf and Israeli partners.",
-          "note": "U.S.-Israel strategic divergence on war termination is the most significant alliance fracture signal in this cycle; Israeli strikes may be partly driven by fear of U.S. abandonment."
-        },
-        "ticker": "Haaretz: JD Vance is seeking a quick exit from the war with Iran; apparently, what happens to Israel in the process doesn’t matter much"
+        "ticker": "Middle East crisis live: Iran’s president says his country has no ‘enmity’ for American people ahead of Trump’s address--Guardian"
       }
     ]
   },
   "parameters": {
-    "E": 17.5,
-    "c": 0.93,
-    "m": 3.4,
-    "H": 9,
-    "G": 7.5,
+    "E": 5,
+    "c": 0.72,
+    "m": 3,
+    "H": 8,
+    "G": 8,
     "S": 10,
     "Sr": 0.78,
-    "k": 1.9,
+    "k": 1.3,
     "nu": 3,
-    "Ps": 4.5,
-    "rhoI": 0.055,
-    "n": 1.9,
+    "Ps": 7,
+    "rhoI": 0.03,
+    "n": 1.3,
     "dual_strait": 0,
     "m_base": 3,
     "m_activated": 4.75,
@@ -126,11 +85,11 @@
     "mediator_status": "Binary flag: 1 = Qatar/Oman back-channel operative (sanctions-relief pathway open); 0 = mediator pathway closed (IRGC strike on Qatari/Omani assets or diplomatic rupture). When 0, Sr is gated — cannot rise regardless of diplomatic signals."
   },
   "derived": {
-    "estar": 56.56,
-    "estarRatio": 3.232,
-    "dominanceMargin": 16.72,
+    "estar": 12.2,
+    "estarRatio": 2.44,
+    "dominanceMargin": 17.22,
     "srCoverage": 4,
-    "uAccommodate": -9,
-    "uEscalate": -65.56
+    "uAccommodate": -8,
+    "uEscalate": -20.2
   }
 }
