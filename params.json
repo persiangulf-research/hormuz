@@ -1,50 +1,91 @@
 {
   "meta": {
-    "published": "2026-04-01T23:30:08.888Z",
-    "closureDays": 30,
+    "published": "2026-04-02T10:54:56.767Z",
+    "closureDays": 31,
     "analystNotes": null,
     "aiCalibrated": true,
-    "brentPrice": 100.24,
-    "brentFetched": "2026-04-01T23:29:19.759Z",
-    "primaryEquation": "Eq.2",
-    "trapStatus": "weakening",
-    "strategicSummary": "Day 30 of the Hormuz closure sees a decisive de-escalatory signal from the U.S. side: Trump's announced military wind-down paired with a national address, simultaneously met by Iran's president offering a 'no enmity' olive branch. This bilateral rhetorical retreat substantially deflates U.S. coercive credibility (c drops to 0.72) and weakens the security guarantee (Ps to 7), while Iran retains full sanctions pressure since no formal OFAC/SWIFT relief has been announced. The pattern strongly suggests a back-channel deal is in late stages, but the yuan infrastructure gains (G=8, H=8) remain locked in regardless of resolution, and Sr=0.78 holds until formal diplomatic instruments are signed. Brent at $100.24 reflects markets beginning to price in de-escalation without full closure relief — consistent with uncertainty about whether the wind-down translates to actual Hormuz reopening or merely reduced kinetic operations.",
-    "mostSignificantEvent": "Headline 0 — Trump's military wind-down announcement is the most significant event because it unilaterally collapses U.S. coercive credibility on day 30, effectively confirming to Iran and global markets that the maximum pressure phase is ending without a formal settlement, handing Iran a strategic endurance victory regardless of subsequent negotiations.",
+    "brentPrice": 108.62,
+    "brentFetched": "2026-04-02T10:47:20.128Z",
+    "primaryEquation": "Eq.3 (Trap Condition: S - Sr > G·k·nu - Ps)",
+    "trapStatus": "active",
+    "strategicSummary": "Day 31 of Hormuz closure at $108.62 Brent shows a model under mounting diplomatic and political pressure rather than military escalation. The most structurally important development is Trump's statement decoupling U.S. interest from Middle Eastern oil, which directly undermines the U.S. security guarantee (Ps -0.5 to 6.5) and signals to Iran that Washington's resolve is softening — a dynamic that paradoxically both reduces credibility of further U.S. strikes (c marginally down) and weakens deterrence. European voices (Macron, Italian FM) are aligning on an off-ramp narrative, consistent with coalition fatigue visible in equity markets (MSFT -22%). The Iran trap equation remains active: S=10 still exceeds Sr=0.78, Iran's yuan gains (G=8) continue accruing, and no formal sanctions relief has been granted. However, the Western coalition is visibly fraying, and Ps=6.5 is approaching a threshold where Iran's calculus tips further toward holding the strait. No parameter changes are warranted for Google/AI headlines, which are noise relative to the crisis variables.",
+    "mostSignificantEvent": "Headline 4 — Trump's statement that the U.S. does not need Middle Eastern oil is the most consequential event because it publicly signals reduced U.S. strategic commitment to Hormuz security, directly eroding the coalition guarantee (Ps) and giving Iran confirmation that Western resolve is fragmenting on day 31 of closure.",
     "news": [
       {
         "id": "N-001",
-        "date": "2026-04-01",
-        "headline": "Trump Says U.S. Military Campaign to Wind Down and Plans National Address--NY Times",
-        "severity": "red",
-        "eq": "5",
-        "eqLabel": "Eq.5 — Commitment Device / m",
-        "metricsImpact": {
-          "c_delta": "-0.12 — U.S. military wind-down announcement is a major credibility deflation; Iran reads this as confirmation the threat was time-limited",
-          "Ps_delta": "-1 — coalition partners lose confidence in U.S. staying power, weakening the security guarantee",
-          "E_delta": "-1 — U.S. de-escalatory posture reduces the realized escalation cost pressure on both sides",
-          "note": "This is the dominant event: a commander-in-chief publicly announcing wind-down on day 30 of closure fundamentally shifts the coercive bargaining balance toward Iran."
-        },
-        "ticker": "Trump Says U.S. Military Campaign to Wind Down and Plans National Address--NY Times"
-      },
-      {
-        "id": "N-002",
-        "date": "2026-04-01",
-        "headline": "Middle East crisis live: Iran’s president says his country has no ‘enmity’ for American people ahead of Trump’s address--Guardian",
+        "date": "2026-04-02",
+        "headline": "FRENCH PRESIDENT: WAR DOES NOT OFFER A \"PERMANENT SOLUTION\" FOR THE IRANIAN NUCLEAR FILE",
         "severity": "red",
         "eq": "5",
         "eqLabel": "Eq.5 — Commitment Device / c",
         "metricsImpact": {
-          "c_delta": "negligible — rhetorical softening by Iran's president is face-saving positioning ahead of expected negotiation, not an operational shift",
-          "Sr_delta": "0 — 'no enmity' language is diplomatic signaling, not a formal OFAC/SWIFT qualifying action",
-          "note": "Iran is creating diplomatic cover for a negotiated exit while preserving leverage; pairs with Trump wind-down to suggest back-channel deal is likely imminent but not yet formalized."
+          "c_delta": "-0.004: French diplomatic framing as 'no permanent solution' marginally reduces Western escalation credibility and supports ceasefire pathway signaling",
+          "E_star": "E*=5, unchanged but European diplomatic pressure creates slight downward bias",
+          "note": "Macron's language is a classic off-ramp signal; if echoed by Germany/UK it could further reduce c and Ps through coalition softening"
         },
-        "ticker": "Middle East crisis live: Iran’s president says his country has no ‘enmity’ for American people ahead of Trump’s address--Guardian"
+        "ticker": "FRENCH PRESIDENT: WAR DOES NOT OFFER A \"PERMANENT SOLUTION\" FOR THE IRANIAN NUCLEAR FILE"
+      },
+      {
+        "id": "N-002",
+        "date": "2026-04-02",
+        "headline": "GOOGLE EYES NATURAL GAS AS AI POWER DEMAND OUTPACES CLEAN ENERGY - AXIOS",
+        "severity": "red",
+        "eq": "5",
+        "eqLabel": "Eq.5 — Commitment Device / c",
+        "metricsImpact": {
+          "c_delta": "No direct c impact",
+          "E_star": "Neutral to model parameters",
+          "note": "Google pivoting to natural gas for AI power is a long-run demand signal that marginally supports elevated Brent but does not change Hormuz crisis variables directly"
+        },
+        "ticker": "GOOGLE EYES NATURAL GAS AS AI POWER DEMAND OUTPACES CLEAN ENERGY - AXIOS"
+      },
+      {
+        "id": "N-003",
+        "date": "2026-04-02",
+        "headline": "MICROSOFT'S STOCK FALLS 22% THIS YEAR DUE TO FEARS ABOUT THE IRAN WAR AND A DISAPPOINTING AI MARKET",
+        "severity": "red",
+        "eq": "5",
+        "eqLabel": "Eq.5 — Commitment Device / c",
+        "metricsImpact": {
+          "c_delta": "No direct c impact",
+          "E_star": "Indirect signal that Western economic costs of prolonged crisis are accumulating, creating pressure on Ps",
+          "note": "Microsoft -22% YTD links Iran war to equity market stress; this is a hegemony-cost signal consistent with H=8 and could accelerate political will for settlement"
+        },
+        "ticker": "MICROSOFT'S STOCK FALLS 22% THIS YEAR DUE TO FEARS ABOUT THE IRAN WAR AND A DISAPPOINTING AI MARKET"
+      },
+      {
+        "id": "N-004",
+        "date": "2026-04-02",
+        "headline": "ITALIAN FOREIGN MINISTER: THE PROLONGED CONTINUATION OF THE MIDDLE EAST CRISIS COULD LEAD TO AN INCREASE IN MIGRATION FLOWS",
+        "severity": "red",
+        "eq": "5",
+        "eqLabel": "Eq.5 — Commitment Device / c",
+        "metricsImpact": {
+          "c_delta": "No direct c impact",
+          "E_star": "E broadening risk flagged by Italian FM migration concern; no parameter change yet",
+          "note": "Italian FM migration warning signals European coalition fatigue; watch for further defections that would push Ps lower"
+        },
+        "ticker": "ITALIAN FOREIGN MINISTER: THE PROLONGED CONTINUATION OF THE MIDDLE EAST CRISIS COULD LEAD TO AN INCREASE IN MIGRATION FLOWS"
+      },
+      {
+        "id": "N-005",
+        "date": "2026-04-02",
+        "headline": "BREAKING: Trump says the United States does not need Middle Eastern oil",
+        "severity": "red",
+        "eq": "5",
+        "eqLabel": "Eq.5 — Commitment Device / c",
+        "metricsImpact": {
+          "c_delta": "Slight negative on c via reduced U.S. commitment signaling",
+          "Ps_delta": "-0.5: Direct reduction in U.S. security guarantee credibility; allies will discount U.S. resolve",
+          "note": "Most significant headline — Trump publicly decoupling U.S. strategic interest from Hormuz is a credibility shock to the Western deterrence posture and directly weakens Ps"
+        },
+        "ticker": "BREAKING: Trump says the United States does not need Middle Eastern oil"
       }
     ]
   },
   "parameters": {
     "E": 5,
-    "c": 0.72,
+    "c": 0.87,
     "m": 3,
     "H": 8,
     "G": 8,
@@ -52,7 +93,7 @@
     "Sr": 0.78,
     "k": 1.3,
     "nu": 3,
-    "Ps": 7,
+    "Ps": 6.5,
     "rhoI": 0.03,
     "n": 1.3,
     "dual_strait": 0,
@@ -85,11 +126,11 @@
     "mediator_status": "Binary flag: 1 = Qatar/Oman back-channel operative (sanctions-relief pathway open); 0 = mediator pathway closed (IRGC strike on Qatari/Omani assets or diplomatic rupture). When 0, Sr is gated — cannot rise regardless of diplomatic signals."
   },
   "derived": {
-    "estar": 12.2,
-    "estarRatio": 2.44,
+    "estar": 13.7,
+    "estarRatio": 2.74,
     "dominanceMargin": 17.22,
     "srCoverage": 4,
     "uAccommodate": -8,
-    "uEscalate": -20.2
+    "uEscalate": -21.7
   }
 }
