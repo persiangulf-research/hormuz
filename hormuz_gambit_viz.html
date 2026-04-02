@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hormuz Gambit — Persian Gulf Pipeline & IMEC Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050a0f;
+    --bg2: #0a1219;
+    --bg3: #0f1c28;
+    --amber: #e8a020;
+    --amber-dim: #a06010;
+    --red: #c0392b;
+    --red-bright: #e74c3c;
+    --teal: #1abc9c;
+    --teal-dim: #0d7a65;
+    --blue: #2980b9;
+    --blue-bright: #3498db;
+    --gold: #f39c12;
+    --white: #dce8f0;
+    --muted: #5a7a8a;
+    --border: #1e3040;
+    --glow-amber: rgba(232,160,32,0.15);
+    --glow-red: rgba(192,57,43,0.2);
+    --glow-teal: rgba(26,188,156,0.15);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content:'';
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity:0.4;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    position:relative; z-index:10;
+    padding: 28px 40px 20px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(5,10,15,0.98) 0%, rgba(10,18,25,0.85) 100%);
+    display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:12px;
+  }
+  .header-title { line-height:1; }
+  .header-title .sup {
+    font-family:'Share Tech Mono'; font-size:11px; color:var(--amber); letter-spacing:3px;
+    text-transform:uppercase; display:block; margin-bottom:6px;
+  }
+  .header-title h1 {
+    font-family:'Bebas Neue'; font-size:52px; letter-spacing:4px; color:var(--white);
+    text-shadow: 0 0 40px rgba(232,160,32,0.25);
+  }
+  .header-meta {
+    font-family:'Share Tech Mono'; font-size:11px; color:var(--muted); text-align:right; line-height:1.8;
+  }
+  .header-meta span { color:var(--amber); }
+
+  /* ─── NAV TABS ─── */
+  .nav {
+    position:relative; z-index:10;
+    display:flex; gap:2px; padding:12px 40px 0;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    overflow-x:auto;
+  }
+  .nav button {
+    font-family:'Share Tech Mono'; font-size:11px; letter-spacing:2px; text-transform:uppercase;
+    padding:10px 20px; border:none; cursor:pointer; background:transparent;
+    color:var(--muted); border-bottom: 2px solid transparent;
+    transition: all 0.2s; white-space:nowrap;
+  }
+  .nav button:hover { color:var(--white); }
+  .nav button.active { color:var(--amber); border-bottom-color:var(--amber); }
+
+  /* ─── PANELS ─── */
+  .panel { display:none; padding:32px 40px 60px; position:relative; z-index:5; }
+  .panel.active { display:block; }
+
+  /* ─── SECTION TITLE ─── */
+  .sec-title {
+    font-family:'Bebas Neue'; font-size:32px; letter-spacing:3px; color:var(--white);
+    margin-bottom:4px;
+  }
+  .sec-sub {
+    font-family:'Share Tech Mono'; font-size:11px; color:var(--muted); letter-spacing:2px;
+    margin-bottom:28px;
+  }
+
+  /* ─── MAP PANEL ─── */
+  #map-panel .map-container {
+    position:relative; width:100%; max-width:1100px; margin:0 auto;
+    background: var(--bg3); border:1px solid var(--border);
+  }
+  .map-svg { width:100%; display:block; }
+
+  /* ─── TOOLTIP ─── */
+  #tooltip {
+    position:fixed; z-index:100; pointer-events:none;
+    background:rgba(5,10,15,0.97); border:1px solid var(--amber);
+    padding:12px 16px; max-width:280px;
+    font-family:'Share Tech Mono'; font-size:11px; line-height:1.6;
+    box-shadow: 0 0 20px rgba(232,160,32,0.2);
+    opacity:0; transition:opacity 0.15s;
+  }
+  #tooltip.visible { opacity:1; }
+  #tooltip .tt-title { color:var(--amber); font-size:12px; margin-bottom:6px; letter-spacing:1px; }
+  #tooltip .tt-row { display:flex; justify-content:space-between; gap:12px; }
+  #tooltip .tt-key { color:var(--muted); }
+  #tooltip .tt-val { color:var(--white); }
+
+  /* ─── LEGEND ─── */
+  .legend {
+    display:flex; flex-wrap:wrap; gap:16px; margin-top:16px;
+    font-family:'Share Tech Mono'; font-size:11px;
+  }
+  .legend-item { display:flex; align-items:center; gap:8px; }
+  .legend-dot { width:12px; height:12px; border-radius:50%; }
+  .legend-line { width:32px; height:3px; }
+
+  /* ─── PIPELINE TABLE ─── */
+  .pipeline-table { width:100%; border-collapse:collapse; font-size:13px; }
+  .pipeline-table th {
+    font-family:'Share Tech Mono'; font-size:10px; letter-spacing:2px; color:var(--muted);
+    text-transform:uppercase; padding:8px 12px; border-bottom:1px solid var(--border);
+    text-align:left; background:var(--bg2);
+  }
+  .pipeline-table td {
+    padding:10px 12px; border-bottom:1px solid rgba(30,48,64,0.5);
+    vertical-align:top; line-height:1.4;
+  }
+  .pipeline-table tr:hover td { background:rgba(232,160,32,0.04); }
+  .status-tag {
+    display:inline-block; padding:2px 8px; font-family:'Share Tech Mono'; font-size:10px;
+    letter-spacing:1px; text-transform:uppercase;
+  }
+  .st-active { background:rgba(26,188,156,0.15); color:var(--teal); border:1px solid var(--teal-dim); }
+  .st-proposed { background:rgba(41,128,185,0.12); color:var(--blue-bright); border:1px solid #1e5070; }
+  .st-damaged { background:rgba(192,57,43,0.15); color:var(--red-bright); border:1px solid #7a2020; }
+  .st-dormant { background:rgba(90,122,138,0.15); color:var(--muted); border:1px solid #2a4050; }
+  .vuln-bar-wrap { width:120px; height:6px; background:rgba(255,255,255,0.07); display:inline-block; vertical-align:middle; }
+  .vuln-bar { height:100%; }
+
+  /* ─── EQUATIONS PANEL ─── */
+  .eq-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:16px; }
+  .eq-card {
+    background:var(--bg3); border:1px solid var(--border); padding:20px;
+    position:relative; overflow:hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    cursor:default;
+  }
+  .eq-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  }
+  .eq-card.eq-eq4::before { background:var(--red); }
+  .eq-card.eq-eq5::before { background:var(--amber); }
+  .eq-card.eq-eq7::before { background:var(--gold); }
+  .eq-card.eq-eq8::before { background:var(--red-bright); }
+  .eq-card.eq-eq12::before { background:var(--teal); }
+  .eq-card:hover { border-color:rgba(232,160,32,0.3); box-shadow:0 0 20px rgba(232,160,32,0.07); }
+  .eq-num {
+    font-family:'Bebas Neue'; font-size:42px; color:rgba(255,255,255,0.05);
+    position:absolute; top:10px; right:16px; line-height:1;
+  }
+  .eq-label { font-family:'Share Tech Mono'; font-size:10px; color:var(--muted); letter-spacing:2px; margin-bottom:6px; }
+  .eq-name { font-size:17px; font-weight:600; color:var(--white); margin-bottom:12px; }
+  .eq-formula { font-family:'Share Tech Mono'; font-size:11px; color:var(--amber); background:rgba(232,160,32,0.07); padding:8px 10px; margin-bottom:12px; }
+  .eq-verdict { font-size:13px; line-height:1.5; color:#a0b8c8; }
+  .eq-timeline { display:flex; gap:0; margin-top:12px; font-family:'Share Tech Mono'; font-size:10px; }
+  .eq-tl { flex:1; padding:6px 8px; text-align:center; }
+  .eq-tl .tl-label { color:var(--muted); letter-spacing:1px; display:block; margin-bottom:3px; }
+  .eq-tl .tl-val { font-size:11px; }
+  .tl-short { background:rgba(192,57,43,0.1); }
+  .tl-med { background:rgba(232,160,32,0.1); }
+  .tl-long { background:rgba(26,188,156,0.1); }
+  .dir-up { color:var(--red-bright); }
+  .dir-down { color:var(--teal); }
+  .dir-none { color:var(--muted); }
+
+  /* ─── IRAN MOVES PANEL ─── */
+  .moves-grid { display:flex; flex-direction:column; gap:16px; max-width:900px; }
+  .move-card {
+    display:grid; grid-template-columns:80px 1fr; gap:0;
+    background:var(--bg3); border:1px solid var(--border);
+    overflow:hidden;
+  }
+  .move-num {
+    background:rgba(232,160,32,0.08); border-right:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Bebas Neue'; font-size:56px; color:rgba(232,160,32,0.3);
+  }
+  .move-body { padding:20px 24px; }
+  .move-timing { font-family:'Share Tech Mono'; font-size:10px; color:var(--amber); letter-spacing:2px; margin-bottom:6px; }
+  .move-title { font-size:18px; font-weight:700; margin-bottom:10px; }
+  .move-desc { color:#8aA8b8; line-height:1.6; font-size:14px; }
+  .move-yield {
+    margin-top:12px; padding:8px 12px;
+    background:rgba(26,188,156,0.07); border-left:2px solid var(--teal);
+    font-family:'Share Tech Mono'; font-size:11px; color:var(--teal);
+  }
+
+  /* ─── PARADOX PANEL ─── */
+  .race-card {
+    max-width:900px;
+    background:var(--bg3); border:1px solid var(--border); padding:32px;
+    margin-bottom:24px;
+  }
+  .race-title { font-family:'Bebas Neue'; font-size:28px; letter-spacing:2px; color:var(--amber); margin-bottom:20px; }
+  .race-bars { display:flex; flex-direction:column; gap:20px; }
+  .race-bar-row { }
+  .race-bar-label { font-family:'Share Tech Mono'; font-size:11px; color:var(--muted); letter-spacing:1px; margin-bottom:6px; display:flex; justify-content:space-between; }
+  .race-bar-track { height:28px; background:rgba(255,255,255,0.05); position:relative; overflow:hidden; }
+  .race-bar-fill {
+    height:100%; display:flex; align-items:center; padding-left:10px;
+    font-family:'Share Tech Mono'; font-size:11px;
+    transition: width 1s ease;
+  }
+  .bar-pipeline { background:linear-gradient(90deg, #2980b9, #1a5c85); color:#a0d0f0; }
+  .bar-eq8 { background:linear-gradient(90deg, #c0392b, #7a1515); color:#f0a0a0; }
+  .bar-imec { background:linear-gradient(90deg, #1abc9c, #0d6655); color:#a0f0e0; }
+
+  .paradox-points { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; margin-top:24px; }
+  .pp-card {
+    padding:20px; border:1px solid var(--border);
+    background:var(--bg3);
+  }
+  .pp-icon { font-size:24px; margin-bottom:10px; }
+  .pp-title { font-weight:700; margin-bottom:8px; font-size:15px; }
+  .pp-body { color:#8aA8b8; font-size:13px; line-height:1.5; }
+
+  /* ─── STATUS BAR ─── */
+  .statusbar {
+    position:fixed; bottom:0; left:0; right:0; z-index:20;
+    background:rgba(5,10,15,0.95); border-top:1px solid var(--border);
+    padding:6px 40px;
+    display:flex; gap:32px; align-items:center;
+    font-family:'Share Tech Mono'; font-size:10px;
+    backdrop-filter:blur(8px);
+  }
+  .sb-item { display:flex; align-items:center; gap:8px; }
+  .sb-key { color:var(--muted); letter-spacing:1px; }
+  .sb-val { color:var(--amber); }
+  .sb-val.red { color:var(--red-bright); }
+  .sb-val.teal { color:var(--teal); }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width:4px; height:4px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border); }
+
+  /* ─── PULSE ANIMATION ─── */
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .pulse { animation: pulse 2s infinite; }
+
+  /* ─── SCAN LINE ─── */
+  @keyframes scanline { from{top:-100%} to{top:200%} }
+  .map-container::after {
+    content:''; position:absolute; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, transparent, rgba(232,160,32,0.1), transparent);
+    animation: scanline 6s linear infinite; pointer-events:none;
+  }
+
+  /* responsive */
+  @media (max-width:700px) {
+    header { padding:16px 20px; }
+    .header-title h1 { font-size:32px; }
+    .nav, .panel { padding-left:16px; padding-right:16px; }
+    .statusbar { padding:6px 16px; gap:16px; flex-wrap:wrap; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-title">
+    <span class="sup"><a href="index.html" style="color:var(--muted);text-decoration:none;">← Portal</a> · Hormuz Gambit Research Platform · Day 33</span>
+    <h1>Persian Gulf Pipeline & IMEC Assessment</h1>
+  </div>
+  <div class="header-meta">
+    Source: Financial Times 2 April 2026<br>
+    c=<span>0.87</span> · E*=<span>13.7</span> · k=<span>1.3</span><br>
+    rho_total=<span>0.0365</span> · H(33)≈<span>32% H₀</span>
+  </div>
+</header>
+
+<nav class="nav">
+  <button class="active" onclick="showPanel('map',this)">Corridor Map</button>
+  <button onclick="showPanel('pipelines',this)">Pipeline Landscape</button>
+  <button onclick="showPanel('equations',this)">Equation Impact</button>
+  <button onclick="showPanel('moves',this)">Iran's Response</button>
+  <button onclick="showPanel('paradox',this)">The Paradox</button>
+  <button onclick="window.location='m_ceiling/index.html'" style="color:var(--blue-bright);border-bottom-color:var(--blue-bright);">m_ceiling Simulator →</button>
+</nav>
+
+<!-- ═══════════════════════════════════════════════ MAP ═══ -->
+<div id="map" class="panel active">
+  <div class="sec-title">Strategic Corridor Map</div>
+  <div class="sec-sub">CLICK NODES AND ROUTES FOR DETAILS · HOVER FOR QUICK INFO</div>
+
+  <div class="map-container" id="map-container">
+    <svg class="map-svg" viewBox="0 0 1100 620" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="gAmber" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#e8a020" stop-opacity="0.35"/>
+          <stop offset="100%" stop-color="#e8a020" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="gRed" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#c0392b" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#c0392b" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="gTeal" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#1abc9c" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="#1abc9c" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <marker id="arrow-amber" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#e8a020" opacity="0.7"/>
+        </marker>
+        <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#3498db" opacity="0.7"/>
+        </marker>
+        <marker id="arrow-teal" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#1abc9c" opacity="0.7"/>
+        </marker>
+        <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#c0392b" opacity="0.7"/>
+        </marker>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(30,48,64,0.4)" stroke-width="0.5"/>
+        </pattern>
+      </defs>
+
+      <!-- Background -->
+      <rect width="1100" height="620" fill="#050a0f"/>
+      <rect width="1100" height="620" fill="url(#grid)"/>
+
+      <!-- Sea regions -->
+      <!-- Arabian Sea -->
+      <ellipse cx="780" cy="420" rx="130" ry="80" fill="rgba(41,128,185,0.06)" stroke="none"/>
+      <text x="780" y="425" fill="rgba(41,128,185,0.25)" font-family="Share Tech Mono" font-size="11" text-anchor="middle">ARABIAN SEA</text>
+
+      <!-- Persian Gulf -->
+      <ellipse cx="630" cy="310" rx="90" ry="35" fill="rgba(192,57,43,0.08)" stroke="rgba(192,57,43,0.15)" stroke-width="0.5"/>
+      <text x="630" y="315" fill="rgba(192,57,43,0.5)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">PERSIAN GULF</text>
+
+      <!-- Red Sea -->
+      <rect x="300" y="230" width="55" height="200" rx="20" fill="rgba(26,188,156,0.06)" stroke="rgba(26,188,156,0.12)" stroke-width="0.5" transform="rotate(-8,327,330)"/>
+      <text x="298" y="340" fill="rgba(26,188,156,0.35)" font-family="Share Tech Mono" font-size="9" text-anchor="middle" transform="rotate(-8,298,340)">RED SEA</text>
+
+      <!-- Mediterranean -->
+      <ellipse cx="180" cy="130" rx="160" ry="55" fill="rgba(41,128,185,0.06)" stroke="none"/>
+      <text x="180" y="135" fill="rgba(41,128,185,0.2)" font-family="Share Tech Mono" font-size="11" text-anchor="middle">MEDITERRANEAN SEA</text>
+
+      <!-- ─── CHOKEPOINTS ─── -->
+      <!-- Strait of Hormuz -->
+      <circle cx="700" cy="330" r="22" fill="url(#gRed)" class="pulse"/>
+      <circle cx="700" cy="330" r="10" fill="rgba(192,57,43,0.3)" stroke="#c0392b" stroke-width="1.5" filter="url(#glow)"
+        class="map-node" data-id="hormuz"/>
+      <text x="700" y="360" fill="#c0392b" font-family="Share Tech Mono" font-size="10" text-anchor="middle">STRAIT OF HORMUZ</text>
+      <text x="700" y="372" fill="rgba(192,57,43,0.6)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">CLOSED — DAY 33</text>
+
+      <!-- Bab al-Mandab -->
+      <circle cx="310" cy="390" r="18" fill="url(#gAmber)" class="pulse"/>
+      <circle cx="310" cy="390" r="8" fill="rgba(232,160,32,0.25)" stroke="#e8a020" stroke-width="1.5" filter="url(#glow)"
+        class="map-node" data-id="bab"/>
+      <text x="310" y="416" fill="#e8a020" font-family="Share Tech Mono" font-size="9" text-anchor="middle">BAB AL-MANDAB</text>
+      <text x="310" y="427" fill="rgba(232,160,32,0.5)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">HOUTHI RISK</text>
+
+      <!-- Suez -->
+      <circle cx="245" cy="210" r="7" fill="rgba(41,128,185,0.2)" stroke="#3498db" stroke-width="1"
+        class="map-node" data-id="suez"/>
+      <text x="245" y="200" fill="#3498db" font-family="Share Tech Mono" font-size="9" text-anchor="middle">SUEZ</text>
+
+      <!-- ─── KEY LOCATIONS ─── -->
+      <!-- India (Mumbai) -->
+      <circle cx="880" cy="360" r="9" fill="rgba(26,188,156,0.2)" stroke="#1abc9c" stroke-width="1.5"
+        class="map-node" data-id="india"/>
+      <circle cx="880" cy="360" r="18" fill="url(#gTeal)"/>
+      <text x="880" y="383" fill="#1abc9c" font-family="Rajdhani" font-size="13" font-weight="600" text-anchor="middle">INDIA</text>
+      <text x="880" y="396" fill="rgba(26,188,156,0.5)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">IMEC ORIGIN</text>
+
+      <!-- Saudi Arabia (Riyadh area) -->
+      <circle cx="500" cy="330" r="9" fill="rgba(232,160,32,0.2)" stroke="#e8a020" stroke-width="1.5"
+        class="map-node" data-id="saudi"/>
+      <text x="500" y="320" fill="#e8a020" font-family="Rajdhani" font-size="13" font-weight="600" text-anchor="middle">SAUDI</text>
+      <text x="500" y="352" fill="rgba(232,160,32,0.4)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">ARABIA</text>
+
+      <!-- Yanbu (Red Sea terminal) -->
+      <rect x="279" y="289" width="8" height="8" fill="rgba(26,188,156,0.4)" stroke="#1abc9c" stroke-width="1"
+        class="map-node" data-id="yanbu" transform="rotate(45,283,293)"/>
+      <text x="283" y="282" fill="#1abc9c" font-family="Share Tech Mono" font-size="9" text-anchor="middle">YANBU</text>
+
+      <!-- Neom -->
+      <rect x="260" y="330" width="7" height="7" fill="rgba(41,128,185,0.3)" stroke="#3498db" stroke-width="1"
+        class="map-node" data-id="neom" transform="rotate(45,263,333)"/>
+      <text x="258" y="355" fill="rgba(41,128,185,0.7)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">NEOM</text>
+
+      <!-- UAE / Fujairah -->
+      <circle cx="690" cy="370" r="6" fill="rgba(41,128,185,0.2)" stroke="#3498db" stroke-width="1"
+        class="map-node" data-id="fujairah"/>
+      <text x="690" y="390" fill="#3498db" font-family="Share Tech Mono" font-size="9" text-anchor="middle">FUJAIRAH</text>
+
+      <!-- Iran -->
+      <circle cx="620" cy="220" r="9" fill="rgba(192,57,43,0.2)" stroke="#c0392b" stroke-width="1.5"
+        class="map-node" data-id="iran"/>
+      <circle cx="620" cy="220" r="22" fill="url(#gRed)" opacity="0.6"/>
+      <text x="620" y="213" fill="#c0392b" font-family="Rajdhani" font-size="14" font-weight="700" text-anchor="middle">IRAN</text>
+
+      <!-- Iraq -->
+      <circle cx="520" cy="200" r="6" fill="rgba(90,122,138,0.2)" stroke="#5a7a8a" stroke-width="1"
+        class="map-node" data-id="iraq"/>
+      <text x="520" y="192" fill="#5a7a8a" font-family="Rajdhani" font-size="11" text-anchor="middle">IRAQ</text>
+
+      <!-- Ceyhan (Turkey) -->
+      <circle cx="390" cy="120" r="6" fill="rgba(90,122,138,0.2)" stroke="#5a7a8a" stroke-width="1"
+        class="map-node" data-id="ceyhan"/>
+      <text x="390" y="112" fill="#5a7a8a" font-family="Share Tech Mono" font-size="9" text-anchor="middle">CEYHAN</text>
+
+      <!-- Haifa (Israel) -->
+      <circle cx="300" cy="170" r="6" fill="rgba(41,128,185,0.2)" stroke="#3498db" stroke-width="1"
+        class="map-node" data-id="haifa"/>
+      <text x="300" y="162" fill="#3498db" font-family="Share Tech Mono" font-size="9" text-anchor="middle">HAIFA</text>
+
+      <!-- Egypt -->
+      <circle cx="245" cy="240" r="6" fill="rgba(90,122,138,0.2)" stroke="#5a7a8a" stroke-width="1"
+        class="map-node" data-id="egypt"/>
+      <text x="245" y="258" fill="#5a7a8a" font-family="Share Tech Mono" font-size="9" text-anchor="middle">EGYPT</text>
+
+      <!-- Europe -->
+      <circle cx="140" cy="80" r="9" fill="rgba(41,128,185,0.2)" stroke="#3498db" stroke-width="1.5"
+        class="map-node" data-id="europe"/>
+      <circle cx="140" cy="80" r="20" fill="rgba(41,128,185,0.08)"/>
+      <text x="140" y="73" fill="#3498db" font-family="Rajdhani" font-size="14" font-weight="600" text-anchor="middle">EUROPE</text>
+
+      <!-- Oman -->
+      <circle cx="730" cy="420" r="6" fill="rgba(26,188,156,0.2)" stroke="#1abc9c" stroke-width="1"
+        class="map-node" data-id="oman"/>
+      <text x="755" y="425" fill="rgba(26,188,156,0.7)" font-family="Share Tech Mono" font-size="9">OMAN</text>
+
+      <!-- Aqaba -->
+      <rect x="272" y="355" width="7" height="7" fill="rgba(41,128,185,0.2)" stroke="#3498db" stroke-width="1"
+        transform="rotate(45,275,359)" class="map-node" data-id="aqaba"/>
+      <text x="276" y="378" fill="rgba(41,128,185,0.6)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">AQABA</text>
+
+      <!-- ─── ROUTES ─── -->
+
+      <!-- HORMUZ CLOSURE - dashed red X -->
+      <line x1="680" y1="310" x2="720" y2="350" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="5,4" opacity="0.8"/>
+      <line x1="720" y1="310" x2="680" y2="350" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="5,4" opacity="0.8"/>
+
+      <!-- PETROLINE: Saudi → Yanbu (ACTIVE - teal solid) -->
+      <path d="M 495 330 Q 390 310 283 293" stroke="#1abc9c" stroke-width="2.5" fill="none" opacity="0.85"
+        marker-end="url(#arrow-teal)" class="route-line" data-id="petroline"/>
+      <text x="390" y="305" fill="rgba(26,188,156,0.7)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">PETROLINE (7M bpd)</text>
+
+      <!-- PETROLINE EXPANSION: dashed teal -->
+      <path d="M 495 330 Q 380 305 260 335" stroke="#1abc9c" stroke-width="1.5" fill="none" opacity="0.4" stroke-dasharray="6,4"
+        marker-end="url(#arrow-teal)" class="route-line" data-id="petroline-exp"/>
+
+      <!-- Normal Hormuz route (pre-crisis) - very dim -->
+      <path d="M 695 325 Q 750 280 730 250 Q 700 200 620 180 Q 500 150 390 120 Q 300 100 140 80" 
+        stroke="#3498db" stroke-width="1" fill="none" opacity="0.15" stroke-dasharray="3,6"/>
+
+      <!-- ADCOP: UAE → Fujairah (partial, damaged) -->
+      <path d="M 500 330 Q 600 350 688 368" stroke="#e8a020" stroke-width="1.5" fill="none" opacity="0.5" stroke-dasharray="4,4"
+        class="route-line" data-id="adcop"/>
+      <text x="590" y="345" fill="rgba(232,160,32,0.5)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">ADCOP (damaged)</text>
+
+      <!-- Kirkuk-Ceyhan -->
+      <path d="M 522 198 Q 460 160 390 122" stroke="#5a7a8a" stroke-width="1.5" fill="none" opacity="0.5"
+        marker-end="url(#arrow-blue)" class="route-line" data-id="kirkuk"/>
+      <text x="458" y="158" fill="rgba(90,122,138,0.6)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">K-C (250K bpd)</text>
+
+      <!-- IMEC corridor: India → Persian Gulf → Jordan → Haifa/Egypt → Europe -->
+      <path d="M 878 358 Q 800 340 700 330 Q 620 320 500 330 Q 420 335 350 320 Q 300 190 300 170 Q 290 130 140 80"
+        stroke="#f39c12" stroke-width="2" fill="none" opacity="0.5" stroke-dasharray="10,5"
+        marker-end="url(#arrow-amber)" class="route-line" data-id="imec"/>
+      <text x="640" y="298" fill="rgba(243,156,18,0.8)" font-family="Share Tech Mono" font-size="10" text-anchor="middle">━━━ IMEC CORRIDOR (PROPOSED)</text>
+
+      <!-- IPSA: Iraq → Saudi → Yanbu (dormant) -->
+      <path d="M 522 202 Q 510 260 500 330 Q 400 310 283 293" stroke="#5a7a8a" stroke-width="1.5" fill="none" opacity="0.35" stroke-dasharray="3,5"
+        class="route-line" data-id="ipsa"/>
+      <text x="430" y="258" fill="rgba(90,122,138,0.5)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">IPSA (dormant)</text>
+
+      <!-- Persian Gulf → Oman → Arabian Sea (ONLY bypass-both route) -->
+      <path d="M 690 365 Q 720 400 730 418" stroke="#1abc9c" stroke-width="1.5" fill="none" opacity="0.4" stroke-dasharray="5,4"
+        marker-end="url(#arrow-teal)" class="route-line" data-id="oman-route"/>
+
+      <!-- Iraq-Jordan proposed -->
+      <path d="M 522 198 Q 480 240 450 270 Q 380 330 275 360" stroke="#3498db" stroke-width="1.5" fill="none" opacity="0.3" stroke-dasharray="4,5"
+        class="route-line" data-id="iraq-jordan"/>
+
+      <!-- Yanbu → (Red Sea) → Suez → Med -->
+      <path d="M 283 293 Q 265 250 245 210 Q 245 180 245 162" stroke="rgba(26,188,156,0.3)" stroke-width="1" fill="none" stroke-dasharray="2,4"/>
+      <text x="258" y="230" fill="rgba(26,188,156,0.25)" font-family="Share Tech Mono" font-size="8" text-anchor="middle">→ BAB AL-MANDAB RISK</text>
+
+      <!-- ─── LABELS ─── -->
+      <text x="30" y="560" fill="rgba(90,122,138,0.6)" font-family="Share Tech Mono" font-size="9">SCHEMATIC — NOT TO SCALE</text>
+
+      <!-- m_ceiling callout -->
+      <rect x="820" y="20" width="260" height="70" fill="rgba(10,18,25,0.9)" stroke="rgba(232,160,32,0.3)" stroke-width="1"/>
+      <text x="840" y="40" fill="rgba(232,160,32,0.6)" font-family="Share Tech Mono" font-size="9" letter-spacing="1">CURRENT PARAMETERS</text>
+      <text x="840" y="56" fill="#dce8f0" font-family="Share Tech Mono" font-size="11">m=3.0  E*=13.7  c=0.87</text>
+      <text x="840" y="72" fill="#5a7a8a" font-family="Share Tech Mono" font-size="10">m_ceiling: 3.0 → 2.85 (5yr)</text>
+      <text x="840" y="84" fill="#5a7a8a" font-family="Share Tech Mono" font-size="10">Full build: 3.0 → ~2.4-2.6 (10yr)</text>
+
+    </svg>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend" style="margin-top:20px;">
+    <div class="legend-item"><div class="legend-line" style="background:#1abc9c;"></div><span style="color:#1abc9c">Active pipeline</span></div>
+    <div class="legend-item"><div class="legend-line" style="background:#1abc9c;opacity:0.4;border-top:2px dashed #1abc9c;height:0"></div><span style="color:rgba(26,188,156,0.6)">Proposed expansion</span></div>
+    <div class="legend-item"><div class="legend-line" style="background:#f39c12;border-top:2px dashed #f39c12;height:0"></div><span style="color:#f39c12">IMEC corridor (proposed)</span></div>
+    <div class="legend-item"><div class="legend-line" style="background:#5a7a8a;border-top:2px dashed #5a7a8a;height:0"></div><span style="color:#5a7a8a">Dormant / low-capacity</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#c0392b;box-shadow:0 0 8px #c0392b"></div><span style="color:#c0392b">Chokepoint (closed/risk)</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e8a020"></div><span style="color:#e8a020">Strategic terminal</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ PIPELINES ═══ -->
+<div id="pipelines" class="panel">
+  <div class="sec-title">Pipeline Landscape</div>
+  <div class="sec-sub">FULL BYPASS INFRASTRUCTURE ASSESSMENT · m_RESILIENCE IMPACT</div>
+
+  <div style="overflow-x:auto;">
+  <table class="pipeline-table">
+    <thead>
+      <tr>
+        <th>Pipeline / Route</th>
+        <th>Status</th>
+        <th>Capacity</th>
+        <th>Cost (est.)</th>
+        <th>Timeline</th>
+        <th>Terminal</th>
+        <th>m_res Impact</th>
+        <th>Iran Vulnerability</th>
+      </tr>
+    </thead>
+    <tbody id="pipeline-tbody"></tbody>
+  </table>
+  </div>
+
+  <div style="margin-top:32px; max-width:700px; background:var(--bg3); border:1px solid rgba(232,160,32,0.3); padding:24px;">
+    <div style="font-family:'Share Tech Mono'; font-size:10px; color:var(--amber); letter-spacing:2px; margin-bottom:12px;">m_CEILING ARITHMETIC — FULL BUILD SCENARIO</div>
+    <div style="font-family:'Share Tech Mono'; font-size:12px; color:#8aA8b8; line-height:2;">
+      Current m_ceiling = <span style="color:var(--white)">3.0</span> (existing bypass fully operational)<br>
+      Full build theoretical bypass: <span style="color:var(--white)">18.25M bpd</span> vs 20M bpd Hormuz<br>
+      New bypass fraction: <span style="color:var(--white)">91.25%</span><br>
+      New m_ceiling = 3.0 + (1−0.9125)×1.75 = <span style="color:var(--amber)">3.15</span><br>
+      <span style="color:var(--red-bright)">⚠ Even full build only lowers m_ceiling 3.0→3.15 because Red Sea / Bab al-Mandab exposure replaces Hormuz exposure</span>
+    </div>
+    <div style="margin-top:16px;">
+      <a href="m_ceiling/index.html" style="font-family:'Share Tech Mono';font-size:11px;color:var(--blue-bright);text-decoration:none;border-bottom:1px solid var(--blue-bright);padding-bottom:2px;">Open interactive m_ceiling simulator →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ EQUATIONS ═══ -->
+<div id="equations" class="panel">
+  <div class="sec-title">Equation Impact Assessment</div>
+  <div class="sec-sub">FIVE-EQUATION RESPONSE TO FT PIPELINE ANNOUNCEMENT</div>
+
+  <div class="eq-grid" id="eq-grid"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ MOVES ═══ -->
+<div id="moves" class="panel">
+  <div class="sec-title">Iran's Optimal Response</div>
+  <div class="sec-sub">THREE-MOVE SEQUENCE FOLLOWING FT ANNOUNCEMENT</div>
+
+  <div class="moves-grid" id="moves-grid"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ PARADOX ═══ -->
+<div id="paradox" class="panel">
+  <div class="sec-title">The Central Paradox</div>
+  <div class="sec-sub">WHY GULF PIPELINE INVESTMENT DEEPENS IRAN'S TRAP IN THE SHORT RUN</div>
+
+  <div class="race-card">
+    <div class="race-title">The Race EQ8 Wins Before Any Pipeline Is Built</div>
+    <div style="font-family:'Share Tech Mono'; font-size:11px; color:var(--muted); margin-bottom:20px; line-height:1.8;">
+      H(t+1) = H(t) × (1−ρ_I−n_t×ρ_S) · rho_total = 0.0365/round · H(33) ≈ 32% H₀
+    </div>
+    <div class="race-bars" id="race-bars-container"></div>
+    <div style="margin-top:20px; font-family:'Share Tech Mono'; font-size:11px; color:var(--red-bright); border-top:1px solid var(--border); padding-top:16px; line-height:1.8;">
+      ⚠ At rho_I=0.030/round: H after 5yr pipeline build ≈ (0.9635)^1825 ≈ 0.001 H₀<br>
+      ⚠ H after 10yr full build ≈ 0.0 — near-total hegemony erosion before any barrel bypasses Hormuz
+    </div>
+  </div>
+
+  <div class="paradox-points" id="paradox-points"></div>
+
+  <div style="max-width:900px; margin-top:24px; background:rgba(26,188,156,0.05); border:1px solid rgba(26,188,156,0.2); padding:24px;">
+    <div style="font-family:'Bebas Neue'; font-size:22px; letter-spacing:2px; color:var(--teal); margin-bottom:12px;">ONLY VIABLE ESCAPE: GULF → OMAN → ARABIAN SEA</div>
+    <div style="font-family:'Share Tech Mono'; font-size:11px; color:#8aA8b8; line-height:2;">
+      Only route bypassing BOTH Hormuz AND Bab al-Mandab simultaneously<br>
+      Requires: Persian Gulf Railway completion (UAE-Oman link, est. mid-2027) + new Omani port capacity (Duqm, Sohar, Salalah)<br>
+      Timeline: <span style="color:var(--white)">5-7 years minimum</span> on aggressive sovereign funding<br>
+      This route is <span style="color:var(--red-bright)">NOT in the FT report</span> — all discussed routes terminate at Red Sea (Yanbu, Neom, Aqaba).<br>
+      <span style="color:var(--red-bright)">Structural verdict: EQ8 wins the race against all currently discussed routes.</span>
+    </div>
+  </div>
+</div>
+
+<!-- Status Bar -->
+<div class="statusbar">
+  <div class="sb-item"><span class="sb-key">m</span><span class="sb-val red">3.0</span></div>
+  <div class="sb-item"><span class="sb-key">E*</span><span class="sb-val red">13.7</span></div>
+  <div class="sb-item"><span class="sb-key">k</span><span class="sb-val">1.3</span></div>
+  <div class="sb-item"><span class="sb-key">H(33)</span><span class="sb-val red">~32% H₀</span></div>
+  <div class="sb-item"><span class="sb-key">Sr</span><span class="sb-val">0.78</span></div>
+  <div class="sb-item"><a href="m_ceiling/index.html" style="text-decoration:none;color:inherit;"><span class="sb-key">m_ceiling</span><span class="sb-val" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">3.0 (→3.15 full build)</span></a></div>
+  <div class="sb-item"><span class="sb-key">IMEC ETA</span><span class="sb-val teal">2033-2036</span></div>
+</div>
+
+<!-- Tooltip -->
+<div id="tooltip"></div>
+
+<script>
+// ─── DATA ───────────────────────────────────────
+const nodeData = {
+  hormuz: { title:"STRAIT OF HORMUZ", rows:[["Status","CLOSED — Day 33"],["Daily flow (pre)","~20M bpd (20% world oil"],["Current bypass","Petroline 7M bpd"],["m value","3.0"],["Iran leverage","Maximum"]] },
+  bab: { title:"BAB AL-MANDAB", rows:[["Controller","Houthi (Iran-aligned"],["Risk","If activated: m→4.75"],["E* if dual-strait","21.6"],["Threat to Red Sea","All Yanbu/Neom routes exposed"]] },
+  iran: { title:"IRAN", rows:[["Strategy","Dominant (close Hormuz)"],["Pre-emption window","Open on all announced pipelines"],["EQ7 leverage","Yuan deal offer within 30 days"],["G (yuan gain)","7.5→8.5-9.0"]] },
+  saudi: { title:"SAUDI ARABIA", rows:[["Petroline","Operating (primary route)"],["Capacity","7M bpd"],["Evaluating","Expansion + Neom terminal"],["S-EQ7-3 target","Yuan pricing tranche offer"]] },
+  yanbu: { title:"YANBU TERMINAL", rows:[["Type","Red Sea (Petroline exit)"],["m_res contribution","77.8% of current bypass"],["Bab al-Mandab risk","Yes — if activated, still exposed"],["Expansion","Part of Petroline expansion plan"]] },
+  neom: { title:"NEOM (PROPOSED TERMINAL)", rows:[["Status","Under consideration"],["Timeline","3-6 years"],["Cost","$2-5B"],["Risk","Closer to Houthi range than Yanbu South"]] },
+  fujairah: { title:"FUJAIRAH (UAE/ADCOP)", rows:[["ADCOP status","Partially operational / damaged"],["Capacity","1.5M bpd (when intact)"],["m_res","9% of bypass"],["Risk","Within Iranian drone range; previously struck"]] },
+  india: { title:"INDIA — IMEC ORIGIN", rows:[["Role","Eastern anchor of IMEC corridor"],["Route","India → Persian Gulf → Jordan → Haifa/Egypt → Europe"],["Timeline","7-10+ years full build"],["Cost","$15-20B (full)"]] },
+  imec: { title:"IMEC CORRIDOR (PROPOSED)", rows:[["Full name","India-Middle East-Europe Economic Corridor"],["Type","Multi-modal (not pure oil)"],["m_ceiling reduction","-0.5 to -0.6 units (if complete)"],["Haifa route","Politically impossible (Iran war ongoing)"],["Earliest completion","2033-2036"]] },
+  petroline: { title:"EAST-WEST PETROLINE", rows:[["Status","ACTIVE — primary export route"],["Capacity","7M bpd"],["Built","1980s"],["Significance","77.8% of current bypass"],["Expansion","10-12M bpd (3-5yr, $2-4B)"]] },
+  "petroline-exp": { title:"PETROLINE EXPANSION (PROPOSED)", rows:[["Target capacity","10-12M bpd"],["Cost","$2-4B est."],["Timeline","3-5 years"],["m_ceiling change","3.0→2.85 (medium term)"],["Iran risk","Same corridor — same vulnerability"]] },
+  adcop: { title:"UAE ADCOP PIPELINE (DAMAGED)", rows:[["Capacity","1.5M bpd (design)"],["Status","Partially operational"],["Built","2012"],["Expansion","2-3M bpd, $1-2B, 2-4yr"],["Risk","Fujairah attacked multiple times"]] },
+  kirkuk: { title:"KIRKUK-CEYHAN (IRAQ-TURKEY)", rows:[["Design capacity","1.6M bpd"],["Operating","~250K bpd (restarted)"],["Built","1970s"],["m_res","1.5% of bypass"],["Risk","70+ prior attacks; most vulnerable globally"]] },
+  ipsa: { title:"IPSA (IRAQ-SAUDI, DORMANT)", rows:[["Design capacity","1.65M bpd"],["Status","Mothballed since 1990"],["Restoration cost","$600M est."],["Timeline","12-24 months restoration"],["Iran risk","Pre-emption window NOW OPEN (FT announcement)"]] },
+  "iraq-jordan": { title:"IRAQ-JORDAN-AQABA (PROPOSED)", rows:[["Capacity","1M bpd est."],["Cost","$5-8B"],["Timeline","5-7 years (optimistic)"],["m_res","+6% if built"],["Status","Never built; political obstacles remain"]] },
+  "oman-route": { title:"PERSIAN GULF → OMAN ROUTE (OPTIMAL, NOT IN FT)", rows:[["Why critical","ONLY route bypassing both Hormuz AND Bab al-Mandab"],["Requires","Persian Gulf Railway (UAE-Oman, est. mid-2027) + Omani port expansion"],["Ports","Duqm, Sohar, Salalah"],["Timeline","5-7 years minimum"],["Problem","Not discussed in FT report"]] },
+  suez: { title:"SUEZ CANAL", rows:[["Role","Mediterranean exit for Red Sea routes"],["Risk","Requires Egyptian sovereign agreement"],["IMEC alternative","Egypt route (non-Haifa) under discussion"]] },
+  haifa: { title:"HAIFA (ISRAEL)", rows:[["IMEC status","Original IMEC endpoint"],["Current status","Politically impossible (Iran war + normalization paused)"],["Alternative","Egypt / other Mediterranean outlets"]] },
+  europe: { title:"EUROPE — IMEC DESTINATION", rows:[["Role","Western anchor of IMEC corridor"],["Interest","Diversification from Russian energy"],["Timeline","Awaiting IMEC completion (2033-2036 min)"]] },
+  iraq: { title:"IRAQ", rows:[["Pipelines","Kirkuk-Ceyhan (active, low capacity), IPSA (dormant)"],["Proposed","Iraq-Jordan-Aqaba"],["Vulnerability","IPSA: pre-emption window open"]] },
+  ceyhan: { title:"CEYHAN (TURKEY)", rows:[["Route","Kirkuk-Ceyhan terminus"],["Current flow","~250K bpd"],["Mediterranean","Direct export point"]] },
+  egypt: { title:"EGYPT", rows:[["IMEC role","Alternative Mediterranean route to Haifa"],["Suez","Canal operator"],["Dependency","Egyptian sovereign infrastructure decisions required"]] },
+  oman: { title:"OMAN", rows:[["Strategic value","ONLY Arabian Sea access bypassing both chokepoints"],["Ports","Duqm, Sohar, Salalah"],["Persian Gulf Railway","UAE-Oman link est. mid-2027"],["Not in FT report","All FT routes are Red Sea terminal"]] },
+  aqaba: { title:"AQABA (JORDAN)", rows:[["Route","Iraq-Jordan-Aqaba (proposed)"],["Cost","$5-8B"],["Timeline","5-7 years"],["Red Sea","Still exposed to Bab al-Mandab risk"]] },
+};
+
+const pipelineData = [
+  { name:"Saudi East-West Petroline", status:"active", cap:"7M bpd", cost:"Built (1980s)", time:"Operating now", term:"Yanbu, Red Sea", mres:"77.8% of current bypass", vuln:55, vulnColor:"#e8a020", vulnNote:"4 pumping stations; Houthi+Iran missile range" },
+  { name:"Saudi Petroline expansion", status:"proposed", cap:"10-12M bpd", cost:"$2-4B", time:"3-5 years", term:"Yanbu + Neom", mres:"+15-20% m_res", vuln:55, vulnColor:"#e8a020", vulnNote:"Same corridor, same vulnerability" },
+  { name:"UAE ADCOP (existing/damaged)", status:"damaged", cap:"1.5M bpd", cost:"Built (2012)", time:"Partially operational", term:"Fujairah", mres:"9% of bypass (when intact)", vuln:80, vulnColor:"#c0392b", vulnNote:"Previously struck; Fujairah in Iranian drone range" },
+  { name:"UAE ADCOP expansion/backup", status:"proposed", cap:"2-3M bpd", cost:"$1-2B", time:"2-4 years", term:"Fujairah + Khor Fakkan", mres:"+5-8% m_res", vuln:80, vulnColor:"#c0392b", vulnNote:"Attacked multiple times; no strategic depth" },
+  { name:"Iraq-Turkey Kirkuk-Ceyhan", status:"active", cap:"1.6M bpd (cap); 250K (oper.)", cost:"Built (1970s)", time:"250K bpd restarted", term:"Ceyhan, Mediterranean", mres:"1.5% of bypass (current)", vuln:95, vulnColor:"#c0392b", vulnNote:"70+ prior attacks; most vulnerable pipeline globally" },
+  { name:"IPSA (Iraq-Saudi, dormant)", status:"dormant", cap:"1.65M bpd", cost:"$600M restoration", time:"12-24 months restoration", term:"Yanbu, Red Sea", mres:"+10% m_res if restored", vuln:70, vulnColor:"#e8a020", vulnNote:"PRE-EMPTION WINDOW NOW OPEN — FT announcement" },
+  { name:"Iraq-Jordan-Aqaba (proposed)", status:"proposed", cap:"1M bpd", cost:"$5-8B", time:"5-7 years (optimistic)", term:"Aqaba, Red Sea", mres:"+6% m_res if built", vuln:40, vulnColor:"#3498db", vulnNote:"Never built; political obstacles remain" },
+  { name:"IMEC corridor revival (proposed)", status:"proposed", cap:"Multi-modal; not pure oil", cost:"$15-20B full build", time:"7-10+ years full build", term:"Haifa / Egypt ports", mres:"Structural m_ceiling -0.5 to -0.6", vuln:30, vulnColor:"#3498db", vulnNote:"Israel route politically impossible; extreme complexity" },
+  { name:"Saudi-Neom new terminal (proposed)", status:"proposed", cap:"Additional export cap", cost:"$2-5B", time:"3-6 years", term:"Red Sea (deep water)", mres:"+5% m_res if built", vuln:65, vulnColor:"#e8a020", vulnNote:"Closer to Houthi range than Yanbu South" },
+  { name:"Persian Gulf → Oman → Arabian Sea", status:"proposed", cap:"TBD (new build)", cost:"Requires Persian Gulf Railway + ports", time:"5-7 years minimum", term:"Duqm/Sohar/Salalah", mres:"Only true dual-bypass route", vuln:10, vulnColor:"#1abc9c", vulnNote:"NOT in FT report; bypasses both Hormuz AND Bab al-Mandab" },
+];
+
+const eqData = [
+  { id:"eq5", cls:"eq-eq5", label:"EQ5", name:"Closure Incentive", formula:"E* = c·m·S_oil / (S_oil + S_gas·α + S_oth·β)", verdict:"Pipeline announcements create pre-emption targets. Short-term: m unchanged (projects are declarations only). Iran's strike probability RISES with each announcement.", short:"No change. c=0.87, m=3.0, E*=13.7 unchanged.", med:"Marginal. Petroline +2-3M bpd. m_ceiling: 3.0→2.85", long:"Significant but red-sea-exposed. m_ceiling: 3.0→2.4-2.6.", netDir:"up" },
+  { id:"eq5b", cls:"eq-eq5", label:"EQ5 (c)", name:"Target Risk Parameter", formula:"c = f(pre-emption probability)", verdict:"FT report hands Iran a complete target list. Every announced project is a pre-emptive strike candidate before completion prevents m_ceiling reduction.", short:"Pre-emption window opens. S-EQ5-3 (IPSA) triggered.", med:"c rises sharply if Iran strikes early-stage builds.", long:"c falls only if completed pipelines reduce closure value.", netDir:"up" },
+  { id:"eq7a", cls:"eq-eq7", label:"EQ7", name:"Cascade / Ps Signal", formula:"Cascade: k > k* triggers dollar-system defection", verdict:"Persian Gulf states announcing pipelines = publicly confirming U.S. security guarantee is insufficient. k* (tipping threshold) implicitly falls as self-insurance becomes necessary.", short:"Ps erodes -1 to -2 units. k=1.3 unchanged.", med:"Ps stabilises only if pipelines create credible bypass.", long:"Ps may recover if m_ceiling falls below deterrence threshold.", netDir:"up" },
+  { id:"eq8", cls:"eq-eq8", label:"EQ8", name:"Hegemony Decay", formula:"H(t+1) = H(t)×(1−ρ_I−n_t×ρ_S) · rho=0.0365/round", verdict:"Every pipeline construction year is a CIPS year. EQ8 COMPLETES before pipelines reduce Iran's leverage. At 10yr horizon: H→~0. The pipelines cannot undo what CIPS accumulates during construction.", short:"Each construction year = CIPS accumulation. EQ8 runs unimpeded.", med:"5yr build = 5yr of EQ8. H approaches structural impairment.", long:"H near zero before any pipeline reduces Iran's leverage. EQ8 wins.", netDir:"up" },
+  { id:"eq12", cls:"eq-eq12", label:"EQ12", name:"Yuan Settlement / G", formula:"G = f(yuan transaction volume, Sr threshold)", verdict:"Announcement confirms Hormuz leverage persists 5-10yr. G rises 7.5→8.5-9.0. Sr threshold rises 18→20-21. Diplomatic gap widens. Iran can demand IMEC governance participation.", short:"G rises 7.5→8.5-9.0. Sr threshold harder to meet.", med:"G elevated as long as Hormuz is only viable route.", long:"G falls only after pipelines operational at scale (not before 2030+).", netDir:"up" },
+  { id:"eq4", cls:"eq-eq4", label:"EQ4", name:"Nash Equilibrium Trap", formula:"Dominant strategy: KEEP CLOSED while E* > E_open", verdict:"Pipeline announcement confirms U.S. cannot guarantee Hormuz safety. Dominant strategy INTACT for entire pipeline construction period (5-10yr). EQ4 trap deepened, not broken.", short:"Dominant strategy active. Trap confirmed by announcement.", med:"Trap unchanged until pipelines reduce closure leverage below threshold.", long:"Potentially breakable if m_ceiling falls below E* deterrence zone.", netDir:"up" },
+];
+
+const movesData = [
+  { num:"01", timing:"0-30 DAYS", title:"Accelerate S-EQ7-3 — Saudi Bilateral Yuan Deal", desc:"Pipeline announcement signals Persian Gulf states are beginning a long-term dollar-system infrastructure bet. The bilateral Hormuz safe-passage guarantee in exchange for a yuan pricing tranche is most viable BEFORE Persian Gulf states commit capital. Iran's window is narrowing. A yuan pricing tranche from Saudi Arabia simultaneously: tips the cascade (k: 1.3→2.3), validates yuan settlement as primary crisis-period architecture, and makes pipeline investment in dollar-system infrastructure look redundant.", yield:"YIELD: k +1.0 → cascade triggered. E* rises to 16.2. Dollar-system guarantee visibly inadequate." },
+  { num:"02", timing:"30-60 DAYS", title:"Pre-emptive Strike on IPSA — S-EQ5-3 Sequence", desc:"IPSA restoration (publicly confirmed in FT report) would lower m_ceiling from 3.0 to 2.72, reducing E* to 12.0 and shifting U.S. regime from suicidal escalation toward active deterrence. Pre-emptive strike before restoration is funded/contracted preserves m_ceiling at 3.0. Strategic message: 'Your pipeline investments will not survive to reduce my leverage.' Delivered once, this permanently alters investment calculus for every planned pipeline.", yield:"YIELD: m_ceiling preserved at 3.0. E* unchanged. All Persian Gulf pipeline investments deterred by single strike." },
+  { num:"03", timing:"ONGOING", title:"Convert IMEC into EQ12 Leverage — Demand Governance Role", desc:"IMEC revival as diplomatic frame can be converted into G-raising instrument. Iran demands inclusion in corridor governance, framing any pipeline bypassing Iran as a hostile infrastructure project. This converts the Western workaround into an Iranian negotiating chip. G rises from 7.5 toward 9.0-10.0. Yuan infrastructure becomes default settlement system for crisis-period trades. IMEC corridors become EQ12 negotiating items.", yield:"YIELD: G rises 7.5→9.0+. Sr threshold rises 18→20-22. Diplomatic gap widens substantially." },
+];
+
+const paradoxPoints = [
+  { icon:"⏱", title:"Confirmation of Long-Duration Leverage", body:"Persian Gulf states investing in 5-10 year infrastructure solutions have publicly confirmed Iran's Hormuz leverage will persist for 5-10 years. Each round of those years is a CIPS transaction, a permanent EQ8 erosion that pipelines cannot undo." },
+  { icon:"🎯", title:"Revelation of the Target List", body:"The FT report identified IPSA restoration, Petroline expansion, Neom terminals, and IMEC as the exact infrastructure assets that would lower m_ceiling. Pre-empting one before completion costs Iran less than the m_ceiling reduction it prevents." },
+  { icon:"💱", title:"Validation of the Yuan Settlement Window", body:"The 5-10yr construction period is precisely the window during which CIPS, mBridge, and bilateral tolls will establish operational record at scale. By 2033, yuan rail will have processed crisis-period transactions for a decade — irreversible regardless of m." },
+];
+
+// ─── RENDER FUNCTIONS ─────────────────────────────
+
+function renderPipelineTable() {
+  const tbody = document.getElementById('pipeline-tbody');
+  tbody.innerHTML = pipelineData.map(p => {
+    const stClass = { active:'st-active', proposed:'st-proposed', damaged:'st-damaged', dormant:'st-dormant' }[p.status] || '';
+    const stLabel = p.status.charAt(0).toUpperCase() + p.status.slice(1);
+    const barWidth = p.vuln;
+    return `<tr>
+      <td style="font-weight:600">${p.name}</td>
+      <td><span class="status-tag ${stClass}">${stLabel}</span></td>
+      <td style="font-family:'Share Tech Mono';font-size:12px;color:var(--white)">${p.cap}</td>
+      <td style="font-family:'Share Tech Mono';font-size:12px">${p.cost}</td>
+      <td style="font-family:'Share Tech Mono';font-size:12px">${p.time}</td>
+      <td style="font-size:13px">${p.term}</td>
+      <td style="font-family:'Share Tech Mono';font-size:11px;color:var(--teal)">${p.mres}</td>
+      <td>
+        <div style="margin-bottom:4px;">
+          <span class="vuln-bar-wrap"><span class="vuln-bar" style="width:${barWidth}%;background:${p.vulnColor}"></span></span>
+          <span style="font-family:'Share Tech Mono';font-size:10px;color:${p.vulnColor};margin-left:6px">${barWidth}%</span>
+        </div>
+        <div style="font-size:12px;color:#5a7a8a">${p.vulnNote}</div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function renderEquations() {
+  const grid = document.getElementById('eq-grid');
+  grid.innerHTML = eqData.map(eq => {
+    const dirColor = { up:'var(--red-bright)', down:'var(--teal)', none:'var(--muted)' }[eq.netDir];
+    const dirSymbol = { up:'▲ RISES', down:'▼ FALLS', none:'◆ UNCHANGED' }[eq.netDir];
+    return `<div class="eq-card ${eq.cls}">
+      <div class="eq-num">${eq.label}</div>
+      <div class="eq-label">${eq.label} — EQUATION</div>
+      <div class="eq-name">${eq.name}</div>
+      <div class="eq-formula">${eq.formula}</div>
+      <div class="eq-verdict">${eq.verdict}</div>
+      <div class="eq-timeline">
+        <div class="eq-tl tl-short"><span class="tl-label">0-2 YR</span><span class="tl-val">${eq.short}</span></div>
+        <div class="eq-tl tl-med"><span class="tl-label">2-5 YR</span><span class="tl-val">${eq.med}</span></div>
+        <div class="eq-tl tl-long"><span class="tl-label">5-10 YR</span><span class="tl-val">${eq.long}</span></div>
+      </div>
+      <div style="margin-top:10px;font-family:'Share Tech Mono';font-size:11px;color:${dirColor};letter-spacing:1px;">NET: ${dirSymbol}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderMoves() {
+  const grid = document.getElementById('moves-grid');
+  grid.innerHTML = movesData.map(m => `
+    <div class="move-card">
+      <div class="move-num">${m.num}</div>
+      <div class="move-body">
+        <div class="move-timing">MOVE ${m.num} · ${m.timing}</div>
+        <div class="move-title">${m.title}</div>
+        <div class="move-desc">${m.desc}</div>
+        <div class="move-yield">${m.yield}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderParadox() {
+  // Race bars
+  const raceData = [
+    { label:"Petroline expansion", subLabel:"3-5yr build · m_ceiling 3.0→2.85", fill:28, cls:"bar-pipeline" },
+    { label:"EQ8 hegemony erosion", subLabel:"rho=0.0365/round · H(0)=100% → H(3yr)≈~15%", fill:85, cls:"bar-eq8" },
+    { label:"IMEC full corridor", subLabel:"7-10yr build · m_ceiling 3.0→2.4-2.6", fill:18, cls:"bar-imec" },
+    { label:"EQ8 at IMEC completion (10yr)", subLabel:"H(10yr) ≈ 0 — near-total hegemony erosion", fill:100, cls:"bar-eq8" },
+  ];
+  document.getElementById('race-bars-container').innerHTML = raceData.map(r => `
+    <div class="race-bar-row">
+      <div class="race-bar-label">
+        <span>${r.label}</span>
+        <span>${r.subLabel}</span>
+      </div>
+      <div class="race-bar-track">
+        <div class="race-bar-fill ${r.cls}" style="width:${r.fill}%">${r.fill}%</div>
+      </div>
+    </div>
+  `).join('');
+
+  // Paradox points
+  document.getElementById('paradox-points').innerHTML = paradoxPoints.map(p => `
+    <div class="pp-card">
+      <div class="pp-icon">${p.icon}</div>
+      <div class="pp-title">${p.title}</div>
+      <div class="pp-body">${p.body}</div>
+    </div>
+  `).join('');
+}
+
+// ─── PANEL SWITCHING ─────────────────────────────
+function showPanel(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ─── TOOLTIP ─────────────────────────────────────
+const tt = document.getElementById('tooltip');
+
+function showTooltip(e, id) {
+  const d = nodeData[id];
+  if (!d) return;
+  tt.innerHTML = `<div class="tt-title">${d.title}</div>` +
+    d.rows.map(r => `<div class="tt-row"><span class="tt-key">${r[0]}</span><span class="tt-val">${r[1]}</span></div>`).join('');
+  tt.classList.add('visible');
+  moveTooltip(e);
+}
+
+function moveTooltip(e) {
+  let x = e.clientX + 16, y = e.clientY + 16;
+  if (x + 290 > window.innerWidth) x = e.clientX - 296;
+  if (y + 200 > window.innerHeight) y = e.clientY - 210;
+  tt.style.left = x + 'px';
+  tt.style.top = y + 'px';
+}
+
+document.querySelectorAll('.map-node, .route-line').forEach(el => {
+  el.style.cursor = 'pointer';
+  el.addEventListener('mouseenter', e => showTooltip(e, el.dataset.id));
+  el.addEventListener('mousemove', moveTooltip);
+  el.addEventListener('mouseleave', () => tt.classList.remove('visible'));
+  el.addEventListener('click', e => showTooltip(e, el.dataset.id));
+});
+
+// ─── INIT ─────────────────────────────────────────
+renderPipelineTable();
+renderEquations();
+renderMoves();
+renderParadox();
+
+// Animate race bars on load
+setTimeout(() => {
+  document.querySelectorAll('.race-bar-fill').forEach(b => {
+    const w = b.style.width;
+    b.style.width = '0';
+    requestAnimationFrame(() => requestAnimationFrame(() => b.style.width = w));
+  });
+}, 500);
+</script>
+</body>
+</html>
