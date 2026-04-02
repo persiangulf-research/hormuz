@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>m_ceiling — Geographic Multiplier Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">m = 3.0 + (1−m_res)×1.75</div>
+    <div class="nav-links">
+      <a href="../index.html" style="border-right:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.4);font-size:11px">← Portal</a>
+      <a href="#formula">Formula</a>
+      <a href="#pipelines">Pipelines</a>
+      <a href="#simulator">Simulator</a>
+      <a href="#scenarios">Scenarios</a>
+      <a href="#analysis">Analysis</a>
+    </div>
+    <button class="nav-burger" id="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <canvas id="hero-canvas"></canvas>
+  </div>
+  <div class="hero-grid">
+    <div class="hero-tag">Geographic Analysis · April 2026</div>
+    <h1 class="hero-title">
+      <span class="hero-eq">m(t) = 3.0 + (1 − m_res) × 1.75</span>
+      <span class="hero-subtitle">The Chokepoint Ceiling</span>
+    </h1>
+    <p class="hero-desc">The m_ceiling metric quantifies Iran's maximum geographic leverage over the Strait of Hormuz. It represents the lowest achievable m if all bypass infrastructure were fully operational — and reveals why pipeline expansion cannot structurally eliminate Iran's advantage.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-val" id="hero-m">3.00</span><span class="stat-label">Current m_ceiling</span></div>
+      <div class="stat"><span class="stat-val">58%</span><span class="stat-label">Net irreplaceable fraction</span></div>
+      <div class="stat"><span class="stat-val">20M</span><span class="stat-label">bpd Hormuz throughput</span></div>
+      <div class="stat"><span class="stat-val">4.75</span><span class="stat-label">Dual-strait m_activated</span></div>
+    </div>
+    <a href="#formula" class="hero-cta">Explore the formula ↓</a>
+  </div>
+</section>
+
+<!-- FORMULA -->
+<section id="formula" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">01 · The Formula</div>
+    <h2 class="section-title">m_ceiling Derivation</h2>
+    <div class="eq-display">
+      <div class="eq-main" style="background:rgba(255,255,255,0.05);color:#fff;border-color:#3b82f6;">m_ceiling = m_base + (1 − m_resilience) × α</div>
+      <div class="eq-terms">
+        <div class="term">
+          <div class="term-sym" style="color:#3b82f6;">m_base</div>
+          <div class="term-name">Base geographic multiplier</div>
+          <div class="term-desc">The minimum m achievable when all existing bypass infrastructure is fully operational. Currently 3.0 — reflecting ~58% net irreplaceable fraction of Hormuz throughput after accounting for Yanbu, Fujairah, and existing pipeline capacity.</div>
+        </div>
+        <div class="term">
+          <div class="term-sym" style="color:#3b82f6;">m_res</div>
+          <div class="term-name">Resilience fraction [0, 1]</div>
+          <div class="term-desc">The fraction of total Hormuz throughput that can be rerouted through bypass pipelines. At m_res = 1.0: all oil bypasses Hormuz, m approaches m_base. At m_res = 0.0: no bypass, m = m_base + α = 4.75.</div>
+        </div>
+        <div class="term">
+          <div class="term-sym" style="color:#3b82f6;">α</div>
+          <div class="term-name">Chokepoint sensitivity coefficient</div>
+          <div class="term-desc">Calibrated at 1.75. Represents the maximum m amplification when zero bypass exists. Derived from the gap between m_base (3.0, Hormuz-only with bypass) and m_activated (4.75, dual-strait with bypass collapse).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-strip">
+      <div class="insight">
+        <div class="insight-icon">Current state</div>
+        <div class="insight-text">m_res ≈ 0.42 (existing bypass covers ~42% of Hormuz volume via Yanbu + Fujairah). m_ceiling = 3.0 + (1−0.42)×1.75 ≈ 4.02. But actual bypass is counted as already in m_base, so effective m_res is higher.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">Full build (all pipelines)</div>
+        <div class="insight-text">18.25M bpd theoretical bypass vs 20M bpd Hormuz → m_res = 91.25%. m_ceiling = 3.0 + (1−0.9125)×1.75 = 3.15. Even full build barely lowers m because Red Sea exposure replaces Hormuz exposure.</div>
+      </div>
+      <div class="insight">
+        <div class="insight-icon">Oman route (only genuine reduction)</div>
+        <div class="insight-text">Only Gulf → Oman → Arabian Sea bypasses both Hormuz AND Bab al-Mandab. This is the only route that genuinely lowers m_ceiling without substituting a new chokepoint vulnerability.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PIPELINE LANDSCAPE -->
+<section id="pipelines" class="section">
+  <div class="section-inner">
+    <div class="section-tag">02 · Pipeline Landscape</div>
+    <h2 class="section-title">Bypass Infrastructure Assessment</h2>
+    <p class="section-lead" style="color:#666;">Toggle pipelines on/off to see their combined effect on m_ceiling. Each pipeline contributes bypass capacity but may introduce Red Sea / Bab al-Mandab exposure.</p>
+
+    <div class="pipeline-grid" id="pipeline-grid">
+      <!-- Populated by JS -->
+    </div>
+
+    <div class="pipeline-summary" id="pipeline-summary">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- SIMULATOR -->
+<section id="simulator" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">03 · Interactive</div>
+    <h2 class="section-title">m_ceiling Simulator</h2>
+    <p class="section-lead">Adjust parameters and watch m_ceiling update in real time. Toggle pipelines, set Hormuz throughput, and model the Bab al-Mandab exposure.</p>
+
+    <div class="sim-layout">
+      <div class="sim-controls">
+        <!-- Dual-strait toggle -->
+        <div id="dual-toggle-btn" data-on="0" style="display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1rem;background:rgba(37,99,235,0.12);border:1px solid rgba(37,99,235,0.35);border-radius:8px;margin-bottom:0.5rem;cursor:pointer;user-select:none;">
+          <span style="font-size:1.1em;">⚡</span>
+          <span style="font-size:0.88rem;color:#60a5fa;font-weight:600;flex:1;">Dual-strait scenario <span style="font-size:0.78rem;font-weight:400;color:#9ca3af;">(Bab al-Mandab activated)</span></span>
+          <span style="position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0;">
+            <span id="dual-toggle-track" style="display:block;width:100%;height:100%;background:#374151;border-radius:24px;transition:.25s;"></span>
+            <span id="dual-toggle-thumb" style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.25s;"></span>
+          </span>
+        </div>
+        <div id="dual-strait-banner" style="display:none;background:rgba(37,99,235,0.15);border:1px solid rgba(37,99,235,0.5);border-radius:8px;padding:0.85rem 1.2rem;margin-bottom:1rem;font-size:0.85rem;color:#60a5fa;line-height:1.6;">
+          <strong style="color:#3b82f6;">⚡ Dual-strait active</strong> — Bab al-Mandab closed via Houthi activation. All Red Sea-terminating bypass routes are neutralised. m rises to 4.75 regardless of pipeline capacity.
+        </div>
+
+        <div class="sim-param">
+          <label>Hormuz throughput (M bpd)</label>
+          <input type="range" id="sim-hormuz" min="10" max="30" step="0.5" value="20">
+          <span class="sim-val" id="sim-hormuzv">20.0</span>
+        </div>
+        <div class="sim-param">
+          <label>Total bypass capacity (M bpd) — auto from toggles</label>
+          <input type="range" id="sim-bypass" min="0" max="25" step="0.25" value="8.8" disabled>
+          <span class="sim-val" id="sim-bypassv">8.8</span>
+        </div>
+        <div class="sim-param">
+          <label>Red Sea exposure fraction of bypass [0–100%]</label>
+          <input type="range" id="sim-redsea" min="0" max="100" step="1" value="80">
+          <span class="sim-val" id="sim-redseav">80%</span>
+        </div>
+        <div class="sim-param">
+          <label>m_base (base multiplier with full bypass)</label>
+          <input type="range" id="sim-mbase" min="150" max="400" step="5" value="300">
+          <span class="sim-val" id="sim-mbasev">3.00</span>
+        </div>
+        <div class="sim-param">
+          <label>α — chokepoint sensitivity coefficient</label>
+          <input type="range" id="sim-alpha" min="100" max="300" step="5" value="175">
+          <span class="sim-val" id="sim-alphav">1.75</span>
+        </div>
+        <div class="sim-param">
+          <label>c — credibility (for E* impact)</label>
+          <input type="range" id="sim-c" min="0" max="100" step="1" value="87">
+          <span class="sim-val" id="sim-cv">0.87</span>
+        </div>
+        <div class="sim-param">
+          <label>E — base escalation cost</label>
+          <input type="range" id="sim-E" min="10" max="150" step="1" value="50">
+          <span class="sim-val" id="sim-Ev">5.0</span>
+        </div>
+      </div>
+
+      <div class="sim-outputs">
+        <div class="sim-eq-display" id="sim-eq">m = 3.0 + (1−0.44)×1.75 = 3.98</div>
+        <div class="sim-metrics">
+          <div class="sim-met"><div class="sm-label">m_ceiling</div><div class="sm-val accent" id="sm-m">3.00</div></div>
+          <div class="sim-met"><div class="sm-label">m_resilience</div><div class="sm-val" id="sm-mres">44%</div></div>
+          <div class="sim-met"><div class="sm-label">Bypass fraction</div><div class="sm-val" id="sm-bypass">44%</div></div>
+          <div class="sim-met"><div class="sm-label">E* (at current c)</div><div class="sm-val amber" id="sm-estar">13.7</div></div>
+          <div class="sim-met"><div class="sm-label">Net irreplaceable</div><div class="sm-val red" id="sm-irrep">56%</div></div>
+          <div class="sim-met"><div class="sm-label">Deterrence gap</div><div class="sm-val green" id="sm-gap">13.7</div></div>
+        </div>
+        <div class="sim-verdict" id="sim-verdict"></div>
+      </div>
+    </div>
+
+    <div class="sim-chart-wrap">
+      <canvas id="sim-chart" height="260"></canvas>
+    </div>
+    <div class="sim-legend">
+      <span><span class="leg-sq" style="background:#3b82f6"></span>m_ceiling</span>
+      <span><span class="leg-sq" style="background:#fbbf24"></span>E* impact</span>
+      <span><span class="leg-sq" style="background:#ef4444"></span>Dual-strait m (4.75)</span>
+      <span><span class="leg-sq" style="background:#22c55e"></span>m_resilience</span>
+    </div>
+  </div>
+</section>
+
+<!-- PRESET SCENARIOS -->
+<section id="scenarios" class="section">
+  <div class="section-inner">
+    <div class="section-tag">04 · Preset Scenarios</div>
+    <h2 class="section-title">Pipeline Build Scenarios</h2>
+    <div class="scenario-grid" id="scenario-grid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ANALYSIS -->
+<section id="analysis" class="section section-dark">
+  <div class="section-inner">
+    <div class="section-tag">05 · Strategic Analysis</div>
+    <h2 class="section-title">Why m_ceiling Barely Moves</h2>
+
+    <div class="analysis-grid">
+      <div class="analysis-card">
+        <div class="ac-num">01</div>
+        <h3>The Bab al-Mandab Substitution Problem</h3>
+        <p>Every new pipeline that terminates at a Red Sea port — Yanbu, Neom, Aqaba — solves the Hormuz problem by substituting Bab al-Mandab exposure. The Houthis remain aligned with Iran. A Bab al-Mandab activation post-pipeline-expansion produces m=4.75 regardless of how much Petroline capacity has been added.</p>
+      </div>
+      <div class="analysis-card">
+        <div class="ac-num">02</div>
+        <h3>The Oman Route Exception</h3>
+        <p>Only Gulf → Oman → Arabian Sea bypasses both chokepoints. This requires Gulf Railway completion (UAE-Oman link mid-2027 earliest) and new Omani port capacity. Even on aggressive timelines: 5–7 years. At current rho_I, EQ8 completes hegemony erosion before this route is operational.</p>
+      </div>
+      <div class="analysis-card">
+        <div class="ac-num">03</div>
+        <h3>Pre-emption Window</h3>
+        <p>Every publicly announced pipeline is a target Iran can strike before completion. The FT report has handed Iran a complete target list: IPSA restoration, Petroline expansion, Neom terminals, IMEC. Striking one preserves m_ceiling at 3.0 and deters all future pipeline investment.</p>
+      </div>
+      <div class="analysis-card">
+        <div class="ac-num">04</div>
+        <h3>EQ8 Wins the Race</h3>
+        <p>At rho_total = 0.0365/round, cumulative hegemony erosion over a 10-year pipeline construction horizon is near-total: H ≈ 0.0. The dollar-system's energy invoicing role will be structurally impaired before any new pipeline reduces m_ceiling. Pipelines cannot undo what CIPS accumulates during construction.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem;padding:1.5rem;background:rgba(239,68,68,0.10);border-left:4px solid #ef4444;border-radius:6px;">
+      <h3 style="color:#f87171;font-size:1.1rem;margin:0 0 1rem;">Structural Verdict</h3>
+      <div style="color:rgba(255,255,255,0.7);font-size:0.9rem;line-height:1.8;">
+        <p style="margin:0 0 0.5rem;">Even under the full 10-year build scenario (all pipelines completed), m_ceiling only falls from 3.0 to 3.15. The geographic constraint is not eliminated — it is rerouted to a chokepoint Iran already controls through Houthi proxy.</p>
+        <p style="margin:0;">The only genuine m_ceiling reduction route (Oman) is 5–7 years minimum and not in any current pipeline plan. EQ8 completes its work before any infrastructure solution arrives. Iran does not need to win the infrastructure race — it only needs to run out the clock.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-eq">m(t) = m_base + (1 − m_res) × α</div>
+    <div class="footer-meta">Geographic Analysis · The Hormuz Gambit Series · April 2026</div>
+    <div class="footer-links">
+      <a href="#hero">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
