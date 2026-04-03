@@ -515,7 +515,7 @@
       <!-- m_ceiling callout -->
       <rect x="820" y="20" width="260" height="70" fill="rgba(10,18,25,0.9)" stroke="rgba(232,160,32,0.3)" stroke-width="1"/>
       <text x="840" y="40" fill="rgba(232,160,32,0.6)" font-family="Share Tech Mono" font-size="9" letter-spacing="1">CURRENT PARAMETERS</text>
-      <text x="840" y="56" fill="#dce8f0" font-family="Share Tech Mono" font-size="11">m=3.0  E*=13.7  c=0.87</text>
+      <text id="param-callout" x="840" y="56" fill="#dce8f0" font-family="Share Tech Mono" font-size="11"></text>
       <text x="840" y="72" fill="#5a7a8a" font-family="Share Tech Mono" font-size="10">m_ceiling: 3.0 → 2.85 (5yr)</text>
       <text x="840" y="84" fill="#5a7a8a" font-family="Share Tech Mono" font-size="10">Full build: 3.0 → ~2.4-2.6 (10yr)</text>
 
@@ -633,6 +633,27 @@
 <div id="tooltip"></div>
 
 <script>
+let params = {};
+fetch('params.json').then(r => r.json()).then(p => {
+  params = p;
+  init();
+});
+
+function init() {
+  const p = params.parameters;
+  const d = params.derived;
+  const m = params.meta;
+  document.querySelector('.header-title .sup').innerHTML = `<a href="index.html" style="color:var(--muted);text-decoration:none;">← Portal</a> · Hormuz Gambit Research Platform · Day ${m.closureDays}`;
+  document.querySelector('.header-meta').innerHTML = `Source: Financial Times 2 April 2026<br>c=<span>${p.c}</span> · E*=<span>${d.estar}</span> · k=<span>${p.k}</span><br>rho_total=<span>${(p.rhoI * p.n).toFixed(4)}</span> · H(${m.closureDays})≈<span>${Math.round(p.H / 10 * 100)}% H₀</span>`;
+  document.querySelector('.statusbar').innerHTML = `<div class="sb-item"><span class="sb-key">m</span><span class="sb-val red">${p.m}</span></div><div class="sb-item"><span class="sb-key">E*</span><span class="sb-val red">${d.estar}</span></div><div class="sb-item"><span class="sb-key">k</span><span class="sb-val">${p.k}</span></div><div class="sb-item"><span class="sb-key">H(${m.closureDays})</span><span class="sb-val red">~${Math.round(p.H / 10 * 100)}% H₀</span></div><div class="sb-item"><span class="sb-key">Sr</span><span class="sb-val">${p.Sr}</span></div><div class="sb-item"><a href="m_ceiling/index.html" style="text-decoration:none;color:inherit;"><span class="sb-key">m_ceiling</span><span class="sb-val" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">${p.m} (→3.15 full build)</span></a></div><div class="sb-item"><span class="sb-key">IMEC ETA</span><span class="sb-val teal">2033-2036</span></div>`;
+  document.getElementById('param-callout').textContent = `m=${p.m}  E*=${d.estar}  c=${p.c}`;
+  renderPipelineTable();
+  renderEquations();
+  renderMoves();
+  renderRaceBars();
+  renderParadoxPoints();
+}
+
 // ─── DATA ───────────────────────────────────────
 const nodeData = {
   hormuz: { title:"STRAIT OF HORMUZ", rows:[["Status","CLOSED — Day 33"],["Daily flow (pre)","~20M bpd (20% world oil"],["Current bypass","Petroline 7M bpd"],["m value","3.0"],["Iran leverage","Maximum"]] },
