@@ -982,7 +982,8 @@ footer {
     <div class="h-tick"><span class="h-tick-label">Ps</span><span class="h-tick-val" id="tick-ps">12</span></div>
     <div class="h-tick"><span class="h-tick-label">n</span><span class="h-tick-val" id="tick-n">1.3</span></div>
     <div class="h-tick"><span class="h-tick-label">Sr Cov.</span><span class="h-tick-val" id="tick-srcov">4%</span></div>
-  <a href="https://persian-gulf.medium.com/" target="_blank" rel="noopener" class="h-research-link" style="margin-left: auto;">
+    <button onclick="clearCacheAndReload()" title="Clear cache & reload params.json" style="font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:#f97316;border:1px solid rgba(249,115,22,.35);border-radius:3px;padding:5px 10px;cursor:pointer;transition:all .2s;white-space:nowrap;margin-left:auto;">↻ Cache</button>
+    <a href="https://persian-gulf.medium.com/" target="_blank" rel="noopener" class="h-research-link">
       Research Articles ↗
     </a>
   </div>
@@ -1292,12 +1293,6 @@ footer {
     </div>
   </div>
 
-</div>
-
-<!-- CLEAR CACHE BUTTON — force fresh fetch of params.json -->
-<div style="padding:.75rem clamp(1.5rem,4vw,3rem);border-bottom:1px solid var(--border);background:rgba(8,12,18,0.6);display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-  <button onclick="clearCacheAndReload()" style="font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:transparent;color:#f97316;border:1px solid rgba(249,115,22,.35);border-radius:3px;padding:7px 16px;cursor:pointer;transition:all .2s;white-space:nowrap;">&#x21BB; Clear cache & reload</button>
-  <span style="font-family:var(--mono);font-size:10px;color:rgba(232,226,212,.2);letter-spacing:.05em;margin-left:auto;">Clears stored data and forces fresh params.json fetch</span>
 </div>
 
 <!-- ABOUT STRIP -->
