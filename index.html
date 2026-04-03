@@ -921,7 +921,7 @@ footer {
     </span>
   </div>
   <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0;line-height:1.25;">
-    <span style="font-family:var(--mono);font-size:12px;color:rgba(252,165,165,0.7);white-space:nowrap;font-weight:600;">02 Apr 2026</span>
+    <span style="font-family:var(--mono);font-size:12px;color:rgba(252,165,165,0.7);white-space:nowrap;font-weight:600;" id="bb-date">02 Apr 2026</span>
     <span class="bb-time" id="bb-time" style="font-size:10px;margin-top:2px;">23:19 UTC</span>
   </div>
 </div>
@@ -1294,12 +1294,10 @@ footer {
 
 </div>
 
-<!-- RESET BUTTON — restore MODEL to params.json defaults -->
+<!-- CLEAR CACHE BUTTON — force fresh fetch of params.json -->
 <div style="padding:.75rem clamp(1.5rem,4vw,3rem);border-bottom:1px solid var(--border);background:rgba(8,12,18,0.6);display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-  <button id="reset-params-btn" onclick="resetToParamsDefaults()" style="font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:transparent;color:#ef4444;border:1px solid rgba(239,68,68,.35);border-radius:3px;padding:7px 16px;cursor:pointer;transition:all .2s;white-space:nowrap;">&#x21BA; Reset to params.json defaults</button>
-  <button id="resume-live-btn" onclick="resumeLiveParams()" style="display:none;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:transparent;color:#22c55e;border:1px solid rgba(34,197,94,.35);border-radius:3px;padding:7px 16px;cursor:pointer;transition:all .2s;white-space:nowrap;">&#x25B6; Resume live params.json</button>
-  <span id="reset-params-msg" style="font-family:var(--mono);font-size:10px;color:rgba(232,226,212,.35);letter-spacing:.06em;"></span>
-  <span style="font-family:var(--mono);font-size:10px;color:rgba(232,226,212,.2);letter-spacing:.05em;margin-left:auto;">Restores all model parameters (E, c, m, H, G, S, Sr, k, ν, Ps, ρ_I, n) to published params.json values &amp; refreshes all tickers.</span>
+  <button onclick="clearCacheAndReload()" style="font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:transparent;color:#f97316;border:1px solid rgba(249,115,22,.35);border-radius:3px;padding:7px 16px;cursor:pointer;transition:all .2s;white-space:nowrap;">&#x21BB; Clear cache & reload</button>
+  <span style="font-family:var(--mono);font-size:10px;color:rgba(232,226,212,.2);letter-spacing:.05em;margin-left:auto;">Clears stored data and forces fresh params.json fetch</span>
 </div>
 
 <!-- ABOUT STRIP -->
@@ -1370,11 +1368,15 @@ setInterval(updateClosureDays, 60000);
 (function(){
   const dateEl = document.getElementById('live-date');
   const timeEl = document.getElementById('live-utc-time');
+  const bbDateEl = document.getElementById('bb-date');
   const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const monthsShort = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function updateDateTime() {
     const d = new Date();
     if (dateEl) dateEl.textContent = d.getUTCDate() + ' ' + months[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
     if (timeEl) timeEl.textContent = d.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'UTC'}) + ' UTC';
+    // Update breaking banner date with current date (no params.json needed)
+    if (bbDateEl) bbDateEl.textContent = d.getUTCDate() + ' ' + monthsShort[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
   }
   updateDateTime();
   setInterval(updateDateTime, 1000);
@@ -1514,6 +1516,21 @@ const PARAMS_FALLBACK = {
       .then(data => {
         buildBannerText(data);
         renderAlertCards((data.meta && data.meta.news) || PARAMS_FALLBACK.meta.news);
+        // Update date from params.json
+        if(data.meta && data.meta.published){
+          const date = new Date(data.meta.published);
+          const monthYear = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+          const footerMeta = document.querySelector('.footer-meta');
+          if(footerMeta) footerMeta.textContent = 'Geoeconomics Analysis Series · ' + monthYear;
+          
+          // Also update breaking banner date
+          const bbDateEl = document.getElementById('bb-date');
+          if(bbDateEl){
+            const day = date.getUTCDate();
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            bbDateEl.textContent = day + ' ' + months[date.getUTCMonth()] + ' ' + date.getUTCFullYear();
+          }
+        }
       })
       .catch(err => {
         // Fetch failed on HTTP — fall back to inline data
@@ -2313,45 +2330,13 @@ function resetToParamsDefaults() {
   }, 3500);
 }
 
-// ── Resume live params.json (clear the reset flag) ────────────────────
-function resumeLiveParams() {
-  localStorage.removeItem('hg_reset_to_defaults');
-  // Hide resume button
-  const resumeBtn = document.getElementById('resume-live-btn');
-  if (resumeBtn) resumeBtn.style.display = 'none';
-  // Clear the status message
-  const msg = document.getElementById('reset-params-msg');
-  if (msg) { msg.textContent = '↻ Fetching live params.json…'; msg.style.color = 'rgba(232,226,212,.45)'; }
-  // Re-run loadParams() to fetch live data immediately
-  loadParams().then(() => {
-    if (msg) { msg.textContent = '✓ Live params.json restored'; msg.style.color = '#22c55e'; }
-    setTimeout(() => { if (msg) msg.textContent = ''; }, 2500);
-  });
-}
-
-// ── On page load: if reset flag is active, show the resume button ─────
-(function initResetUI() {
-  if (localStorage.getItem('hg_reset_to_defaults') === '1') {
-    const resumeBtn = document.getElementById('resume-live-btn');
-    const msg       = document.getElementById('reset-params-msg');
-    if (resumeBtn) resumeBtn.style.display = 'inline-block';
-    if (msg) { msg.textContent = '⚠ Using PARAMS_FALLBACK defaults (not live params.json)'; msg.style.color = 'rgba(232,226,212,.3)'; }
-  }
-})();
-
-// ── Clear Cache & Reload (nuclear option for users) ───────────────────
+// ── Clear Cache & Reload ────────────────────────────────────────────────
 function clearCacheAndReload() {
   try {
     localStorage.clear();
     sessionStorage.clear();
-    // Show brief confirmation before reload
-    const btn = document.getElementById('clear-cache-btn');
-    if (btn) {
-      btn.textContent = '✓ Cleared — reloading...';
-      btn.style.color = '#22c55e';
-      btn.style.borderColor = 'rgba(34,197,94,.5)';
-    }
-    setTimeout(() => location.reload(), 600);
+    // Reload with cache bypass
+    location.href = location.pathname + '?v=' + Date.now();
   } catch(e) {
     alert('Could not clear cache: ' + e.message);
   }
