@@ -372,7 +372,7 @@
       <circle cx="700" cy="330" r="10" fill="rgba(192,57,43,0.3)" stroke="#c0392b" stroke-width="1.5" filter="url(#glow)"
         class="map-node" data-id="hormuz"/>
       <text x="700" y="360" fill="#c0392b" font-family="Share Tech Mono" font-size="10" text-anchor="middle">STRAIT OF HORMUZ</text>
-      <text x="700" y="372" fill="rgba(192,57,43,0.6)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">CLOSED — DAY 33</text>
+      <text id="map-closure-day" x="700" y="372" fill="rgba(192,57,43,0.6)" font-family="Share Tech Mono" font-size="9" text-anchor="middle">CLOSED — DAY 33</text>
 
       <!-- Bab al-Mandab -->
       <circle cx="310" cy="390" r="18" fill="url(#gAmber)" class="pulse"/>
@@ -633,6 +633,10 @@
 <div id="tooltip"></div>
 
 <script>
+const WAR_START = new Date('2026-03-02T00:00:00Z');
+function getClosureDays() {
+  return Math.floor((new Date() - WAR_START) / (1000 * 60 * 60 * 24));
+}
 let params = {};
 fetch('params.json').then(r => r.json()).then(p => {
   params = p;
@@ -643,10 +647,13 @@ function init() {
   const p = params.parameters;
   const d = params.derived;
   const m = params.meta;
-  document.querySelector('.header-title .sup').innerHTML = `<a href="index.html" style="color:var(--muted);text-decoration:none;">← Portal</a> · Hormuz Gambit Research Platform · Day ${m.closureDays}`;
-  document.querySelector('.header-meta').innerHTML = `Source: Financial Times 2 April 2026<br>c=<span>${p.c}</span> · E*=<span>${d.estar}</span> · k=<span>${p.k}</span><br>rho_total=<span>${(p.rhoI * p.n).toFixed(4)}</span> · H(${m.closureDays})≈<span>${Math.round(p.H / 10 * 100)}% H₀</span>`;
-  document.querySelector('.statusbar').innerHTML = `<div class="sb-item"><span class="sb-key">m</span><span class="sb-val red">${p.m}</span></div><div class="sb-item"><span class="sb-key">E*</span><span class="sb-val red">${d.estar}</span></div><div class="sb-item"><span class="sb-key">k</span><span class="sb-val">${p.k}</span></div><div class="sb-item"><span class="sb-key">H(${m.closureDays})</span><span class="sb-val red">~${Math.round(p.H / 10 * 100)}% H₀</span></div><div class="sb-item"><span class="sb-key">Sr</span><span class="sb-val">${p.Sr}</span></div><div class="sb-item"><a href="m_ceiling/index.html" style="text-decoration:none;color:inherit;"><span class="sb-key">m_ceiling</span><span class="sb-val" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">${p.m} (→3.15 full build)</span></a></div><div class="sb-item"><span class="sb-key">IMEC ETA</span><span class="sb-val teal">2033-2036</span></div>`;
+  const closureDays = getClosureDays();
+  document.querySelector('.header-title .sup').innerHTML = `<a href="index.html" style="color:var(--muted);text-decoration:none;">← Portal</a> · Hormuz Gambit Research Platform · Day ${closureDays}`;
+  document.querySelector('.header-meta').innerHTML = `Source: Financial Times 2 April 2026<br>c=<span>${p.c}</span> · E*=<span>${d.estar}</span> · k=<span>${p.k}</span><br>rho_total=<span>${(p.rhoI * p.n).toFixed(4)}</span> · H(${closureDays})≈<span>${Math.round(p.H / 10 * 100)}% H₀</span>`;
+  document.querySelector('.statusbar').innerHTML = `<div class="sb-item"><span class="sb-key">m</span><span class="sb-val red">${p.m}</span></div><div class="sb-item"><span class="sb-key">E*</span><span class="sb-val red">${d.estar}</span></div><div class="sb-item"><span class="sb-key">k</span><span class="sb-val">${p.k}</span></div><div class="sb-item"><span class="sb-key">H(${closureDays})</span><span class="sb-val red">~${Math.round(p.H / 10 * 100)}% H₀</span></div><div class="sb-item"><span class="sb-key">Sr</span><span class="sb-val">${p.Sr}</span></div><div class="sb-item"><a href="m_ceiling/index.html" style="text-decoration:none;color:inherit;"><span class="sb-key">m_ceiling</span><span class="sb-val" style="cursor:pointer;text-decoration:underline;text-decoration-style:dotted;">${p.m} (→3.15 full build)</span></a></div><div class="sb-item"><span class="sb-key">IMEC ETA</span><span class="sb-val teal">2033-2036</span></div>`;
   document.getElementById('param-callout').textContent = `m=${p.m}  E*=${d.estar}  c=${p.c}`;
+  const mapDayEl = document.getElementById('map-closure-day');
+  if (mapDayEl) mapDayEl.textContent = 'CLOSED — DAY ' + closureDays;
   renderPipelineTable();
   renderEquations();
   renderMoves();
