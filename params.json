@@ -4,7 +4,7 @@
     "closureDays": 40,
     "analystNotes": null,
     "aiCalibrated": true,
-    "brentPrice": null,
+    "brentPrice": 94.45,
     "brentFetched": null,
     "primaryEquation": "Eq.3",
     "trapStatus": "active",
