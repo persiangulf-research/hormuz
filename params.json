@@ -1,15 +1,17 @@
 {
   "meta": {
-    "published": "2026-04-11T00:31:05.775Z",
+    "published": "2026-04-11T01:07:40.780Z",
     "closureDays": 40,
     "analystNotes": null,
     "aiCalibrated": true,
     "brentPrice": 94.45,
-    "brentFetched": "2026-04-11T00:31:05.775Z",
-    "primaryEquation": "Eq.3",
+    "brentFetched": "2026-04-11T01:06:10.397Z",
+    "natGasPrice": null,
+    "natGasFetched": null,
+    "primaryEquation": "Eq.3 (Escalation threshold: c·m·E vs. S - Sr)",
     "trapStatus": "active",
-    "strategicSummary": "On closure day 40, the Hormuz crisis is entering its most acute diplomatic-military inflection point. Trump's dual declarations — 'with or without Iran' and zero tolerance for tolls — eliminate the commercial off-ramp Iran may have sought and raise U.S. credibility to 0.93, approaching the threshold where bluff/resolve ambiguity collapses. The European jet fuel shock within three weeks creates a hard external deadline that transforms this from a bilateral standoff into a systemic allied emergency, raising E to 5.5 and implicitly expanding the coalition behind U.S. action. The most strategically complex signal is China's diplomatic capital play: Beijing has nudged Iran toward talks and is now positioned as a credible intermediary with Trump, marginally reducing H (hegemony loss) as China acts as a responsible stakeholder rather than a pure spoiler. However, Sr remains at 0.78 — no formal OFAC/SWIFT relief has been granted, meaning Iran's core sanctions pain is unresolved. The trap remains active: Iran cannot exit without formal relief, the U.S. cannot grant relief without political cost, and the three-week European fuel clock is now the binding constraint on the entire system.",
-    "mostSignificantEvent": "Headline 3 (European systemic jet fuel shortage within three weeks): This is the binding constraint that transforms the crisis from a bilateral standoff into a multilateral emergency with a hard deadline, compressing the diplomatic window and sharply raising the cost of continued closure for all parties — including the U.S., which now faces allied pressure to act.",
+    "strategicSummary": "Day 40 of the Hormuz closure marks a significant hardening of the U.S. position: Trump's 'with or without' declaration and explicit toll rejection have simultaneously raised the credibility of military action (c up to 0.87) and closed the informal bargaining space that could have produced a revenue-sharing compromise. European aviation fuel shortages create a 21-day hard deadline that will accelerate great-power pressure on all parties, lifting both E and Ps marginally. The most structurally important development is China's acknowledged diplomatic capital — the WSJ framing suggests Beijing has positioned itself as the indispensable broker, which is the most plausible face-saving off-ramp for Iran at this stage. The trap remains fully active: with $94.45 Brent and a 40-day closure, the financial incentives for Iran to maintain closure are high, but the tripartite dynamic (U.S. military threat + European civilian harm + Chinese diplomatic pressure) is assembling the conditions for a negotiated reopening within the next 2–3 weeks, contingent on formal Sr movement.",
+    "mostSignificantEvent": "Headline 1 (Trump 'with or without') is the most significant because it transforms U.S. posture from coercive diplomacy into a unilateral military ultimatum, locking in a high-c equilibrium that forecloses soft landing scenarios and makes the Chinese mediation channel (Headline 4) the only remaining credible off-ramp — a structural shift in the crisis architecture.",
     "news": [
       {
         "id": "N-001",
@@ -19,9 +21,10 @@
         "eq": "5",
         "eqLabel": "Eq.5 — Commitment Device / c",
         "metricsImpact": {
-          "c_delta": "+0.02 — 'with or without' language is a credible threat escalation, moving c toward 0.93",
-          "Ps_delta": "+0.5 — unilateral framing reinforces U.S. guarantee signal",
-          "note": "Raises risk of kinetic action but also opens diplomatic off-ramp if Iran seeks talks to avoid U.S. strike."
+          "c_delta": "+0.04 — 'with or without' declaration raises U.S. military credibility floor, pressing Iran's response credibility upward as a countermove",
+          "E_delta": "+0.3 — unilateral framing broadens escalation envelope by signaling willingness to act outside multilateral consensus",
+          "Ps_delta": "+0.5 — explicit presidential commitment partially offsets coalition-defection risk",
+          "note": "Most decisive statement for the trap: locks in a high-c equilibrium where neither side can credibly de-escalate without concession; increases probability of kinetic test within 10–14 days."
         },
         "ticker": "President Trump says the Strait of Hormuz will be opened \"with or without\" Iran's approval."
       },
@@ -33,9 +36,9 @@
         "eq": "5",
         "eqLabel": "Eq.5 — Commitment Device / c",
         "metricsImpact": {
-          "c_delta": "+0.01 — toll refusal closes any commercial compromise route, hardening U.S. red line",
-          "E_delta": "+0.1 — eliminates a potential non-military resolution path, marginally raising escalation cost",
-          "note": "Strategically forecloses Iranian attempt to monetize the closure short of war, forcing binary outcome."
+          "c_delta": "+0.01 — toll rejection removes Iran's potential revenue-extraction off-ramp, narrowing face-saving exits and hardening the standoff",
+          "Sr_delta": "0 — no formal relief action; toll rejection actually reduces informal bargaining space",
+          "note": "By closing the 'toll compromise' scenario, Trump eliminates a sub-optimal but conflict-terminating deal; raises duration risk of closure beyond day 40."
         },
         "ticker": "Trump says will not allow tolls in Strait of Hormuz"
       },
@@ -47,9 +50,9 @@
         "eq": "5",
         "eqLabel": "Eq.5 — Commitment Device / c",
         "metricsImpact": {
-          "E_delta": "+0.4 — European systemic shortage within three weeks dramatically raises allied escalation cost and time pressure",
-          "Ps_delta": "+0.5 — European vulnerability creates implicit coalition pressure on Iran, strengthening U.S. guarantee indirectly",
-          "note": "Three-week horizon is a hard deadline that compresses the diplomatic window and may accelerate U.S. military planning timeline."
+          "E_delta": "+0.2 — European aviation fuel crisis at 3-week horizon broadens economic damage beyond oil markets into civilian infrastructure, elevating political cost of continued closure",
+          "Ps_delta": "+0.5 — European emergency creates coalition alignment pressure; NATO partners now have direct economic skin in the game supporting U.S. posture",
+          "note": "Systemic jet fuel shortage is a 'civilian harm' escalation threshold that historically accelerates great-power coordination; watch for EU Article 222 invocation or emergency IEA release within 72 hours."
         },
         "ticker": "European airports are facing 'systemic' jet fuel shortages 'within three weeks' if the Strait of Hormuz is not fully reopened, according to Financial Times report."
       },
@@ -61,9 +64,10 @@
         "eq": "12",
         "eqLabel": "Eq.12 — Sr threshold",
         "metricsImpact": {
-          "H_delta": "-0.2 — China spending diplomatic capital with Trump slightly rehabilitates multilateral order, reducing hegemony loss",
-          "Sr_delta": "0 — no formal relief instrument issued; talk-nudging does not count as OFAC/SWIFT action",
-          "note": "China's broker role is the most strategically significant event: it gains leverage with both Tehran and Washington simultaneously, potentially slowing yuan infrastructure push in exchange for crisis management credit."
+          "G_delta": "+0.0 (boundary — China gains soft-power capital but no CIPS/mBridge volume change yet)",
+          "H_delta": "0 — diplomatic capital with Trump is transactional, not structural yuan infrastructure deepening",
+          "mediator_status": "1 confirmed — China's intermediary role reinforces rather than replaces Qatar/Oman channel",
+          "note": "Critical geopolitical development: China extracting 'diplomatic capital' from both sides creates a de facto tripartite negotiation architecture; Iran gains a face-saving exit vector via Beijing, potentially the most likely off-ramp scenario at this stage of the crisis."
         },
         "ticker": "China is responsible for 'nudging' Iran to agree for talks with US and now has 'diplomatic capital' with Trump, according to Wall Street Journal report."
       }
@@ -71,9 +75,9 @@
   },
   "parameters": {
     "E": 5.5,
-    "c": 0.93,
+    "c": 0.87,
     "m": 3,
-    "H": 6.8,
+    "H": 7,
     "G": 8,
     "S": 10,
     "Sr": 0.78,
@@ -85,7 +89,8 @@
     "dual_strait": 0,
     "m_base": 3,
     "m_activated": 4.75,
-    "mediator_status": 1
+    "mediator_status": 1,
+    "brentPrice": 94.45
   },
   "paramEquations": {
     "E": "Eq.5",
@@ -112,11 +117,11 @@
     "mediator_status": "Binary flag: 1 = Qatar/Oman back-channel operative (sanctions-relief pathway open); 0 = mediator pathway closed (IRGC strike on Qatari/Omani assets or diplomatic rupture). When 0, Sr is gated — cannot rise regardless of diplomatic signals."
   },
   "derived": {
-    "estar": 15.73,
-    "estarRatio": 2.86,
+    "estar": 15.07,
+    "estarRatio": 2.74,
     "dominanceMargin": 17.22,
     "srCoverage": 4,
-    "uAccommodate": -6.8,
-    "uEscalate": -22.53
+    "uAccommodate": -7,
+    "uEscalate": -22.07
   }
 }
