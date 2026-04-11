@@ -1904,11 +1904,23 @@ async function loadParams() {
       paramsLoaded: true,
       meta: data.meta || {},
     });
+
+    // Use brentPrice/natGasPrice from params.json if available (set from admin panel)
+    if (p.brentPrice !== undefined || p.natGasPrice !== undefined) {
+      const brent = p.brentPrice ?? BRENT_FALLBACK;
+      const natGas = p.natGasPrice ?? NATGAS_FALLBACK;
+      renderOilPriceWidget([
+        { code: 'BRENT_CRUDE_USD', price: brent, changes: {} },
+        { code: 'NATURAL_GAS_USD', price: natGas, changes: {} },
+      ], false, null);
+      updateDisplay(brent, false);
+    }
+
+    // Brent/NatGas prices: prefer live API from loadPriceWidget(), but fallback to params.json values (set from admin panel)
+    // Note: If live API fetch succeeds, it will override these values via renderOilPriceWidget()
+    
     updateAllTickers(MODEL, data.derived || {}, data.meta || {});
     runBriefing(data);
-
-    // NOTE: Brent price is fetched directly from OilPrice API by loadPriceWidget() — no params.json dependency.
-    // params.json only carries game-theory parameters (c, m, E, H, G, S, Sr, …) and news[].
 
   } catch(_) {
     // params.json not found — fallback already applied above

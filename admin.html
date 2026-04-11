@@ -260,9 +260,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;heigh
     <hr>
 
     <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:.5rem">&#x21BA; Reset parameters</div>
-    <div style="font-size:10px;color:var(--fa);margin-bottom:.5rem;line-height:1.5">Restore all parameters to the values currently published in <code style="color:var(--al)">params.json</code>. News classification and AI results are preserved.</div>
+    <div style="font-size:10px;color:var(--fa);margin-bottom:.5rem;line-height:1.5">Restore all parameters to the values currently published in <code style="color:var(--al)">params.json</code>. Fetches live data (bypasses cache) to ensure latest values.</div>
     <div class="brow" style="margin-top:0;margin-bottom:.65rem">
       <button class="btn br" onclick="resetParams()" id="reset-btn">&#x21BA; Reset to params.json defaults</button>
+      <button class="btn br" onclick="forceRefreshParams()" style="margin-left:8px;background:var(--ad);color:var(--am)">&#x21BB; Force refresh</button>
     </div>
     <div id="reset-ale"></div>
 
@@ -307,6 +308,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;heigh
 
     <div id="pub-ale"></div>
     <button class="resetbtn" onclick="resetParams()">&#x21BA; Reset all parameters to params.json defaults</button>
+    <button class="resetbtn" onclick="forceRefreshParams()" style="margin-left:8px;background:var(--ad);color:var(--am)">&#x21BB; Force refresh</button>
     <button class="pubbtn" onclick="publish()">&#x2191; Download params.json</button>
     <div style="font-size:10px;color:var(--fa);line-height:1.5">
       Save to <code style="color:var(--al)">github_site/params.json</code> &#x2192; push to GitHub.<br>
@@ -372,7 +374,23 @@ Also provide a "news_impacts" array — one entry per headline (in the same orde
 Return ONLY valid JSON - no other text before or after:
 {"parameters":{"c":{"value":0.90,"delta":0.00,"confidence":"high","justification":"one sentence"},"m":{"value":3.0,"delta":0.00,"confidence":"high","justification":"one sentence"},"E":{"value":5,"delta":0,"confidence":"medium","justification":"one sentence"},"H":{"value":7,"delta":0,"confidence":"medium","justification":"one sentence"},"G":{"value":8,"delta":0,"confidence":"medium","justification":"one sentence"},"S":{"value":10,"delta":0,"confidence":"high","justification":"one sentence"},"Sr":{"value":0.78,"delta":0,"confidence":"high","justification":"one sentence"},"k":{"value":1.3,"delta":0,"confidence":"medium","justification":"one sentence"},"nu":{"value":3,"delta":0,"confidence":"low","justification":"one sentence"},"Ps":{"value":12,"delta":0,"confidence":"medium","justification":"one sentence"},"rhoI":{"value":0.03,"delta":0,"confidence":"low","justification":"one sentence"},"n":{"value":1.3,"delta":0,"confidence":"medium","justification":"one sentence"},"dual_strait":{"value":0,"delta":0,"confidence":"high","justification":"one sentence"},"m_base":{"value":3.0,"delta":0.00,"confidence":"high","justification":"one sentence"},"m_activated":{"value":4.75,"delta":0.00,"confidence":"high","justification":"one sentence"},"mediator_status":{"value":1,"delta":0,"confidence":"high","justification":"one sentence"}},"news_impacts":[{"headline_index":0,"metricsImpact":{"c_delta":"c impact description","E_star":"E* result","note":"strategic note"}}],"summary":"One paragraph strategic read.","most_significant_event":"Most important headline and why.","primary_equation":"Eq.X","trap_status":"active|weakening|broken"}`;
 
-let P={},SR={},HL=[],AIR=null,BRT={p:null,ts:null,live:false};
+let P={},SR={},HL=[],AIR=null,BRT={p:null,ts:null,live:false},NATG={p:null,ts:null,live:false},PARAMS_JSON_DEFAULTS={};
+
+function fetchParamsJsonDefaults(){
+  return fetch('params.json?v=' + Date.now(), { cache: 'no-store' })
+    .then(r => r.json())
+    .then(data => {
+      if(data.parameters){
+        PARAMS_JSON_DEFAULTS = { ...data.parameters };
+        console.log('[Params] Loaded live defaults from params.json:', PARAMS_JSON_DEFAULTS);
+      }
+      return PARAMS_JSON_DEFAULTS;
+    })
+    .catch(err => {
+      console.warn('[Params] Failed to fetch live params.json:', err);
+      return {};
+    });
+}
 
 function init(){
   const c=cfg();
@@ -390,6 +408,12 @@ function init(){
   if(lp) document.getElementById('last-pub').textContent=lp;
   document.getElementById('sess-t').textContent=ft(new Date());
   renderPG();upD();upJ();
+  
+  // Fetch live params.json defaults first, then setup auto-refresh
+  fetchParamsJsonDefaults().then(() => {
+    // Set up periodic refresh of params.json (every 5 minutes)
+    setInterval(fetchParamsJsonDefaults, 5 * 60 * 1000);
+  });
   
   // Initial Brent fetch on load (skip on weekends)
   if (new Date().getDay() !== 0 && new Date().getDay() !== 6) {
@@ -432,8 +456,8 @@ async function fetchBrent(){
     return;
   }
 
-  const API_URL = 'https://api.oilpriceapi.com/v1/prices/latest?by_code=BRENT_CRUDE_USD';
-  let price=null, source='';
+  const API_URL = 'https://api.oilpriceapi.com/v1/prices/latest?by_code=BRENT_CRUDE_USD,NATURAL_GAS_USD';
+  let price=null, natGasPrice=null, source='';
 
   // Tier 1 — direct call (works when oilpriceapi.com has whitelisted this origin)
   try {
@@ -444,7 +468,15 @@ async function fetchBrent(){
     });
     if (r.ok) {
       const json = await r.json();
-      if (json.status === 'success' && json.data?.price > 0) {
+      if (json.status === 'success' && json.data?.prices) {
+        const prices = json.data.prices;
+        const brent = prices.find(p => p.code === 'BRENT_CRUDE_USD');
+        const natGas = prices.find(p => p.code === 'NATURAL_GAS_USD');
+        if (brent?.price > 0) price = parseFloat(brent.price);
+        if (natGas?.price > 0) natGasPrice = parseFloat(natGas.price);
+        source = 'oilpriceapi.com';
+        console.log('[Brent] Direct price:', price, 'NatGas:', natGasPrice);
+      } else if (json.status === 'success' && json.data?.price > 0) {
         price = parseFloat(json.data.price);
         source = 'oilpriceapi.com';
         console.log('[Brent] Direct price:', price);
@@ -462,7 +494,15 @@ async function fetchBrent(){
       });
       if (r2.ok) {
         const json = await r2.json();
-        if (json.status === 'success' && json.data?.price > 0) {
+        if (json.status === 'success' && json.data?.prices) {
+          const prices = json.data.prices;
+          const brent = prices.find(p => p.code === 'BRENT_CRUDE_USD');
+          const natGas = prices.find(p => p.code === 'NATURAL_GAS_USD');
+          if (brent?.price > 0) price = parseFloat(brent.price);
+          if (natGas?.price > 0) natGasPrice = parseFloat(natGas.price);
+          source = 'oilpriceapi.com (proxy)';
+          console.log('[Brent] Proxy price:', price, 'NatGas:', natGasPrice);
+        } else if (json.status === 'success' && json.data?.price > 0) {
           price = parseFloat(json.data.price);
           source = 'oilpriceapi.com (proxy)';
           console.log('[Brent] Proxy price:', price);
@@ -473,16 +513,18 @@ async function fetchBrent(){
 
   if (price) {
     BRT = {p: price, ts: new Date(), live: true};
+    if (natGasPrice) NATG = {p: natGasPrice, ts: new Date(), live: true};
     updBrentBar();
     P.c = Math.min(0.98, Math.max(0.80, 0.70 + ((price - 65) / 10) * 0.04));
     SR.c = 'auto';
     renderPG(); upD(); upJ();
-    document.getElementById('brent-res').textContent = '$' + price.toFixed(2) + ' via ' + source;
-    sal('brent-ale', 'Brent $' + price.toFixed(2) + ' via ' + source + ' — c auto-updated to ' + P.c.toFixed(2), 'ok');
-    addLog('m', 'Brent $' + price.toFixed(2) + ' (' + source + ') → c=' + P.c.toFixed(2));
+    const gasTxt = natGasPrice ? ` | NatGas $${natGasPrice.toFixed(2)}` : '';
+    document.getElementById('brent-res').textContent = '$' + price.toFixed(2) + gasTxt + ' via ' + source;
+    sal('brent-ale', 'Brent $' + price.toFixed(2) + (natGasPrice ? ', NatGas $' + natGasPrice.toFixed(2) : '') + ' via ' + source + ' — c auto-updated to ' + P.c.toFixed(2), 'ok');
+    addLog('m', 'Brent $' + price.toFixed(2) + (natGasPrice ? ', NatGas $' + natGasPrice.toFixed(2) : '') + ' (' + source + ') → c=' + P.c.toFixed(2));
   } else {
     document.getElementById('brent-res').textContent = 'Failed';
-    sal('brent-ale', 'API fetch failed. Check your OilPrice API key or use manual override below.', 'er');
+    sal('brent-ale','API fetch failed. Check your OilPrice API key or use manual override below.','er');
     console.log('[Brent] All fetch attempts failed');
   }
 
@@ -703,7 +745,10 @@ function bldJ(){
     return {note: h.desc||''};
   }
 
-  return{meta:{published:new Date().toISOString(),closureDays:Math.floor((new Date()-WAR_START)/864e5),analystNotes:document.getElementById('notes').value.trim()||null,aiCalibrated:AIR!==null,brentPrice:BRT.p||null,brentFetched:BRT.ts?.toISOString()||null,primaryEquation:AIR?.primary_equation||null,trapStatus:AIR?.trap_status||(p.G+p.S-p.Sr>0?'active':'broken'),strategicSummary:AIR?.summary||null,mostSignificantEvent:AIR?.most_significant_event||null,news:HL.slice(0,10).map((h,i)=>{const eq=String(h.eq);const eqBase=eq.replace('m','');const eqLbl=(EQ_LABEL[eq]||'Eq.'+eqBase)+(EQL_MAP[eq]?' — '+EQL_MAP[eq]:'');return{id:'N-'+String(i+1).padStart(3,'0'),date:h.time?h.time.slice(0,10):new Date().toISOString().slice(0,10),headline:h.title,severity:['5','5m'].includes(eq)?'red':'amber',eq:eqBase,eqLabel:eqLbl,metricsImpact:buildMetrics(h,i),ticker:h.title};})},parameters:Object.fromEntries(Object.entries(P).map(([k,v])=>[k,rn(v)])),paramEquations:PARAM_EQUATIONS,paramNotes:PARAM_NOTES,derived:{estar:e,estarRatio:rn(e/p.E),dominanceMargin:rn(p.G+p.S-p.Sr),srCoverage:Math.round(p.Sr/(p.G+p.S)*100),uAccommodate:rn(-p.H),uEscalate:rn(-(p.H+e))}};
+  const paramsWithPrices = Object.fromEntries(Object.entries(P).map(([k,v])=>[k,rn(v)]));
+  if(BRT.p) paramsWithPrices.brentPrice = BRT.p;
+  if(NATG.p) paramsWithPrices.natGasPrice = NATG.p;
+  return{meta:{published:new Date().toISOString(),closureDays:Math.floor((new Date()-WAR_START)/864e5),analystNotes:document.getElementById('notes').value.trim()||null,aiCalibrated:AIR!==null,brentPrice:BRT.p||null,brentFetched:BRT.ts?.toISOString()||null,natGasPrice:NATG.p||null,natGasFetched:NATG.ts?.toISOString()||null,primaryEquation:AIR?.primary_equation||null,trapStatus:AIR?.trap_status||(p.G+p.S-p.Sr>0?'active':'broken'),strategicSummary:AIR?.summary||null,mostSignificantEvent:AIR?.most_significant_event||null,news:HL.slice(0,10).map((h,i)=>{const eq=String(h.eq);const eqBase=eq.replace('m','');const eqLbl=(EQ_LABEL[eq]||'Eq.'+eqBase)+(EQL_MAP[eq]?' — '+EQL_MAP[eq]:'');return{id:'N-'+String(i+1).padStart(3,'0'),date:h.time?h.time.slice(0,10):new Date().toISOString().slice(0,10),headline:h.title,severity:['5','5m'].includes(eq)?'red':'amber',eq:eqBase,eqLabel:eqLbl,metricsImpact:buildMetrics(h,i),ticker:h.title};})},parameters:paramsWithPrices,paramEquations:PARAM_EQUATIONS,paramNotes:PARAM_NOTES,derived:{estar:e,estarRatio:rn(e/p.E),dominanceMargin:rn(p.G+p.S-p.Sr),srCoverage:Math.round(p.Sr/(p.G+p.S)*100),uAccommodate:rn(-p.H),uEscalate:rn(-(p.H+e))}};
 }
 function upJ(){document.getElementById('jbox').textContent=JSON.stringify(bldJ(),null,2);}
 function publish(){
@@ -807,14 +852,18 @@ function downloadChangelog(){
   sal('pub-ale', 'Changelog downloaded: ' + filename + ' (' + changelog.length + ' entries)', 'ok');
 }
 
-// Params from params.json (the canonical published defaults)
-const PARAMS_JSON_DEFAULTS={
-  E:6, c:0.92, m:3.0, H:8, G:8, S:10, Sr:0.78,
-  k:1.3, nu:3, Ps:8, rhoI:0.03, n:1.3,
-  dual_strait:0, m_base:3.0, m_activated:4.75, mediator_status:1
-};
+// NOTE: PARAMS_JSON_DEFAULTS is now dynamically populated by fetchParamsJsonDefaults()
+// This was previously a hardcoded const that didn't match live params.json values
 
 function resetParams(){
+  // Check if we have live params.json defaults
+  if(Object.keys(PARAMS_JSON_DEFAULTS).length === 0){
+    sal('reset-ale','Loading params.json...','warn');
+    fetchParamsJsonDefaults().then(() => {
+      resetParams();
+    });
+    return;
+  }
   // Reset all parameters to params.json published values
   Object.keys(PD).forEach(k=>{
     const def = PARAMS_JSON_DEFAULTS[k];
@@ -828,8 +877,16 @@ function resetParams(){
   // Re-render grid, derived box, JSON preview
   renderPG(); upD(); upJ();
   // Show confirmation in both reset alert areas
-  sal('reset-ale','All parameters reset to params.json defaults.','ok');
+  sal('reset-ale','All parameters reset to live params.json defaults.','ok');
   addLog('m','Parameters reset to params.json defaults');
+}
+
+function forceRefreshParams(){
+  sal('reset-ale','Force refreshing params.json...','warn');
+  fetchParamsJsonDefaults().then(() => {
+    sal('reset-ale','params.json refreshed. Ready to reset.','ok');
+    addLog('m','params.json force refreshed');
+  });
 }
 
 init();
