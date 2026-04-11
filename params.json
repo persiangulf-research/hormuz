@@ -1,94 +1,85 @@
 {
   "meta": {
-    "published": "2026-04-03T00:05:35.021Z",
-    "closureDays": 32,
+    "published": "2026-04-11T00:31:05.775Z",
+    "closureDays": 40,
     "analystNotes": null,
     "aiCalibrated": true,
-    "brentPrice": 94.58,
-    "brentFetched": "2026-04-02T23:55:55.490Z",
-    "primaryEquation": "EQ5",
+    "brentPrice": null,
+    "brentFetched": null,
+    "primaryEquation": "Eq.3",
     "trapStatus": "active",
-    "strategicSummary": "At closure day 32 with Brent at $109.24, c rises to 0.90 reflecting both price-implied escalation and the structural removal of the UNSC military authorization path via Russian, Chinese, and French vetoes. m_effective remains 3.0 with bypass infrastructure intact. E* = 5 × [1 + 0.90 × (3.0−1)] = 14.0 in the Hormuz-only regime; the trap remains firmly active. Sr coverage sits at roughly 4% of the G+S threshold (18.78), meaning Iran's dominant strategy is unbroken. Ps has fallen to 5.5 following France's refusal to support military action — a permanent discontinuous drop — further eroding the security guarantee pillar. The UNSC veto is the most consequential structural event of this cycle: it forecloses collective enforcement, hardens mediator_risk to 0.75, and signals that the closure can persist without triggering a multilateral military response, deepening the equilibrium trap.",
-    "mostSignificantEvent": "Headline 1: Russia, China, and France blocking UNSC military authorization permanently removes the multilateral enforcement threat that could have altered Iran's dominant strategy calculus, constituting a -1 Ps event and a structural deepening of the closure trap.",
+    "strategicSummary": "On closure day 40, the Hormuz crisis is entering its most acute diplomatic-military inflection point. Trump's dual declarations — 'with or without Iran' and zero tolerance for tolls — eliminate the commercial off-ramp Iran may have sought and raise U.S. credibility to 0.93, approaching the threshold where bluff/resolve ambiguity collapses. The European jet fuel shock within three weeks creates a hard external deadline that transforms this from a bilateral standoff into a systemic allied emergency, raising E to 5.5 and implicitly expanding the coalition behind U.S. action. The most strategically complex signal is China's diplomatic capital play: Beijing has nudged Iran toward talks and is now positioned as a credible intermediary with Trump, marginally reducing H (hegemony loss) as China acts as a responsible stakeholder rather than a pure spoiler. However, Sr remains at 0.78 — no formal OFAC/SWIFT relief has been granted, meaning Iran's core sanctions pain is unresolved. The trap remains active: Iran cannot exit without formal relief, the U.S. cannot grant relief without political cost, and the three-week European fuel clock is now the binding constraint on the entire system.",
+    "mostSignificantEvent": "Headline 3 (European systemic jet fuel shortage within three weeks): This is the binding constraint that transforms the crisis from a bilateral standoff into a multilateral emergency with a hard deadline, compressing the diplomatic window and sharply raising the cost of continued closure for all parties — including the U.S., which now faces allied pressure to act.",
     "news": [
       {
         "id": "N-001",
-        "date": "2026-04-03",
-        "headline": "Russia, China and France prevent Arab push at UN Security Council to authorize military action to open the Strait of Hormuz, according to New York Times report",
+        "date": "2026-04-11",
+        "headline": "President Trump says the Strait of Hormuz will be opened \"with or without\" Iran's approval.",
         "severity": "red",
         "eq": "5",
-        "eqLabel": "Eq.5 — Commitment Device / m",
+        "eqLabel": "Eq.5 — Commitment Device / c",
         "metricsImpact": {
-          "c_impact": "0.9 (Δ+0.03) — Brent at $109.24 implies c ≈ 0.96 by linear rule, but UN veto blocking military authorization removes the fastest path to Hormuz reopening, structurally deepening the closure and warranting a modest upward move toward the Brent-implied range; conservative split applied.",
-          "E_star": "E* = 14 (E*/E = 2.8×)",
-          "note": "Headline 1: Russia, China, and France blocking UNSC military authorization permanently removes the multilateral enforcement threat that could have altered Iran's dominant strategy calculus, constituting a -1 Ps event and a structural deepening of the closure trap."
+          "c_delta": "+0.02 — 'with or without' language is a credible threat escalation, moving c toward 0.93",
+          "Ps_delta": "+0.5 — unilateral framing reinforces U.S. guarantee signal",
+          "note": "Raises risk of kinetic action but also opens diplomatic off-ramp if Iran seeks talks to avoid U.S. strike."
         },
-        "ticker": "Russia, China and France prevent Arab push at UN Security Council to authorize military action to open the Strait of Hormuz, according to New York Times report"
+        "ticker": "President Trump says the Strait of Hormuz will be opened \"with or without\" Iran's approval."
       },
       {
         "id": "N-002",
-        "date": "2026-04-03",
-        "headline": "Trump is set to seek a $1.5 trillion dollar Defense budget for next fiscal year, according to Reuters report",
+        "date": "2026-04-11",
+        "headline": "Trump says will not allow tolls in Strait of Hormuz",
         "severity": "red",
         "eq": "5",
         "eqLabel": "Eq.5 — Commitment Device / c",
         "metricsImpact": {
-          "c_delta": "+0.02 — UNSC veto eliminates multilateral military path, extending expected closure duration and hardening c upward",
-          "m_resilience_delta": "+0.00",
-          "Sr_type": "none",
-          "Sr_value": 0,
-          "Ps_delta": -1,
-          "note": "France's public refusal to support military authorization is a permanent -1 Ps event; Russia/China veto confirms no collective security enforcement route, locking the trap more deeply."
+          "c_delta": "+0.01 — toll refusal closes any commercial compromise route, hardening U.S. red line",
+          "E_delta": "+0.1 — eliminates a potential non-military resolution path, marginally raising escalation cost",
+          "note": "Strategically forecloses Iranian attempt to monetize the closure short of war, forcing binary outcome."
         },
-        "ticker": "Trump is set to seek a $1.5 trillion dollar Defense budget for next fiscal year, according to Reuters report"
+        "ticker": "Trump says will not allow tolls in Strait of Hormuz"
       },
       {
         "id": "N-003",
-        "date": "2026-04-03",
-        "headline": "US experts say American strikes on Iran may amount to war crimes",
+        "date": "2026-04-11",
+        "headline": "European airports are facing 'systemic' jet fuel shortages 'within three weeks' if the Strait of Hormuz is not fully reopened, according to Financial Times report.",
         "severity": "red",
         "eq": "5",
         "eqLabel": "Eq.5 — Commitment Device / c",
         "metricsImpact": {
-          "c_delta": "+0.01 — signals U.S. military posture escalation intent, marginally raising conflict credibility",
-          "m_resilience_delta": "+0.00",
-          "Sr_type": "none",
-          "Sr_value": 0,
-          "Ps_delta": 0,
-          "note": "A $1.5T defense budget request is a political signal of resolve but not a deployed force or confirmed strike; it does not move Sr or Ps but marginally supports the high-c regime."
+          "E_delta": "+0.4 — European systemic shortage within three weeks dramatically raises allied escalation cost and time pressure",
+          "Ps_delta": "+0.5 — European vulnerability creates implicit coalition pressure on Iran, strengthening U.S. guarantee indirectly",
+          "note": "Three-week horizon is a hard deadline that compresses the diplomatic window and may accelerate U.S. military planning timeline."
         },
-        "ticker": "US experts say American strikes on Iran may amount to war crimes"
+        "ticker": "European airports are facing 'systemic' jet fuel shortages 'within three weeks' if the Strait of Hormuz is not fully reopened, according to Financial Times report."
       },
       {
         "id": "N-004",
-        "date": "2026-04-03",
-        "headline": "Can Russia help fill the global energy gap?",
-        "severity": "red",
-        "eq": "5",
-        "eqLabel": "Eq.5 — Commitment Device / c",
+        "date": "2026-04-11",
+        "headline": "China is responsible for 'nudging' Iran to agree for talks with US and now has 'diplomatic capital' with Trump, according to Wall Street Journal report.",
+        "severity": "amber",
+        "eq": "12",
+        "eqLabel": "Eq.12 — Sr threshold",
         "metricsImpact": {
-          "c_delta": "+0.00 — legal/reputational constraint on U.S. strike option noted but does not directly move c",
-          "m_resilience_delta": "+0.00",
-          "Sr_type": "none",
-          "Sr_value": 0,
-          "Ps_delta": 0,
-          "note": "War-crimes framing by U.S. experts constrains domestic political will for strikes on Iran, indirectly reinforcing the equilibrium trap by reducing credible military threat."
+          "H_delta": "-0.2 — China spending diplomatic capital with Trump slightly rehabilitates multilateral order, reducing hegemony loss",
+          "Sr_delta": "0 — no formal relief instrument issued; talk-nudging does not count as OFAC/SWIFT action",
+          "note": "China's broker role is the most strategically significant event: it gains leverage with both Tehran and Washington simultaneously, potentially slowing yuan infrastructure push in exchange for crisis management credit."
         },
-        "ticker": "Can Russia help fill the global energy gap?"
+        "ticker": "China is responsible for 'nudging' Iran to agree for talks with US and now has 'diplomatic capital' with Trump, according to Wall Street Journal report."
       }
     ]
   },
   "parameters": {
-    "E": 5,
-    "c": 0.9,
+    "E": 5.5,
+    "c": 0.93,
     "m": 3,
-    "H": 8,
+    "H": 6.8,
     "G": 8,
     "S": 10,
     "Sr": 0.78,
     "k": 1.3,
     "nu": 3,
-    "Ps": 5.5,
+    "Ps": 13,
     "rhoI": 0.03,
     "n": 1.3,
     "dual_strait": 0,
@@ -121,11 +112,11 @@
     "mediator_status": "Binary flag: 1 = Qatar/Oman back-channel operative (sanctions-relief pathway open); 0 = mediator pathway closed (IRGC strike on Qatari/Omani assets or diplomatic rupture). When 0, Sr is gated — cannot rise regardless of diplomatic signals."
   },
   "derived": {
-    "estar": 14,
-    "estarRatio": 2.8,
+    "estar": 15.73,
+    "estarRatio": 2.86,
     "dominanceMargin": 17.22,
     "srCoverage": 4,
-    "uAccommodate": -8,
-    "uEscalate": -22
+    "uAccommodate": -6.8,
+    "uEscalate": -22.53
   }
 }
