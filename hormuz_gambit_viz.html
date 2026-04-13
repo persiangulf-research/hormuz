@@ -638,7 +638,7 @@ function getClosureDays() {
   return Math.floor((new Date() - WAR_START) / (1000 * 60 * 60 * 24));
 }
 let params = {};
-fetch('params.json').then(r => r.json()).then(p => {
+fetch('params.json?v=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(p => {
   params = p;
   init();
 });
@@ -660,6 +660,14 @@ function init() {
   renderRaceBars();
   renderParadoxPoints();
 }
+
+// Refresh params.json every 5 minutes to stay in sync with admin updates
+setInterval(() => {
+  fetch('params.json?v=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(p => {
+    params = p;
+    init();
+  });
+}, 300000);
 
 // ─── DATA ───────────────────────────────────────
 const nodeData = {
